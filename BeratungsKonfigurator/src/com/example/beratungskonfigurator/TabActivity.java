@@ -127,6 +127,7 @@ public class TabActivity extends FragmentActivity {
             if (info.fragment != null && !info.fragment.isDetached()) {
                 FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
                 ft.detach(info.fragment);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             }
 
@@ -139,7 +140,7 @@ public class TabActivity extends FragmentActivity {
             if (mLastTab != newTab) {
                 FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
                 if (mLastTab != null) {
-                    if (mLastTab.fragment != null) {
+                    if (mLastTab.fragment != null) {                
                         ft.detach(mLastTab.fragment);
                     }
                 }
@@ -154,6 +155,7 @@ public class TabActivity extends FragmentActivity {
                 }
 
                 mLastTab = newTab;
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
                 mActivity.getSupportFragmentManager().executePendingTransactions();
             }

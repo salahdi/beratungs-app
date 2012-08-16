@@ -3,7 +3,7 @@
     android:id="@android:id/tabhost"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_height="0dp"
             android:layout_weight="0"/>
 
-        <Fragment
+        <FrameLayout
             android:id="@+android:id/realtabcontent"
             android:layout_width="match_parent"
             android:layout_height="0dp"

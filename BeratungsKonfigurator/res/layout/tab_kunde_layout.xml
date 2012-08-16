@@ -1,34 +1,442 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#FF0000" >
+    android:layout_height="fill_parent" >
 
     <ListView
         android:id="@+id/listView1"
-        android:layout_width="403dp"
-        android:layout_height="wrap_content" >
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:dividerHeight="2dip"
+        android:listSelector="#33B6EA"
+        android:paddingLeft="20dip"
+        android:paddingTop="50dip" >
+
     </ListView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+   <LinearLayout
+        android:id="@+id/layAdresse"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" >
 
-        <TextView
-            android:id="@+id/textTitel"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Titel"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/textView1"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/titelAdresse"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Adresse"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ToggleButton
+                android:id="@+id/toggleEdit1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dip"
+                android:textOff="Edit"
+                android:textOn="Save" />
+        </LinearLayout>
+        <EditText
+            android:id="@+id/kName"
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Name"
+            android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/kVorname"
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Vorname"
+            android:inputType="textPersonName" />
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/kStrasse"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="80"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Straße" />
+            <EditText
+                android:id="@+id/kHausnummer"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Nr."
+                android:inputType="number" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/kPLZ"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="PLZ"
+                android:inputType="textPostalAddress" />
+            <EditText
+                android:id="@+id/kOrt"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="80"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Ort" />
+        </LinearLayout>
+    </LinearLayout>
 
+   
+    <LinearLayout
+        android:id="@+id/layKontakt"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" 
+        android:visibility="gone">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/titelKontakt"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Kontakt"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ToggleButton
+                android:id="@+id/toggleEdit2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:textOff="Edit"
+                android:layout_marginLeft="32dip"
+                android:textOn="Save" />
+        </LinearLayout>
+        <EditText
+            android:id="@+id/kTelefon"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Telefon"
+            android:inputType="phone" />
+        <EditText
+            android:id="@+id/kMobil"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Mobil"
+            android:inputType="phone" />
+        <EditText
+            android:id="@+id/kFax"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Fax"
+            android:inputType="phone" />
+        <EditText
+            android:id="@+id/kMail"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="E-Mail"
+            android:inputType="textEmailAddress" />
+    </LinearLayout>
+
+    
+    <LinearLayout
+        android:id="@+id/layInformation"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip"
+        android:visibility="gone" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/titelInformation"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Adresse"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ToggleButton
+                android:id="@+id/toggleEdit3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dip"
+                android:textOff="Edit"
+                android:textOn="Save" />
+        </LinearLayout>
+        <EditText
+            android:id="@+id/kGeburtsdatum"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Geburtsdatum"
+            android:inputType="date" />
+        <Spinner
+            android:id="@+id/kFamilienstand"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/kKonfession"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/kPflegestufe"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    
+    <LinearLayout
+        android:id="@+id/layVersorgung"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip"
+        android:visibility="gone" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/titelVersorgung"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Versorgung"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/kKostentraeger"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/kVersicherungsart"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/kKrankenkasse"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content" />
+        <Spinner
+            android:id="@+id/kLeistungsart"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    
+    <LinearLayout
+        android:id="@+id/layAngehoeriger"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/titelAngehoeriger"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Angehöriger"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ToggleButton
+                android:id="@+id/toggleEdit4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dip"
+                android:textOff="Edit"
+                android:textOn="Save" />
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/aArt"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/aName"
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Name"
+            android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/aVorname"
+            android:layout_width="300dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Vorname"
+            android:inputType="textPersonName" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/aStrasse"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="80"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Straße" />
+            <EditText
+                android:id="@+id/aHausnummer"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Nr."
+                android:inputType="number" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/aPLZ"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="PLZ"
+                android:inputType="textPostalAddress" />
+            <EditText
+                android:id="@+id/aOrt"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:ems="80"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="Ort" />
+        </LinearLayout>
+        <EditText
+            android:id="@+id/aTelefon"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Telefon"
+            android:inputType="phone" />
+        <EditText
+            android:id="@+id/aMobil"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Mobil"
+            android:inputType="phone" />
+        <EditText
+            android:id="@+id/aFax"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Fax"
+            android:inputType="phone" />
+        <EditText
+            android:id="@+id/aMail"
+            android:layout_width="400dip"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:ems="80"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="E-Mail"
+            android:inputType="textEmailAddress" />
     </LinearLayout>
 
 </LinearLayout>
