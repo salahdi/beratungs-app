@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
 			startActivity(new Intent(this, TabActivity.class));
 			break;
 		case R.id.btn_fberatung:
-			startActivity(new Intent(this, TabActivity.class));
+			startActivity(new Intent(this, FolgeberatungActivity.class));
 			break;
 		}
 	}

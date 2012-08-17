@@ -76,13 +76,10 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 		layVersorgung.setVisibility(View.GONE);
 		layAngehoeriger.setVisibility(View.GONE);
 
-		final ToggleButton toggleEdit1 = (ToggleButton) fragView.findViewById(R.id.toggleEdit1);
-		final ToggleButton toggleEdit2 = (ToggleButton) fragView.findViewById(R.id.toggleEdit2);
-		final ToggleButton toggleEdit3 = (ToggleButton) fragView.findViewById(R.id.toggleEdit3);
-		// final ToggleButton toggleEdit4 = (ToggleButton)
-		// fragView.findViewById(R.id.toggleEdit4);
-		// final ToggleButton toggleEdit5 = (ToggleButton)
-		// fragView.findViewById(R.id.toggleEdit5);
+		final ToggleButton toggleEditAdresse = (ToggleButton) fragView.findViewById(R.id.toggleEditAdresse);
+		final ToggleButton toggleEditKontakt = (ToggleButton) fragView.findViewById(R.id.toggleEditKontakt);
+		final ToggleButton toggleEditInformation = (ToggleButton) fragView.findViewById(R.id.toggleEditInformation);
+		final ToggleButton toggleEditAngehoeriger = (ToggleButton) fragView.findViewById(R.id.toggleEditAngehoeriger);
 
 		final TextView titelAdresse = (TextView) fragView.findViewById(R.id.titelAdresse);
 		titelAdresse.setText(ADRESSE);
@@ -548,7 +545,7 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 
 					ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
 					ListView lv = (ListView) fragView.findViewById(R.id.listView1);
-					//lv.setClickable(true);
+					lv.setClickable(true);
 					lv.setAdapter(adapter);
 
 					lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -699,7 +696,7 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 						}
 					});
 
-					toggleEdit1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+					toggleEditAdresse.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 							if (isChecked) {
 								// The toggle is enabled
@@ -707,6 +704,35 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 								kName.setClickable(true);
 								kName.setCursorVisible(true);
 								kName.setFocusableInTouchMode(true);
+								kName.requestFocus();
+
+								imm.showSoftInput(kName, InputMethodManager.SHOW_IMPLICIT);
+
+								kVorname.setFocusable(true);
+								kVorname.setClickable(true);
+								kVorname.setCursorVisible(true);
+								kVorname.setFocusableInTouchMode(true);
+								
+								kStrasse.setFocusable(true);
+								kStrasse.setClickable(true);
+								kStrasse.setCursorVisible(true);
+								kStrasse.setFocusableInTouchMode(true);
+								
+								kPLZ.setFocusable(true);
+								kPLZ.setClickable(true);
+								kPLZ.setCursorVisible(true);
+								kPLZ.setFocusableInTouchMode(true);
+								
+								kHausnummer.setFocusable(true);
+								kHausnummer.setClickable(true);
+								kHausnummer.setCursorVisible(true);
+								kHausnummer.setFocusableInTouchMode(true);
+								
+								kOrt.setFocusable(true);
+								kOrt.setClickable(true);
+								kOrt.setCursorVisible(true);
+								kOrt.setFocusableInTouchMode(true);
+								
 								//toggleEdit1.setBackgroundColor(Color.rgb(51, 182, 234));
 							} else {
 								// The toggle is disabled
@@ -714,8 +740,227 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 								kName.setClickable(false);
 								kName.setCursorVisible(false);
 								kName.setFocusableInTouchMode(false);
+								
+								kVorname.setFocusable(false);
+								kVorname.setClickable(false);
+								kVorname.setCursorVisible(false);
+								kVorname.setFocusableInTouchMode(false);
+								
+								kStrasse.setFocusable(false);
+								kStrasse.setClickable(false);
+								kStrasse.setCursorVisible(false);
+								kStrasse.setFocusableInTouchMode(false);
+								
+								kPLZ.setFocusable(false);
+								kPLZ.setClickable(false);
+								kPLZ.setCursorVisible(false);
+								kPLZ.setFocusableInTouchMode(false);
+								
+								kHausnummer.setFocusable(false);
+								kHausnummer.setClickable(false);
+								kHausnummer.setCursorVisible(false);
+								kHausnummer.setFocusableInTouchMode(false);
+								
+								kOrt.setFocusable(false);
+								kOrt.setClickable(false);
+								kOrt.setCursorVisible(false);
+								kOrt.setFocusableInTouchMode(false);
+								
 								imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 								//toggleEdit1.setBackgroundColor(Color.LTGRAY);
+							}
+						}
+					});
+					
+					toggleEditKontakt.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							if (isChecked) {
+								// The toggle is enabled
+								kTelefon.setFocusable(true);
+								kTelefon.setClickable(true);
+								kTelefon.setCursorVisible(true);
+								kTelefon.setFocusableInTouchMode(true);
+								kTelefon.requestFocus();
+
+								imm.showSoftInput(kTelefon, InputMethodManager.SHOW_IMPLICIT);
+
+								kMobil.setFocusable(true);
+								kMobil.setClickable(true);
+								kMobil.setCursorVisible(true);
+								kMobil.setFocusableInTouchMode(true);
+								
+								kFax.setFocusable(true);
+								kFax.setClickable(true);
+								kFax.setCursorVisible(true);
+								kFax.setFocusableInTouchMode(true);
+								
+								kMail.setFocusable(true);
+								kMail.setClickable(true);
+								kMail.setCursorVisible(true);
+								kMail.setFocusableInTouchMode(true);
+								
+							} else {
+								// The toggle is disabled
+								kTelefon.setFocusable(false);
+								kTelefon.setClickable(false);
+								kTelefon.setCursorVisible(false);
+								kTelefon.setFocusableInTouchMode(false);
+								kTelefon.requestFocus();
+
+								kMobil.setFocusable(false);
+								kMobil.setClickable(false);
+								kMobil.setCursorVisible(false);
+								kMobil.setFocusableInTouchMode(false);
+								
+								kFax.setFocusable(false);
+								kFax.setClickable(false);
+								kFax.setCursorVisible(false);
+								kFax.setFocusableInTouchMode(false);
+								
+								kMail.setFocusable(false);
+								kMail.setClickable(false);
+								kMail.setCursorVisible(false);
+								kMail.setFocusableInTouchMode(false);
+								
+								imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+							}
+						}
+					});
+					
+					toggleEditInformation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							if (isChecked) {
+								// The toggle is enabled
+								kGeburtsdatum.setFocusable(true);
+								kGeburtsdatum.setClickable(true);
+								kGeburtsdatum.setCursorVisible(true);
+								kGeburtsdatum.setFocusableInTouchMode(true);
+								kGeburtsdatum.requestFocus();
+
+								imm.showSoftInput(kGeburtsdatum, InputMethodManager.SHOW_IMPLICIT);
+
+							} else {
+								// The toggle is disabled
+								kGeburtsdatum.setFocusable(false);
+								kGeburtsdatum.setClickable(false);
+								kGeburtsdatum.setCursorVisible(false);
+								kGeburtsdatum.setFocusableInTouchMode(false);
+								
+								imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+							}
+						}
+					});
+					
+					toggleEditAngehoeriger.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+						public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+							if (isChecked) {
+								// The toggle is enabled
+								aName.setFocusable(true);
+								aName.setClickable(true);
+								aName.setCursorVisible(true);
+								aName.setFocusableInTouchMode(true);
+								aName.requestFocus();
+
+								imm.showSoftInput(aName , InputMethodManager.SHOW_IMPLICIT);
+
+								aVorname.setFocusable(true);
+								aVorname.setClickable(true);
+								aVorname.setCursorVisible(true);
+								aVorname.setFocusableInTouchMode(true);
+								
+								aStrasse.setFocusable(true);
+								aStrasse.setClickable(true);
+								aStrasse.setCursorVisible(true);
+								aStrasse.setFocusableInTouchMode(true);
+								
+								aPLZ.setFocusable(true);
+								aPLZ.setClickable(true);
+								aPLZ.setCursorVisible(true);
+								aPLZ.setFocusableInTouchMode(true);
+								
+								aHausnummer.setFocusable(true);
+								aHausnummer.setClickable(true);
+								aHausnummer.setCursorVisible(true);
+								aHausnummer.setFocusableInTouchMode(true);
+								
+								aOrt.setFocusable(true);
+								aOrt.setClickable(true);
+								aOrt.setCursorVisible(true);
+								aOrt.setFocusableInTouchMode(true);
+								
+								aTelefon.setFocusable(true);
+								aTelefon.setClickable(true);
+								aTelefon.setCursorVisible(true);
+								aTelefon.setFocusableInTouchMode(true);
+
+								aMobil.setFocusable(true);
+								aMobil.setClickable(true);
+								aMobil.setCursorVisible(true);
+								aMobil.setFocusableInTouchMode(true);
+								
+								aFax.setFocusable(true);
+								aFax.setClickable(true);
+								aFax.setCursorVisible(true);
+								aFax.setFocusableInTouchMode(true);
+								
+								aMail.setFocusable(true);
+								aMail.setClickable(true);
+								aMail.setCursorVisible(true);
+								aMail.setFocusableInTouchMode(true);
+								
+							} else {
+								// The toggle is disabled
+								aName.setFocusable(false);
+								aName.setClickable(false);
+								aName.setCursorVisible(false);
+								aName.setFocusableInTouchMode(false);
+
+								aVorname.setFocusable(false);
+								aVorname.setClickable(false);
+								aVorname.setCursorVisible(false);
+								aVorname.setFocusableInTouchMode(false);
+								
+								aStrasse.setFocusable(false);
+								aStrasse.setClickable(false);
+								aStrasse.setCursorVisible(false);
+								aStrasse.setFocusableInTouchMode(false);
+								
+								aPLZ.setFocusable(false);
+								aPLZ.setClickable(false);
+								aPLZ.setCursorVisible(false);
+								aPLZ.setFocusableInTouchMode(false);
+								
+								aHausnummer.setFocusable(false);
+								aHausnummer.setClickable(false);
+								aHausnummer.setCursorVisible(false);
+								aHausnummer.setFocusableInTouchMode(false);
+								
+								aOrt.setFocusable(false);
+								aOrt.setClickable(false);
+								aOrt.setCursorVisible(false);
+								aOrt.setFocusableInTouchMode(false);
+								
+								aTelefon.setFocusable(false);
+								aTelefon.setClickable(false);
+								aTelefon.setCursorVisible(false);
+								aTelefon.setFocusableInTouchMode(false);
+
+								aMobil.setFocusable(false);
+								aMobil.setClickable(false);
+								aMobil.setCursorVisible(false);
+								aMobil.setFocusableInTouchMode(false);
+								
+								aFax.setFocusable(false);
+								aFax.setClickable(false);
+								aFax.setCursorVisible(false);
+								aFax.setFocusableInTouchMode(false);
+								
+								aMail.setFocusable(false);
+								aMail.setClickable(false);
+								aMail.setCursorVisible(false);
+								aMail.setFocusableInTouchMode(false);
+								
+								imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
 							}
 						}
 					});
