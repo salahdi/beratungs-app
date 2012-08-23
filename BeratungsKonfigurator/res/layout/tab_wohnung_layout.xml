@@ -1,8 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:background="#00FF00"
-  >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <ListView
+        android:id="@+id/wohnungList"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:dividerHeight="2dip"
+        android:listSelector="#33B6EA"
+        android:paddingLeft="20dip"
+        android:paddingTop="50dip"
+        android:paddingBottom="50dip"  />
+
+    <LinearLayout
+        android:id="@+id/layAdresse"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/titelWohnsituation"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Wohnsituation"
+                android:textSize="30sp"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/wohnsituationList"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider"
+            android:dividerHeight="2dip"
+            android:paddingBottom="50dip"
+            android:paddingLeft="5dip" 
+            android:choiceMode="multipleChoice"/>
+    </LinearLayout>
+
 </LinearLayout>
