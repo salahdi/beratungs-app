@@ -34,7 +34,9 @@ public class MainActivity extends Activity {
 	public void onButtonClick(View view) {
 		switch (view.getId()) {
 		case R.id.btn_nberatung:
-			startActivity(new Intent(this, TabActivity.class));
+			Intent startBeratung = new Intent(this, TabActivity.class);
+			startBeratung.putExtra("kundeId", -1);
+			startActivity(startBeratung);
 			break;
 		case R.id.btn_fberatung:
 			startActivity(new Intent(this, FolgeberatungActivity.class));

@@ -2,6 +2,7 @@ package com.example.beratungskonfigurator;
 
 import java.util.HashMap;
 
+import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import com.example.beratungskonfigurator.tabs.*;
 public class TabActivity extends FragmentActivity {
     TabHost mTabHost;
     TabManager mTabManager;
+    static int kundeId;
     
     private static final String KUNDE_TAB = "Kunde";
 	private static final String WOHNUNG_TAB = "Wohnung";
@@ -34,6 +36,8 @@ public class TabActivity extends FragmentActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        kundeId = getIntent().getExtras().getInt("kundeId");
 
         setContentView(R.layout.tabs_layout);
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
@@ -56,7 +60,8 @@ public class TabActivity extends FragmentActivity {
         }
     }
 
-    protected void onSaveInstanceState(Bundle outState) {
+
+	protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("tab", mTabHost.getCurrentTabTag());
     }
@@ -137,6 +142,11 @@ public class TabActivity extends FragmentActivity {
 
         public void onTabChanged(String tabId) {
             TabInfo newTab = mTabs.get(tabId);
+            Bundle args = new Bundle();
+            //args.putString("message","JD Nachricht via Bundle");
+            args.putInt("sendKundeId", kundeId);
+
+
             if (mLastTab != newTab) {
                 FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
                 if (mLastTab != null) {
@@ -147,13 +157,12 @@ public class TabActivity extends FragmentActivity {
                 if (newTab != null) {
                     if (newTab.fragment == null) {
                         newTab.fragment = Fragment.instantiate(mActivity,
-                                newTab.clss.getName(), newTab.args);
+                                newTab.clss.getName(), args);
                         ft.add(mContainerId, newTab.fragment, newTab.tag);
                     } else {
                         ft.attach(newTab.fragment);
                     }
                 }
-
                 mLastTab = newTab;
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();

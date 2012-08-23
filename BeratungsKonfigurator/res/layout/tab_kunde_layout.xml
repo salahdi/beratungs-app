@@ -93,7 +93,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:hint="Nr."
-                android:inputType="number" 
+                android:inputType="textPersonName" 
                 android:imeOptions="actionNext"/>
         </LinearLayout>
         <LinearLayout
@@ -283,6 +283,13 @@
                 android:paddingLeft="10dip"
                 android:text="Versorgung"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ToggleButton
+                android:id="@+id/toggleEditVersorgung"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dip"
+                android:textOff="Edit"
+                android:textOn="Save" />
         </LinearLayout>
         <Spinner
             android:id="@+id/kKostentraeger"
@@ -384,7 +391,7 @@
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:hint="Nr."
-                android:inputType="number" 
+                android:inputType="textPersonName" 
                 android:imeOptions="actionNext"/>
         </LinearLayout>
         <LinearLayout

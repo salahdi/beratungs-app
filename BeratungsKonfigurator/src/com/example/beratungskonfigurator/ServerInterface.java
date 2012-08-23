@@ -113,13 +113,13 @@ public class ServerInterface
 			
 			// Create a new HttpClient and Post Header
 			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost( "http://jd.mazebert.com/dbService.php" );
+			HttpPost httppost = new HttpPost( "http://jd.mazebert.com/dbService.php" );			
 			
 			try 
 			{
 				// Create a NameValuePair out of the JSONObject + a name
 	            List<NameValuePair> nVP = new ArrayList<NameValuePair>();  
-	            nVP.add(new BasicNameValuePair("jsonPost", m_params.toString()));  
+	            nVP.add(new BasicNameValuePair("jsonPost", m_params.toString()));
 
 	            // Hand the NVP to the POST
 	            httppost.setEntity(new UrlEncodedFormEntity(nVP));
