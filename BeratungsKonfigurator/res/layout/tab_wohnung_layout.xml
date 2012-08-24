@@ -14,7 +14,7 @@
         android:paddingBottom="50dip"  />
 
     <LinearLayout
-        android:id="@+id/layAdresse"
+        android:id="@+id/layWohnsituation"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -33,8 +33,7 @@
                 android:paddingBottom="40dip"
                 android:paddingLeft="10dip"
                 android:text="Wohnsituation"
-                android:textSize="30sp"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textSize="30sp" />
         </LinearLayout>
 
         <ListView
@@ -47,5 +46,179 @@
             android:paddingLeft="5dip" 
             android:choiceMode="multipleChoice"/>
     </LinearLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/layWohnform"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" >
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/titelWohnform"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Wohnform"
+                android:textSize="30sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/wohnformList"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider"
+            android:dividerHeight="2dip"
+            android:paddingBottom="50dip"
+            android:paddingLeft="5dip" 
+            android:choiceMode="multipleChoice"/>
+    </LinearLayout>
+
+    
+    <LinearLayout
+        android:id="@+id/layWohninformation"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/titelWohninformation"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Wohninformation"
+                android:textSize="30sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/wohninformationList"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider"
+            android:dividerHeight="2dip"
+            android:paddingBottom="50dip"
+            android:paddingLeft="5dip" 
+            android:choiceMode="multipleChoice"/>
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/layWohnumfeld"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/titelWohnumfeld"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Wohnumfeld"
+                android:textSize="30sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/wohnumfeldList"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider"
+            android:dividerHeight="2dip"
+            android:paddingBottom="50dip"
+            android:paddingLeft="5dip" 
+            android:choiceMode="multipleChoice"/>
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/layWohnraeume"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/titelWohnraeume"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Wohnräume"
+                android:textSize="30sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/wohnraeumeList"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider"
+            android:dividerHeight="2dip"
+            android:layout_marginBottom="50dip"
+            android:paddingLeft="5dip" 
+            android:choiceMode="multipleChoice"/>
+    </LinearLayout>
+    
+    
+    <LinearLayout
+        android:id="@+id/layWohnbarrieren"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="80dip"
+        android:paddingTop="60dip" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/titelWohnbarrieren"
+                android:layout_width="300dip"
+                android:layout_height="wrap_content"
+                android:paddingBottom="40dip"
+                android:paddingLeft="10dip"
+                android:text="Wohnbarrieren"
+                android:textSize="30sp" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/wohnbarrierenList"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:divider="@drawable/divider"
+            android:dividerHeight="2dip"
+            android:layout_marginBottom="50dip"
+            android:paddingLeft="5dip" 
+            android:choiceMode="multipleChoice"/>
+    </LinearLayout>
 </LinearLayout>

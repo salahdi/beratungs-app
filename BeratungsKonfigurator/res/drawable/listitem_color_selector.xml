@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@color/konfifarbe2" android:state_checked="true"/>
-    <item android:drawable="@color/konfifarbe" android:state_checked="false"/>
+    <item android:color="@color/cCyan" android:state_checked="true"/>
+    <item android:color="@color/cGray" android:state_checked="false"/>
 
 </selector>

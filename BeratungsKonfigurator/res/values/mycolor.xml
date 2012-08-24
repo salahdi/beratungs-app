@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="konfifarbe">#33b6ea</color>
-    <color name="konfifarbe2">#FF0000</color>
-    <color name="konfifarbe3">#00FF00</color>
-    <color name="konfifarbe4">#0000FF</color>
+    <color name="cCyan">#33b6ea</color>
+    <color name="cGray">#AAAAAA</color>
 
 </resources>
