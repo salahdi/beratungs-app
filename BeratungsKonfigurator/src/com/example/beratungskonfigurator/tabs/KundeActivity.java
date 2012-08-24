@@ -155,6 +155,7 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
 				ListView lv = (ListView) fragView.findViewById(R.id.listView1);
 				lv.setClickable(true);
+				lv.setSelection(0);
 				lv.setAdapter(adapter);
 
 				lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
