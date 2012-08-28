@@ -3,5 +3,8 @@
 
     <color name="cCyan">#33b6ea</color>
     <color name="cGray">#AAAAAA</color>
+    <color name="cRed">#FF0000</color>
+    <color name="cGreen">#00FF00</color>
+    <color name="cLightGray">#AAAAAA</color>
 
 </resources>

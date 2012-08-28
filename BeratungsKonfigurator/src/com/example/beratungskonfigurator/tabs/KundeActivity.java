@@ -1,6 +1,7 @@
 package com.example.beratungskonfigurator.tabs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -24,6 +25,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -56,6 +58,8 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 	private int kKrankenkasseId = 0;
 	private int kKostentraegerId = 0;
 	private int aArtId = 0;
+	
+	private ListView lv;
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -71,70 +75,70 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 		pDialogUpdate.setIndeterminate(false);
 		pDialogUpdate.setCancelable(false);
 
-		final View fragView = (View) inflater.inflate(R.layout.tab_kunde_layout, container, false);
+		final View kundeView = (View) inflater.inflate(R.layout.tab_kunde_layout, container, false);
 		final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 		currentSelected = 0;
 
-		final LinearLayout layAdresse = (LinearLayout) fragView.findViewById(R.id.layAdresse);
-		final LinearLayout layKontakt = (LinearLayout) fragView.findViewById(R.id.layKontakt);
-		final LinearLayout layInformation = (LinearLayout) fragView.findViewById(R.id.layInformation);
-		final LinearLayout layVersorgung = (LinearLayout) fragView.findViewById(R.id.layVersorgung);
-		final LinearLayout layAngehoeriger = (LinearLayout) fragView.findViewById(R.id.layAngehoeriger);
+		final LinearLayout layAdresse = (LinearLayout) kundeView.findViewById(R.id.layAdresse);
+		final LinearLayout layKontakt = (LinearLayout) kundeView.findViewById(R.id.layKontakt);
+		final LinearLayout layInformation = (LinearLayout) kundeView.findViewById(R.id.layInformation);
+		final LinearLayout layVersorgung = (LinearLayout) kundeView.findViewById(R.id.layVersorgung);
+		final LinearLayout layAngehoeriger = (LinearLayout) kundeView.findViewById(R.id.layAngehoeriger);
 
 		layKontakt.setVisibility(View.GONE);
 		layInformation.setVisibility(View.GONE);
 		layVersorgung.setVisibility(View.GONE);
 		layAngehoeriger.setVisibility(View.GONE);
 
-		final ToggleButton toggleEditAdresse = (ToggleButton) fragView.findViewById(R.id.toggleEditAdresse);
-		final ToggleButton toggleEditKontakt = (ToggleButton) fragView.findViewById(R.id.toggleEditKontakt);
-		final ToggleButton toggleEditInformation = (ToggleButton) fragView.findViewById(R.id.toggleEditInformation);
-		final ToggleButton toggleEditVersorgung = (ToggleButton) fragView.findViewById(R.id.toggleEditVersorgung);
-		final ToggleButton toggleEditAngehoeriger = (ToggleButton) fragView.findViewById(R.id.toggleEditAngehoeriger);
+		final ToggleButton toggleEditAdresse = (ToggleButton) kundeView.findViewById(R.id.toggleEditAdresse);
+		final ToggleButton toggleEditKontakt = (ToggleButton) kundeView.findViewById(R.id.toggleEditKontakt);
+		final ToggleButton toggleEditInformation = (ToggleButton) kundeView.findViewById(R.id.toggleEditInformation);
+		final ToggleButton toggleEditVersorgung = (ToggleButton) kundeView.findViewById(R.id.toggleEditVersorgung);
+		final ToggleButton toggleEditAngehoeriger = (ToggleButton) kundeView.findViewById(R.id.toggleEditAngehoeriger);
 
-		final TextView titelAdresse = (TextView) fragView.findViewById(R.id.titelAdresse);
+		final TextView titelAdresse = (TextView) kundeView.findViewById(R.id.titelAdresse);
 		titelAdresse.setText(ADRESSE);
-		final EditText kName = (EditText) fragView.findViewById(R.id.kName);
-		final EditText kVorname = (EditText) fragView.findViewById(R.id.kVorname);
-		final EditText kStrasse = (EditText) fragView.findViewById(R.id.kStrasse);
-		final EditText kHausnummer = (EditText) fragView.findViewById(R.id.kHausnummer);
-		final EditText kPlz = (EditText) fragView.findViewById(R.id.kPLZ);
-		final EditText kOrt = (EditText) fragView.findViewById(R.id.kOrt);
+		final EditText kName = (EditText) kundeView.findViewById(R.id.kName);
+		final EditText kVorname = (EditText) kundeView.findViewById(R.id.kVorname);
+		final EditText kStrasse = (EditText) kundeView.findViewById(R.id.kStrasse);
+		final EditText kHausnummer = (EditText) kundeView.findViewById(R.id.kHausnummer);
+		final EditText kPlz = (EditText) kundeView.findViewById(R.id.kPLZ);
+		final EditText kOrt = (EditText) kundeView.findViewById(R.id.kOrt);
 
-		final TextView titelKontakt = (TextView) fragView.findViewById(R.id.titelKontakt);
+		final TextView titelKontakt = (TextView) kundeView.findViewById(R.id.titelKontakt);
 		titelKontakt.setText(KONTAKT);
-		final EditText kTelefon = (EditText) fragView.findViewById(R.id.kTelefon);
-		final EditText kMobil = (EditText) fragView.findViewById(R.id.kMobil);
-		final EditText kFax = (EditText) fragView.findViewById(R.id.kFax);
-		final EditText kEmail = (EditText) fragView.findViewById(R.id.kMail);
+		final EditText kTelefon = (EditText) kundeView.findViewById(R.id.kTelefon);
+		final EditText kMobil = (EditText) kundeView.findViewById(R.id.kMobil);
+		final EditText kFax = (EditText) kundeView.findViewById(R.id.kFax);
+		final EditText kEmail = (EditText) kundeView.findViewById(R.id.kMail);
 
-		final TextView titelInformation = (TextView) fragView.findViewById(R.id.titelInformation);
+		final TextView titelInformation = (TextView) kundeView.findViewById(R.id.titelInformation);
 		titelInformation.setText(INFORMATION);
-		final EditText kGeburtsdatum = (EditText) fragView.findViewById(R.id.kGeburtsdatum);
-		final Spinner kFamilienstand = (Spinner) fragView.findViewById(R.id.kFamilienstand);
-		final Spinner kKonfession = (Spinner) fragView.findViewById(R.id.kKonfession);
-		final Spinner kPflegestufe = (Spinner) fragView.findViewById(R.id.kPflegestufe);
+		final EditText kGeburtsdatum = (EditText) kundeView.findViewById(R.id.kGeburtsdatum);
+		final Spinner kFamilienstand = (Spinner) kundeView.findViewById(R.id.kFamilienstand);
+		final Spinner kKonfession = (Spinner) kundeView.findViewById(R.id.kKonfession);
+		final Spinner kPflegestufe = (Spinner) kundeView.findViewById(R.id.kPflegestufe);
 
-		final TextView titelVersorgung = (TextView) fragView.findViewById(R.id.titelVersorgung);
+		final TextView titelVersorgung = (TextView) kundeView.findViewById(R.id.titelVersorgung);
 		titelVersorgung.setText(VERSORGUNG);
-		final Spinner kVersicherungsart = (Spinner) fragView.findViewById(R.id.kVersicherungsart);
-		final Spinner kLeistungsart = (Spinner) fragView.findViewById(R.id.kLeistungsart);
-		final Spinner kKrankenkasse = (Spinner) fragView.findViewById(R.id.kKrankenkasse);
-		final Spinner kKostentraeger = (Spinner) fragView.findViewById(R.id.kKostentraeger);
+		final Spinner kVersicherungsart = (Spinner) kundeView.findViewById(R.id.kVersicherungsart);
+		final Spinner kLeistungsart = (Spinner) kundeView.findViewById(R.id.kLeistungsart);
+		final Spinner kKrankenkasse = (Spinner) kundeView.findViewById(R.id.kKrankenkasse);
+		final Spinner kKostentraeger = (Spinner) kundeView.findViewById(R.id.kKostentraeger);
 
-		final TextView titelAngehoeriger = (TextView) fragView.findViewById(R.id.titelAngehoeriger);
+		final TextView titelAngehoeriger = (TextView) kundeView.findViewById(R.id.titelAngehoeriger);
 		titelAngehoeriger.setText(ANGEHOERIGER);
-		final Spinner aArt = (Spinner) fragView.findViewById(R.id.aArt);
-		final EditText aName = (EditText) fragView.findViewById(R.id.aName);
-		final EditText aVorname = (EditText) fragView.findViewById(R.id.aVorname);
-		final EditText aStrasse = (EditText) fragView.findViewById(R.id.aStrasse);
-		final EditText aHausnummer = (EditText) fragView.findViewById(R.id.aHausnummer);
-		final EditText aPlz = (EditText) fragView.findViewById(R.id.aPLZ);
-		final EditText aOrt = (EditText) fragView.findViewById(R.id.aOrt);
-		final EditText aTelefon = (EditText) fragView.findViewById(R.id.aTelefon);
-		final EditText aMobil = (EditText) fragView.findViewById(R.id.aMobil);
-		final EditText aFax = (EditText) fragView.findViewById(R.id.aFax);
-		final EditText aEmail = (EditText) fragView.findViewById(R.id.aMail);
+		final Spinner aArt = (Spinner) kundeView.findViewById(R.id.aArt);
+		final EditText aName = (EditText) kundeView.findViewById(R.id.aName);
+		final EditText aVorname = (EditText) kundeView.findViewById(R.id.aVorname);
+		final EditText aStrasse = (EditText) kundeView.findViewById(R.id.aStrasse);
+		final EditText aHausnummer = (EditText) kundeView.findViewById(R.id.aHausnummer);
+		final EditText aPlz = (EditText) kundeView.findViewById(R.id.aPLZ);
+		final EditText aOrt = (EditText) kundeView.findViewById(R.id.aOrt);
+		final EditText aTelefon = (EditText) kundeView.findViewById(R.id.aTelefon);
+		final EditText aMobil = (EditText) kundeView.findViewById(R.id.aMobil);
+		final EditText aFax = (EditText) kundeView.findViewById(R.id.aFax);
+		final EditText aEmail = (EditText) kundeView.findViewById(R.id.aMail);
 
 		try {
 
@@ -152,11 +156,25 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 
 				String[] values = new String[] { ADRESSE, KONTAKT, INFORMATION, VERSORGUNG, ANGEHOERIGER };
 
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
-				ListView lv = (ListView) fragView.findViewById(R.id.listView1);
+				/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
+				ListView lv = (ListView) fragView.findViewById(R.id.kundeList);
 				lv.setClickable(true);
 				lv.setSelection(0);
-				lv.setAdapter(adapter);
+				lv.setAdapter(adapter);*/
+				
+				SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_main, new String[] { "name" }, new int[] { R.id.name });
+				lv = (ListView) kundeView.findViewById(R.id.kundeList);
+				lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+				list.clear();
+				HashMap<String, String> temp = new HashMap<String, String>();
+				for (int i = 0; i < values.length; i++) {
+					temp.put("name", values[i]);
+					list.add(temp);
+					temp = new HashMap<String, String>();
+				}
+				lv.setAdapter(adapterMainList);
+				lv.setItemChecked(0, true);
+				
 
 				lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 					public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
@@ -657,19 +675,19 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 						aEmail.setText(result.getJSONObject("data").getString("aEmail"));
 
 						Log.i("ALLLEEEEEEE DATEN", result.toString());
-
-						/*
-						 * JSONArray fs = result.getJSONArray("data");
-						 * 
-						 * for (int i = 0; i < fs.length(); i++) {
-						 * fs.getString(i); } Log.i("data", fs.toString());
-						 * Log.i("msg", result.getString("msg"));
-						 */
-
-						ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
-						ListView lv = (ListView) fragView.findViewById(R.id.listView1);
-						lv.setClickable(true);
-						lv.setAdapter(adapter);
+						
+						SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_main, new String[] { "name" }, new int[] { R.id.name });
+						lv = (ListView) kundeView.findViewById(R.id.kundeList);
+						lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+						list.clear();
+						HashMap<String, String> temp = new HashMap<String, String>();
+						for (int i = 0; i < values.length; i++) {
+							temp.put("name", values[i]);
+							list.add(temp);
+							temp = new HashMap<String, String>();
+						}
+						lv.setAdapter(adapterMainList);
+						lv.setItemChecked(0, true);
 
 						lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 							public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
@@ -1652,8 +1670,16 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 
 		} catch (JSONException e) {
 		}
-		return fragView;
+		return kundeView;
 	}
+	
+	@Override
+	public void onPause() {
+		lv.setItemChecked(0, true);
+		super.onPause();
+	}
+	
+	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
 	@Override
 	public boolean onKey(View v, int keyCode, KeyEvent event) {

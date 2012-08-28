@@ -28,6 +28,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.beratungskonfigurator.FolgeberatungActivity;
 import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.ServerInterface;
 import com.example.beratungskonfigurator.ServerInterfaceListener;
@@ -54,6 +55,8 @@ public class WohnungActivity extends Fragment {
 	ListView wohnumfeldList;
 	ListView wohnraeumeList;
 	ListView wohnbarrierenList;
+	ListView lv;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,6 +85,7 @@ public class WohnungActivity extends Fragment {
 		final LinearLayout layWohnraeume = (LinearLayout) wohnungView.findViewById(R.id.layWohnraeume);
 		final LinearLayout layWohnbarrieren = (LinearLayout) wohnungView.findViewById(R.id.layWohnbarrieren);
 
+		layWohnsituation.setVisibility(View.VISIBLE);
 		layWohnform.setVisibility(View.GONE);
 		layWohninformation.setVisibility(View.GONE);
 		layWohnumfeld.setVisibility(View.GONE);
@@ -90,15 +94,24 @@ public class WohnungActivity extends Fragment {
 
 		String[] values = new String[] { WOHNSITUATION, WOHNFORM, WOHNINFORMATION, WOHNUMFELD, WOHNRAEUME, WOHNBARRIEREN };
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, values);
-		final ListView lv = (ListView) wohnungView.findViewById(R.id.wohnungList);
-		lv.setClickable(true);
-		lv.setSelection(0);
-		lv.setAdapter(adapter);
+		/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.wohnung_listview, values);
+		final ListView lv = (ListView) wohnungView.findViewById(R.id.wohnungList);*/
+		
+		SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_main, new String[] { "name" }, new int[] { R.id.name });
+		lv = (ListView) wohnungView.findViewById(R.id.wohnungList);
+		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		list.clear();
+		HashMap<String, String> temp = new HashMap<String, String>();
+		for (int i = 0; i < values.length; i++) {
+			temp.put("name", values[i]);
+			list.add(temp);
+			temp = new HashMap<String, String>();
+		}
+		lv.setAdapter(adapterMainList);
+		lv.setItemChecked(0, true);
 
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-
 				switch (position) {
 				case 0:
 					switch (currentSelected) {
@@ -281,7 +294,7 @@ public class WohnungActivity extends Fragment {
 
 					// Instantiating an adapter to store each items
 					// R.layout.wohnung_listview defines the layout of each item
-					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.wohnung_listview, from, to);
+					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					wohnsituationList = (ListView) wohnungView.findViewById(R.id.wohnsituationList);
 
 					// wohnsituationList.setSelection(kLeistungsartId - 1);
@@ -334,7 +347,7 @@ public class WohnungActivity extends Fragment {
 
 					// Instantiating an adapter to store each items
 					// R.layout.wohnung_listview defines the layout of each item
-					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.wohnung_listview, from, to);
+					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					wohnformList = (ListView) wohnungView.findViewById(R.id.wohnformList);
 
 					// wohnsituationList.setSelection(kLeistungsartId - 1);
@@ -387,7 +400,7 @@ public class WohnungActivity extends Fragment {
 
 					// Instantiating an adapter to store each items
 					// R.layout.wohnung_listview defines the layout of each item
-					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.wohnung_listview, from, to);
+					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					wohnumfeldList = (ListView) wohnungView.findViewById(R.id.wohnumfeldList);
 
 					// wohnsituationList.setSelection(kLeistungsartId - 1);
@@ -440,7 +453,7 @@ public class WohnungActivity extends Fragment {
 
 					// Instantiating an adapter to store each items
 					// R.layout.wohnung_listview defines the layout of each item
-					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.wohnung_listview, from, to);
+					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					wohnraeumeList = (ListView) wohnungView.findViewById(R.id.wohnraeumeList);
 
 					// wohnsituationList.setSelection(kLeistungsartId - 1);
@@ -493,7 +506,7 @@ public class WohnungActivity extends Fragment {
 
 					// Instantiating an adapter to store each items
 					// R.layout.wohnung_listview defines the layout of each item
-					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.wohnung_listview, from, to);
+					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					wohnbarrierenList = (ListView) wohnungView.findViewById(R.id.wohnbarrierenList);
 
 					// wohnsituationList.setSelection(kLeistungsartId - 1);
@@ -674,226 +687,232 @@ public class WohnungActivity extends Fragment {
 		return wohnungView;
 	}
 
+	
 	@Override
 	public void onPause() {
+		
+		lv.setItemChecked(0, true);
 
 		// ----------------------------------------------------------------------------------//
 		// insertWohnsituation
 		// ----------------------------------------------------------------------------------//
 
-		if (wohnsituationList.getCheckedItemCount() != 0) {
-			try {
-				String selected = "";
-				int cntChoice = wohnsituationList.getCount();
-				SparseBooleanArray sparseBooleanArray = wohnsituationList.getCheckedItemPositions();
+		try {
+			String selected = "";
+			int count = 0;
+			int cntChoice = wohnsituationList.getCount();
 
-				for (int i = 0; i < cntChoice; i++) {
-					if (sparseBooleanArray.get(i)) {
-						selected += (wohnsituationList.getItemIdAtPosition(i) + 1) + ".";
-						Log.i("onPause: ", "Selected: " + selected);
-					}
+			SparseBooleanArray sparseBooleanArray = wohnsituationList.getCheckedItemPositions();
+
+			for (int i = 0; i < cntChoice; i++) {
+				if (sparseBooleanArray.get(i)) {
+					selected += (wohnsituationList.getItemIdAtPosition(i) + 1) + ".";
+					count++;
 				}
+			}
+			if (count != 0) {
 				selected = selected.substring(0, selected.length() - 1);
-				Log.i("onPause: ", "Selected nach substring: " + selected);
-
-				JSONObject updateParams = new JSONObject();
-				updateParams.put("wohnsituation", selected);
-				updateParams.put("kundeId", kundeId);
-
-				ServerInterface si = new ServerInterface();
-				si.addListener(new ServerInterfaceListener() {
-					public void serverSuccessHandler(JSONObject result) throws JSONException {
-						Log.i("INSERT Wohnsituation: ", result.getString("msg"));
-					}
-
-					public void serverErrorHandler(Exception e) {
-						// TODO Auto-generated method
-						// stub
-					}
-				});
-				si.call("insertWohnsituation", updateParams);
-			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				Log.i("onPause: ", "Selected nach substring: " + selected + "  Count != 0: " + count);
 			}
 
-		} 
-		
-		if (wohnformList.getCheckedItemCount() != 0) {
-			
-			// ----------------------------------------------------------------------------------//
-			// insertWohnform
-			// ----------------------------------------------------------------------------------//
+			JSONObject updateParams = new JSONObject();
+			updateParams.put("wohnsituation", selected);
+			updateParams.put("kundeId", kundeId);
+			updateParams.put("countAnz", count);
 
-			try {
-				String selected = "";
-				int cntChoice = wohnformList.getCount();
-				SparseBooleanArray sparseBooleanArray = wohnformList.getCheckedItemPositions();
-
-				for (int i = 0; i < cntChoice; i++) {
-					if (sparseBooleanArray.get(i)) {
-						selected += (wohnformList.getItemIdAtPosition(i) + 1) + ".";
-						Log.i("onPause: ", "Selected-Wohnform: " + selected);
-					}
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+					Log.i("INSERT Wohnsituation: ", result.getString("msg"));
 				}
-				selected = selected.substring(0, selected.length() - 1);
 
-				JSONObject updateParams = new JSONObject();
-				updateParams.put("wohnform", selected);
-				updateParams.put("kundeId", kundeId);
-
-				ServerInterface si = new ServerInterface();
-				si.addListener(new ServerInterfaceListener() {
-					public void serverSuccessHandler(JSONObject result) throws JSONException {
-						Log.i("INSERT Wohnform: ", result.getString("msg"));
-					}
-
-					public void serverErrorHandler(Exception e) {
-						// TODO Auto-generated method
-						// stub
-					}
-				});
-				si.call("insertWohnform", updateParams);
-			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-		}
-		
-		if (wohnumfeldList.getCheckedItemCount() != 0) {
-		
-			// ----------------------------------------------------------------------------------//
-			// insertWohnumfeld
-			// ----------------------------------------------------------------------------------//
-
-			try {
-				String selected = "";
-				int cntChoice = wohnumfeldList.getCount();
-				SparseBooleanArray sparseBooleanArray = wohnumfeldList.getCheckedItemPositions();
-
-				for (int i = 0; i < cntChoice; i++) {
-					if (sparseBooleanArray.get(i)) {
-						selected += (wohnumfeldList.getItemIdAtPosition(i) + 1) + ".";
-						Log.i("onPause: ", "Selected-Wohnumfeld: " + selected);
-					}
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method
+					// stub
 				}
-				selected = selected.substring(0, selected.length() - 1);
-
-				JSONObject updateParams = new JSONObject();
-				updateParams.put("wohnumfeld", selected);
-				updateParams.put("kundeId", kundeId);
-
-				ServerInterface si = new ServerInterface();
-				si.addListener(new ServerInterfaceListener() {
-					public void serverSuccessHandler(JSONObject result) throws JSONException {
-						Log.i("INSERT Wohnumfeld: ", result.getString("msg"));
-					}
-
-					public void serverErrorHandler(Exception e) {
-						// TODO Auto-generated method
-						// stub
-					}
-				});
-				si.call("insertWohnumfeld", updateParams);
-			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-		
-		if (wohnraeumeList.getCheckedItemCount() != 0) {
-			
-			// ----------------------------------------------------------------------------------//
-			// insertWohnraeume
-			// ----------------------------------------------------------------------------------//
-
-			try {
-				String selected = "";
-				int cntChoice = wohnraeumeList.getCount();
-				SparseBooleanArray sparseBooleanArray = wohnraeumeList.getCheckedItemPositions();
-
-				for (int i = 0; i < cntChoice; i++) {
-					if (sparseBooleanArray.get(i)) {
-						selected += (wohnraeumeList.getItemIdAtPosition(i) + 1) + ".";
-						Log.i("onPause: ", "Selected-Wohnräume: " + selected);
-					}
-				}
-				selected = selected.substring(0, selected.length() - 1);
-
-				JSONObject updateParams = new JSONObject();
-				updateParams.put("wohnraeume", selected);
-				updateParams.put("kundeId", kundeId);
-
-				ServerInterface si = new ServerInterface();
-				si.addListener(new ServerInterfaceListener() {
-					public void serverSuccessHandler(JSONObject result) throws JSONException {
-						Log.i("INSERT Wohnräume: ", result.getString("msg"));
-					}
-
-					public void serverErrorHandler(Exception e) {
-						// TODO Auto-generated method
-						// stub
-					}
-				});
-				si.call("insertWohnraeume", updateParams);
-			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
-		
-		if (wohnbarrierenList.getCheckedItemCount() != 0) {
-			
-			// ----------------------------------------------------------------------------------//
-			// insertWohnbarrieren
-			// ----------------------------------------------------------------------------------//
-
-			try {
-				String selected = "";
-				int cntChoice = wohnbarrierenList.getCount();
-				SparseBooleanArray sparseBooleanArray = wohnbarrierenList.getCheckedItemPositions();
-
-				for (int i = 0; i < cntChoice; i++) {
-					if (sparseBooleanArray.get(i)) {
-						selected += (wohnbarrierenList.getItemIdAtPosition(i) + 1) + ".";
-						Log.i("onPause: ", "Selected-Wohnbarrieren: " + selected);
-					}
-				}
-				selected = selected.substring(0, selected.length() - 1);
-
-				JSONObject updateParams = new JSONObject();
-				updateParams.put("wohnbarrieren", selected);
-				updateParams.put("kundeId", kundeId);
-
-				ServerInterface si = new ServerInterface();
-				si.addListener(new ServerInterfaceListener() {
-					public void serverSuccessHandler(JSONObject result) throws JSONException {
-						Log.i("INSERT Wohnbarrieren: ", result.getString("msg"));
-					}
-
-					public void serverErrorHandler(Exception e) {
-						// TODO Auto-generated method
-						// stub
-					}
-				});
-				si.call("insertWohnbarrieren", updateParams);
-			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			});
+			si.call("insertWohnsituation", updateParams);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
+		// }
+
+		// ----------------------------------------------------------------------------------//
+		// insertWohnform
+		// ----------------------------------------------------------------------------------//
+
+		try {
+			String selected = "";
+			int count = 0;
+			int cntChoice = wohnformList.getCount();
+			SparseBooleanArray sparseBooleanArray = wohnformList.getCheckedItemPositions();
+
+			for (int i = 0; i < cntChoice; i++) {
+				if (sparseBooleanArray.get(i)) {
+					selected += (wohnformList.getItemIdAtPosition(i) + 1) + ".";
+					count++;
+				}
+			}
+			if (count != 0) {
+				selected = selected.substring(0, selected.length() - 1);
+				Log.i("onPause: ", "Selected nach substring: " + selected + "  Count != 0: " + count);
+			}
+
+			JSONObject updateParams = new JSONObject();
+			updateParams.put("wohnform", selected);
+			updateParams.put("kundeId", kundeId);
+			updateParams.put("countAnz", count);
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+					Log.i("INSERT Wohnform: ", result.getString("msg"));
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method
+					// stub
+				}
+			});
+			si.call("insertWohnform", updateParams);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// ----------------------------------------------------------------------------------//
+		// insertWohnumfeld
+		// ----------------------------------------------------------------------------------//
+
+		try {
+			String selected = "";
+			int count = 0;
+			int cntChoice = wohnumfeldList.getCount();
+			SparseBooleanArray sparseBooleanArray = wohnumfeldList.getCheckedItemPositions();
+
+			for (int i = 0; i < cntChoice; i++) {
+				if (sparseBooleanArray.get(i)) {
+					selected += (wohnumfeldList.getItemIdAtPosition(i) + 1) + ".";
+					count++;
+				}
+			}
+			if (count != 0) {
+				selected = selected.substring(0, selected.length() - 1);
+				Log.i("onPause: ", "Selected nach substring: " + selected + "  Count != 0: " + count);
+			}
+
+			JSONObject updateParams = new JSONObject();
+			updateParams.put("wohnumfeld", selected);
+			updateParams.put("kundeId", kundeId);
+			updateParams.put("countAnz", count);
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+					Log.i("INSERT Wohnumfeld: ", result.getString("msg"));
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method
+					// stub
+				}
+			});
+			si.call("insertWohnumfeld", updateParams);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// ----------------------------------------------------------------------------------//
+		// insertWohnraeume
+		// ----------------------------------------------------------------------------------//
+
+		try {
+			String selected = "";
+			int count = 0;
+			int cntChoice = wohnraeumeList.getCount();
+			SparseBooleanArray sparseBooleanArray = wohnraeumeList.getCheckedItemPositions();
+
+			for (int i = 0; i < cntChoice; i++) {
+				if (sparseBooleanArray.get(i)) {
+					selected += (wohnraeumeList.getItemIdAtPosition(i) + 1) + ".";
+					count++;
+				}
+			}
+			if (count != 0) {
+				selected = selected.substring(0, selected.length() - 1);
+				Log.i("onPause: ", "Selected nach substring: " + selected + "  Count != 0: " + count);
+			}
+
+			JSONObject updateParams = new JSONObject();
+			updateParams.put("wohnraeume", selected);
+			updateParams.put("kundeId", kundeId);
+			updateParams.put("countAnz", count);
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+					Log.i("INSERT Wohnräume: ", result.getString("msg"));
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method
+					// stub
+				}
+			});
+			si.call("insertWohnraeume", updateParams);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// ----------------------------------------------------------------------------------//
+		// insertWohnbarrieren
+		// ----------------------------------------------------------------------------------//
+
+		try {
+			String selected = "";
+			int count = 0;
+			int cntChoice = wohnbarrierenList.getCount();
+			SparseBooleanArray sparseBooleanArray = wohnbarrierenList.getCheckedItemPositions();
+
+			for (int i = 0; i < cntChoice; i++) {
+				if (sparseBooleanArray.get(i)) {
+					selected += (wohnbarrierenList.getItemIdAtPosition(i) + 1) + ".";
+					count++;
+				}
+			}
+			if (count != 0) {
+				selected = selected.substring(0, selected.length() - 1);
+				Log.i("onPause: ", "Selected nach substring: " + selected + "  Count != 0: " + count);
+			}
+
+			JSONObject updateParams = new JSONObject();
+			updateParams.put("wohnbarrieren", selected);
+			updateParams.put("kundeId", kundeId);
+			updateParams.put("countAnz", count);
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+					Log.i("INSERT Wohnbarrieren: ", result.getString("msg"));
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method
+					// stub
+				}
+			});
+			si.call("insertWohnbarrieren", updateParams);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		super.onPause();
 	}
-
-	public Integer[] transformString(String s) throws NumberFormatException {
-		String[] strings = s.split("\\.");
-		Integer[] integers = new Integer[strings.length];
-		for (int i = 0; i < strings.length; i++) {
-			integers[i] = Integer.valueOf(strings[i]);
-		}
-		return integers;
-	}
+	
+	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
 }
