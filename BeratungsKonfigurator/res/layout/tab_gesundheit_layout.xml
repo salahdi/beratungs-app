@@ -22,10 +22,14 @@
             android:id="@+id/gesundheitList"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="50dip"
             android:dividerHeight="2dip"
             android:listSelector="@drawable/listitem_color_selector_single"
-            android:paddingBottom="50dip"
-            android:paddingLeft="20dip" />
+            android:paddingLeft="20dip"
+            android:paddingRight="10dip"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarFadeDuration="0"
+            android:scrollbarStyle="outsideInset" />
 
         <LinearLayout
             android:id="@+id/layErkrankungen"
@@ -53,11 +57,15 @@
                 android:id="@+id/erkrankungenList"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"
                 android:divider="@drawable/divider"
                 android:dividerHeight="2dip"
-                android:paddingBottom="50dip"
-                android:paddingLeft="5dip" />
+                android:paddingLeft="5dip"
+                android:paddingRight="10dip"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarStyle="outsideInset" />
         </LinearLayout>
 
         <LinearLayout
@@ -86,11 +94,15 @@
                 android:id="@+id/pflegeList"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"
                 android:divider="@drawable/divider"
                 android:dividerHeight="2dip"
-                android:paddingBottom="50dip"
-                android:paddingLeft="5dip" />
+                android:paddingLeft="5dip"
+                android:paddingRight="10dip"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarStyle="outsideInset" />
         </LinearLayout>
 
         <LinearLayout
@@ -119,11 +131,15 @@
                 android:id="@+id/alltagskompetenzenList"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"
                 android:divider="@drawable/divider"
                 android:dividerHeight="2dip"
-                android:paddingBottom="50dip"
-                android:paddingLeft="5dip" />
+                android:paddingLeft="5dip"
+                android:paddingRight="10dip"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarStyle="outsideInset" />
         </LinearLayout>
 
         <LinearLayout
@@ -156,7 +172,11 @@
                 android:choiceMode="multipleChoice"
                 android:divider="@drawable/divider"
                 android:dividerHeight="2dip"
-                android:paddingLeft="5dip" />
+                android:paddingLeft="5dip"
+                android:paddingRight="10dip"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarStyle="outsideInset" />
         </LinearLayout>
     </LinearLayout>
 

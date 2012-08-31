@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="1200dip"
+    android:layout_height="700dip"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/dialogTitel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="30dip"
+                android:paddingLeft="20dip"
+                android:paddingTop="30dip"
+                android:text="Szenarien"
+                android:textSize="40sp" />
+
+            <Button
+                android:id="@+id/bClose"
+                android:layout_width="60dip"
+                android:layout_height="60dip"
+                android:layout_alignParentRight="true"
+                android:padding="20dip" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ListView
+            android:id="@+id/szenarioList"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:dividerHeight="2dip"
+            android:listSelector="@drawable/listitem_color_selector_single"
+            android:paddingBottom="20dip"
+            android:paddingLeft="20dip" />
+
+        <LinearLayout
+            android:id="@+id/laySzenario"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="80dip" >
+
+            <TabHost
+                android:id="@+id/TabHost01"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="50dip"
+                android:paddingRight="20dip" >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical" >
+
+                    <TabWidget
+                        android:id="@android:id/tabs"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="10dip" />
+
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" >
+                        
+                        <TextView
+                            android:id="@+id/tBeschreibung"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:ems="10"
+                            android:inputType="textMultiLine"
+                            android:scrollbarAlwaysDrawVerticalTrack="true"
+                            android:scrollbarFadeDuration="0"
+                            android:scrollbarStyle="outsideInset"
+                            android:textSize="18sp" 
+                            android:lineSpacingExtra="5dip"
+                            android:padding="10dip"
+                            android:scrollbars="vertical"/>
+
+                        <Gallery
+                            android:id="@+id/gBilder"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent" />
+
+                        <VideoView
+                            android:id="@+id/vVideo"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent" />
+
+                    </FrameLayout>
+                </LinearLayout>
+            </TabHost>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

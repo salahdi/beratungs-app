@@ -2,7 +2,6 @@ package com.example.beratungskonfigurator;
 
 import java.util.HashMap;
 
-import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,8 +10,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.TabHost;
 
-import com.example.beratungskonfigurator.R;
-import com.example.beratungskonfigurator.tabs.*;
+import com.example.beratungskonfigurator.tabs.AnwendungsfallActivity;
+import com.example.beratungskonfigurator.tabs.ExportActivity;
+import com.example.beratungskonfigurator.tabs.GesundheitActivity;
+import com.example.beratungskonfigurator.tabs.HerstellerActivity;
+import com.example.beratungskonfigurator.tabs.KonfigurationActivity;
+import com.example.beratungskonfigurator.tabs.KundeActivity;
+import com.example.beratungskonfigurator.tabs.UebersichtActivity;
+import com.example.beratungskonfigurator.tabs.WohnungActivity;
 
 /**
  * This demonstrates how you can implement switching between the tabs of a
@@ -27,7 +32,7 @@ public class TabActivity extends FragmentActivity {
     private static final String KUNDE_TAB = "Kunde";
 	private static final String WOHNUNG_TAB = "Wohnung";
 	private static final String GESUNDHEIT_TAB = "Gesundheit";
-	private static final String PROBLEM_TAB = "Problemstellung";
+	//private static final String PROBLEM_TAB = "Problemstellung";
 	private static final String ANWENDUNGSFALL_TAB = "Anwendungsfall";
 	private static final String KONFIGURATION_TAB = "persönliche Konfiguration";
 	private static final String UEBERSICHT_TAB = "Übersicht";
@@ -48,7 +53,7 @@ public class TabActivity extends FragmentActivity {
         mTabManager.addTab(mTabHost.newTabSpec(KUNDE_TAB).setIndicator(KUNDE_TAB),KundeActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(WOHNUNG_TAB).setIndicator(WOHNUNG_TAB),WohnungActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(GESUNDHEIT_TAB).setIndicator(GESUNDHEIT_TAB),GesundheitActivity.class, null);
-        mTabManager.addTab(mTabHost.newTabSpec(PROBLEM_TAB).setIndicator(PROBLEM_TAB),ProblemActivity.class, null);
+        //mTabManager.addTab(mTabHost.newTabSpec(PROBLEM_TAB).setIndicator(PROBLEM_TAB),ProblemActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(ANWENDUNGSFALL_TAB).setIndicator(ANWENDUNGSFALL_TAB),AnwendungsfallActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(KONFIGURATION_TAB).setIndicator(KONFIGURATION_TAB),KonfigurationActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(UEBERSICHT_TAB).setIndicator(UEBERSICHT_TAB),UebersichtActivity.class, null);

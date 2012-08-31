@@ -22,11 +22,10 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.example.beratungskonfigurator.R;
-import com.example.beratungskonfigurator.ServerInterface;
-import com.example.beratungskonfigurator.ServerInterfaceListener;
+import com.example.beratungskonfigurator.server.ServerInterface;
+import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
 public class GesundheitActivity extends Fragment {
 
@@ -503,7 +502,6 @@ public class GesundheitActivity extends Fragment {
 		return gesundheitView;
 	}
 
-	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
 	@Override
 	public void onPause() {
@@ -684,4 +682,5 @@ public class GesundheitActivity extends Fragment {
 		super.onPause();
 	}
 
+	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 }

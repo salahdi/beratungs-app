@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.beratungskonfigurator.server.ServerInterface;
+import com.example.beratungskonfigurator.server.ServerInterfaceListener;
+
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -66,6 +69,7 @@ public class FolgeberatungActivity extends ListActivity implements AdapterView.O
 						items);
 				adapterSortList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 				sortList.setAdapter(adapterSortList);
+				sortList.setVisibility(View.VISIBLE);
 
 				JSONArray alleKunden = result.getJSONArray("data");
 
@@ -108,14 +112,6 @@ public class FolgeberatungActivity extends ListActivity implements AdapterView.O
 						//startActivity(new Intent(FolgeberatungActivity.this, TabActivity.class));
 					}
 				});
-
-				/*
-				 * ArrayAdapter<String> dataAdapter = new
-				 * ArrayAdapter<String>(FolgeberatungActivity.this,
-				 * R.layout.custom_row_view, list); ListView lv = (ListView)
-				 * findViewById(R.id.listView1); lv.setAdapter(dataAdapter);
-				 */
-
 			}
 
 			public void serverErrorHandler(Exception e) {

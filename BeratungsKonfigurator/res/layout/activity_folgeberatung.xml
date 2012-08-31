@@ -29,6 +29,7 @@
             android:id="@+id/sortList"
             android:layout_width="200dip"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:paddingLeft="10dip"/>
     </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.example.beratungskonfigurator;
+package com.example.beratungskonfigurator.server;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -10,28 +10,26 @@ import org.json.JSONObject;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.beratungskonfigurator.FolgeberatungActivity;
+import com.example.beratungskonfigurator.NumberPic;
 import com.example.beratungskonfigurator.R;
-import com.example.beratungskonfigurator.ServerInterface;
-import com.example.beratungskonfigurator.ServerInterfaceListener;
+import com.example.beratungskonfigurator.server.ServerInterface;
+import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
 public class WohnungActivity extends Fragment {
 
@@ -49,6 +47,8 @@ public class WohnungActivity extends Fragment {
 	private static final String WOHNBARRIEREN = "Wohnbarrieren";
 
 	private String wohnsituationId = "";
+	EditText etNumber;
+	EditText etWohnflaeche;
 
 	ListView wohnsituationList;
 	ListView wohnformList;
@@ -56,7 +56,6 @@ public class WohnungActivity extends Fragment {
 	ListView wohnraeumeList;
 	ListView wohnbarrierenList;
 	ListView lv;
-	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,12 +91,38 @@ public class WohnungActivity extends Fragment {
 		layWohnraeume.setVisibility(View.GONE);
 		layWohnbarrieren.setVisibility(View.GONE);
 
+		etWohnflaeche = (EditText) wohnungView.findViewById(R.id.etWohnflaeche);
+		Button bPlus = (Button) wohnungView.findViewById(R.id.bPlus);
+		Button bMinus = (Button) wohnungView.findViewById(R.id.bMinus);
+		etNumber = (EditText) wohnungView.findViewById(R.id.etNumber);
+		etNumber.setText("0");
+		etNumber.setFocusable(false);
+		etNumber.setClickable(false);
+		etNumber.setCursorVisible(false);
+		etNumber.setFocusableInTouchMode(false);
+
+		final NumberPic numberPic = new NumberPic();
+
+		bPlus.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				int tfNumber = Integer.valueOf(etNumber.getText().toString());
+				int number = numberPic.increment(tfNumber);
+				etNumber.setText(Integer.toString(number));
+			}
+		});
+
+		bMinus.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				int tfNumber = Integer.valueOf(etNumber.getText().toString());
+				int number = numberPic.decrement(tfNumber);
+				etNumber.setText(Integer.toString(number));
+			}
+		});
+
 		String[] values = new String[] { WOHNSITUATION, WOHNFORM, WOHNINFORMATION, WOHNUMFELD, WOHNRAEUME, WOHNBARRIEREN };
 
-		/*ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.wohnung_listview, values);
-		final ListView lv = (ListView) wohnungView.findViewById(R.id.wohnungList);*/
-		
-		SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_main, new String[] { "name" }, new int[] { R.id.name });
+		SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_main, new String[] { "name" },
+				new int[] { R.id.name });
 		lv = (ListView) wohnungView.findViewById(R.id.wohnungList);
 		lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		list.clear();
@@ -591,6 +616,34 @@ public class WohnungActivity extends Fragment {
 			si.call("gibKundeWohnform", params);
 
 			// ----------------------------------------------------------------------------------//
+			// gibKundeWohninformation
+			// ----------------------------------------------------------------------------------//
+
+			params = new JSONObject();
+			pDialog.show();
+
+			params.put("kundeId", kundeId);
+
+			si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					pDialog.dismiss();
+
+					etNumber.setText(result.getJSONObject("data").getString("stockwerke"));
+					etWohnflaeche.setText(result.getJSONObject("data").getString("wohnflaeche"));
+					Log.i("WOHNINFORMATION:", result.toString());
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// z.B. Fehler Dialog aufploppen lassen
+					Log.e("error", "called");
+				}
+			});
+			si.call("gibKundeWohninformation", params);
+
+			// ----------------------------------------------------------------------------------//
 			// gibKundeWohnumfeld
 			// ----------------------------------------------------------------------------------//
 
@@ -687,10 +740,9 @@ public class WohnungActivity extends Fragment {
 		return wohnungView;
 	}
 
-	
 	@Override
 	public void onPause() {
-		
+
 		lv.setItemChecked(0, true);
 
 		// ----------------------------------------------------------------------------------//
@@ -737,8 +789,6 @@ public class WohnungActivity extends Fragment {
 			e1.printStackTrace();
 		}
 
-		// }
-
 		// ----------------------------------------------------------------------------------//
 		// insertWohnform
 		// ----------------------------------------------------------------------------------//
@@ -777,6 +827,38 @@ public class WohnungActivity extends Fragment {
 				}
 			});
 			si.call("insertWohnform", updateParams);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// ----------------------------------------------------------------------------------//
+		// insertWohninformation
+		// ----------------------------------------------------------------------------------//
+		try {
+			JSONObject updateParams = new JSONObject();
+
+			updateParams.put("kundeId", kundeId);
+			updateParams.put("stockwerke", etNumber.getText().toString());
+			updateParams.put("wohnflaeche", etWohnflaeche.getText().toString());
+
+			// z.B. Lass Swirl jetzt rotieren
+			pDialogUpdate.show();
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					pDialogUpdate.dismiss();
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method
+					// stub
+				}
+			});
+			si.call("insertWohninformation", updateParams);
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -912,7 +994,7 @@ public class WohnungActivity extends Fragment {
 		}
 		super.onPause();
 	}
-	
+
 	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
 }

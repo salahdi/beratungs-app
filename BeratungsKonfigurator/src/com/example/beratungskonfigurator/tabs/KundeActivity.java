@@ -31,8 +31,8 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.beratungskonfigurator.R;
-import com.example.beratungskonfigurator.ServerInterface;
-import com.example.beratungskonfigurator.ServerInterfaceListener;
+import com.example.beratungskonfigurator.server.ServerInterface;
+import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
 @SuppressLint("ParserError")
 public class KundeActivity extends Fragment implements View.OnKeyListener {
