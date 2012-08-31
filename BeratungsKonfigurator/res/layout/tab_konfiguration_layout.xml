@@ -1,9 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent"
-  android:background="#FF0000"
-  >
-  
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tabTitel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dip"
+        android:paddingLeft="20dip"
+        android:paddingTop="30dip"
+        android:text="persönliche Szenarien einrichten"
+        android:textSize="40sp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ListView
+            android:id="@+id/konfigurationList"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dip"
+            android:dividerHeight="2dip"
+            android:listSelector="@drawable/listitem_color_selector_single"
+            android:paddingLeft="20dip"
+            android:paddingRight="10dip"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarFadeDuration="0"
+            android:scrollbarStyle="outsideInset" />
+
+        <LinearLayout
+            android:id="@+id/layEinstellungen"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="80dip" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/titelEinstellungen"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="40dip"
+                    android:paddingLeft="10dip"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/einstellungenList"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dip"
+                android:choiceMode="multipleChoice"
+                android:divider="@drawable/divider"
+                android:dividerHeight="2dip"
+                android:paddingLeft="5dip"
+                android:paddingRight="10dip"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbarFadeDuration="0"
+                android:scrollbarStyle="outsideInset" />
+        </LinearLayout>
+    </LinearLayout>
+
 </LinearLayout>

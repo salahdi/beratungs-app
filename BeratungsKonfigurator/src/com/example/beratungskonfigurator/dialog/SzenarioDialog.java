@@ -30,20 +30,20 @@ import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.server.ServerInterface;
 import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
-
 public class SzenarioDialog extends Dialog {
 
 	private ProgressDialog pDialog;
 	private ListView szenarioList;
 
+	private int aktuelleListPosition;
 	private int szenarioId;
 	private int mKundeId;
 	private int mAnwendungsfallId;
 	private String mAnwendungsfallName;
 	private TextView tBeschreibung;
 	private TextView dialogTitel;
-	private JSONArray szId;
-	private JSONArray la;
+	private JSONArray szId = new JSONArray();
+	private JSONArray la = new JSONArray();
 
 	ArrayList<Integer> selSzenarioList = new ArrayList<Integer>();
 
@@ -79,7 +79,7 @@ public class SzenarioDialog extends Dialog {
 
 		dialogTitel = (TextView) findViewById(R.id.dialogTitel);
 		dialogTitel.setText(mAnwendungsfallName);
-		
+
 		tBeschreibung = (TextView) findViewById(R.id.tBeschreibung);
 		tBeschreibung.setMovementMethod(new ScrollingMovementMethod());
 		Button bClose = (Button) findViewById(R.id.bClose);
@@ -163,42 +163,35 @@ public class SzenarioDialog extends Dialog {
 					szenarioList.setAdapter(adapterMainList);
 					szenarioList.setItemChecked(0, true);
 
-					try {
-						szenarioId = szId.getInt(0);
-						Log.i("szenarioLIST:", "szenarioId: " + szenarioId);
+					// ----------------------------------------------------------------------------------//
+					// gibSzenarioDetails
+					// ----------------------------------------------------------------------------------//
+					szenarioId = szId.getInt(0);
+					Log.i("szenarioLIST:", "szenarioId: " + szenarioId);
 
-						// ----------------------------------------------------------------------------------//
-						// gibSzenarioDetails
-						// ----------------------------------------------------------------------------------//
+					JSONObject params = new JSONObject();
 
-						JSONObject params = new JSONObject();
-						ServerInterface si;
+					params.put("szenarioId", szenarioId);
 
-						params.put("szenarioId", szenarioId);
+					ServerInterface si = new ServerInterface();
+					si.addListener(new ServerInterfaceListener() {
 
-						si = new ServerInterface();
-						si.addListener(new ServerInterfaceListener() {
+						public void serverSuccessHandler(JSONObject result) throws JSONException {
 
-							public void serverSuccessHandler(JSONObject result) throws JSONException {
+							tBeschreibung.setText(result.getJSONObject("data").getString("beschreibung"));
+						}
 
-								tBeschreibung.setText(result.getJSONObject("data").getString("beschreibung"));
-							}
-
-							public void serverErrorHandler(Exception e) {
-								// z.B. Fehler Dialog aufploppen lassen
-								Log.e("error", "called");
-							}
-						});
-						si.call("gibSzenarioDetails", params);
-
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+						public void serverErrorHandler(Exception e) {
+							// z.B. Fehler Dialog aufploppen lassen
+							Log.e("error", "called");
+						}
+					});
+					si.call("gibSzenarioDetails", params);
 
 					szenarioList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 							try {
+								aktuelleListPosition = position;
 								szenarioId = szId.getInt(position);
 								Log.i("szenarioLIST:", "szenarioId: " + szenarioId + " Position: " + position);
 
@@ -273,7 +266,7 @@ public class SzenarioDialog extends Dialog {
 								szenarioList = (ListView) findViewById(R.id.szenarioList);
 								szenarioList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 								szenarioList.setAdapter(adapterMainList);
-								szenarioList.setItemChecked(pos, true);
+								szenarioList.setItemChecked(aktuelleListPosition, true);
 								Log.i("long clicked", "pos" + " " + pos);
 
 							} catch (JSONException e) {
@@ -296,7 +289,6 @@ public class SzenarioDialog extends Dialog {
 			// ----------------------------------------------------------------------------------//
 			// gibKundeSzenario
 			// ----------------------------------------------------------------------------------//
-
 			Log.i("gibKundeSzenario", "START gibKundeSzenario");
 
 			params = new JSONObject();
