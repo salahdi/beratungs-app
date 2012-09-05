@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
 						}
 					});
 			AlertDialog alert = builder.create();
+			//alert.setIcon(R.drawable.icon);
 			alert.show();
 		}
 

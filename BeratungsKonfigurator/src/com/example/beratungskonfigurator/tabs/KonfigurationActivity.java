@@ -9,9 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -26,7 +30,11 @@ import android.widget.SimpleAdapter;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 
+import com.example.beratungskonfigurator.MainActivity;
 import com.example.beratungskonfigurator.R;
+import com.example.beratungskonfigurator.dialog.GeraeteDialog;
+import com.example.beratungskonfigurator.dialog.RaumauswahlDialog;
+import com.example.beratungskonfigurator.dialog.SzenarioDialog;
 import com.example.beratungskonfigurator.server.ServerInterface;
 import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
@@ -40,6 +48,8 @@ public class KonfigurationActivity extends Fragment {
 	private JSONArray szKonf;
 	private ListView konfigurationList;
 	private ListView einstellungenList;
+
+	private static final String ANWENDUNGSFALL_TAB = "Anwendungsfall";
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -68,7 +78,6 @@ public class KonfigurationActivity extends Fragment {
 			si.addListener(new ServerInterfaceListener() {
 
 				public void serverSuccessHandler(JSONObject result) throws JSONException {
-					pDialog.dismiss();
 					List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
 					la = result.getJSONArray("data");
@@ -93,145 +102,110 @@ public class KonfigurationActivity extends Fragment {
 						konfigurationList.setAdapter(adapterMainList);
 						konfigurationList.setItemChecked(0, true);
 
-						// ----------------------------------------------------------------------------------//
-						// gibSzenarioEinstellungen
-						// ----------------------------------------------------------------------------------//
+						gibSzenarioEinstellungen(0, konfigurationView);
 
-						JSONObject params = new JSONObject();
-
-						pDialog.show();
-
-						Log.i("szenarioID", "szenarioArray: " + szIdArray);
-						szenarioId = szIdArray.getInt(0);
-						params.put("szenarioId", szenarioId);
-
-						ServerInterface si = new ServerInterface();
-						si.addListener(new ServerInterfaceListener() {
-
-							public void serverSuccessHandler(JSONObject result) throws JSONException {
-								pDialog.dismiss();
-								List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-
-								szKonf = result.getJSONArray("data");
-
-								for (int i = 0; i < szKonf.length(); i++) {
-									HashMap<String, String> hm = new HashMap<String, String>();
-									hm.put("name", szKonf.getString(i));
-									hm.put("icon", String.valueOf(R.drawable.icon_kategorie1));
-									list.add(hm);
-								}
-								Log.i("data", szKonf.toString());
-								final SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_einstellungen,
-										new String[] { "name", "icon" }, new int[] { R.id.name, R.id.icon });
-								einstellungenList = (ListView) konfigurationView.findViewById(R.id.einstellungenList);
-								einstellungenList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-								einstellungenList.setAdapter(adapterMainList);
-								einstellungenList.setItemChecked(0, true);
-
-								einstellungenList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-									public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-									}
-								});
-							}
-
-							public void serverErrorHandler(Exception e) {
-								// z.B. Fehler Dialog aufploppen lassen
-								Log.e("error", "called");
-							}
-						});
-						si.call("gibSzenarioEinstellungen", params);
-
+						pDialog.dismiss();
 						konfigurationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 							public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+								
+								gibSzenarioEinstellungen(position, konfigurationView);
 
-								try {
-									// ----------------------------------------------------------------------------------//
-									// gibSzenarioEinstellungen
-									// ----------------------------------------------------------------------------------//
-
-									JSONObject params = new JSONObject();
-
-									pDialog.show();
-
-									szenarioId = szIdArray.getInt(position);
-									params.put("szenarioId", szenarioId);
-
-									ServerInterface si = new ServerInterface();
-									si.addListener(new ServerInterfaceListener() {
-
-										public void serverSuccessHandler(JSONObject result) throws JSONException {
-											pDialog.dismiss();
-											List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-
-											szKonf = result.getJSONArray("data");
-
-											for (int i = 0; i < szKonf.length(); i++) {
-												HashMap<String, String> hm = new HashMap<String, String>();
-												hm.put("name", szKonf.getString(i));
-												list.add(hm);
-											}
-											Log.i("data", szKonf.toString());
-											final SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_main,
-													new String[] { "name" }, new int[] { R.id.name });
-											einstellungenList = (ListView) konfigurationView.findViewById(R.id.einstellungenList);
-											einstellungenList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-											einstellungenList.setAdapter(adapterMainList);
-											einstellungenList.setItemChecked(0, true);
-
-											einstellungenList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-												public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-												}
-											});
-										}
-
-										public void serverErrorHandler(Exception e) {
-											// z.B. Fehler Dialog aufploppen
-											// lassen
-											Log.e("error", "called");
-										}
-									});
-									si.call("gibSzenarioEinstellungen", params);
-								} catch (JSONException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
 							}
 						});
-					}else{
-						/*
-						android.app.Fragment fragment = getActivity().getFragmentManager().findFragmentById(3);
-						FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-						ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		                ft.commit();
-		                getActivity().getSupportFragmentManager().executePendingTransactions();*/
+					} else {
+
+						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+						builder.setTitle("Kein Szenario ausgewählt!");
+						builder.setIcon(R.drawable.icon_kategorie1);
+						builder.setMessage(
+								"Sie haben noch keinen Anwendungsfall mit entsprechendem Szenario ausgewählt, welches Sie konfigurien können! Gehen Sie zurück zu Anwendungsfall und wählen Sie dort das zu Ihrem vorliegendem Problemfall passende Szenario aus!")
+								.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+									}
+								});
+						AlertDialog alert = builder.create();
+						alert.show();
 					}
-					
-				}public void serverErrorHandler(Exception e) {
+				}
+				public void serverErrorHandler(Exception e) {
 					// z.B. Fehler Dialog aufploppen lassen
 					Log.e("error", "called");
 				}
-
 			});
 			si.call("gibSelectedSzenario", params);
-
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		return konfigurationView;
 	}
 
 	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-	// int type = getItemViewType(position);
-	/*
-	 * switch (type) { case TYPE_ITEM: convertView =
-	 * mInflater.inflate(R.layout.item1, null); holder.textView =
-	 * (TextView)convertView.findViewById(R.id.text); break; case
-	 * TYPE_SEPARATOR: convertView = mInflater.inflate(R.layout.item2, null);
-	 * holder.textView = (TextView)convertView.findViewById(R.id.textSeparator);
-	 * break; }
-	 */
+
+	private void gibSzenarioEinstellungen( int position, final View konfigurationView ) {
+
+		try {
+			// ----------------------------------------------------------------------------------//
+			// gibSzenarioEinstellungen
+			// ----------------------------------------------------------------------------------//
+
+			JSONObject params = new JSONObject();
+			pDialog.show();
+			szenarioId = szIdArray.getInt(position);
+			params.put("szenarioId", szenarioId);
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+					szKonf = result.getJSONArray("data");
+
+					for (int i = 0; i < szKonf.length(); i++) {
+						HashMap<String, String> hm = new HashMap<String, String>();
+						hm.put("name", szKonf.getString(i));
+						hm.put("icon", String.valueOf(R.drawable.icon_kategorie1));
+						list.add(hm);
+					}
+					Log.i("data", szKonf.toString());
+					final SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_einstellungen, new String[] {
+							"name", "icon" }, new int[] { R.id.name, R.id.icon });
+					einstellungenList = (ListView) konfigurationView.findViewById(R.id.einstellungenList);
+					einstellungenList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+					einstellungenList.setAdapter(adapterMainList);
+					pDialog.dismiss();
+					einstellungenList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+							String selListItem = einstellungenList.getItemAtPosition(position).toString();
+							Log.i("in onClick", "Selected Item Name: "+ selListItem + " Position: " + position);
+							if(selListItem.contains("Raumauswahl")){
+								RaumauswahlDialog customDialog = new RaumauswahlDialog(getActivity(), kundeId);
+								customDialog.setTitle("Raumauswahl");
+								customDialog.show();
+							}else if(selListItem.contains("Geräteauswahl")){
+								GeraeteDialog customDialog = new GeraeteDialog(getActivity(), kundeId);
+								customDialog.setTitle("Geräteauswahl");
+								customDialog.show();
+							}
+
+						}
+					});
+				}
+				public void serverErrorHandler(Exception e) {
+					// z.B. Fehler Dialog aufploppen
+					// lassen
+					Log.e("error", "called");
+				}
+			});
+			si.call("gibSzenarioEinstellungen", params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 
 }
