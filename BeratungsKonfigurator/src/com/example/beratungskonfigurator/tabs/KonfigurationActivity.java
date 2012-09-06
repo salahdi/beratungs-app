@@ -32,7 +32,9 @@ import android.widget.TextView;
 
 import com.example.beratungskonfigurator.MainActivity;
 import com.example.beratungskonfigurator.R;
+import com.example.beratungskonfigurator.dialog.DienstleisterDialog;
 import com.example.beratungskonfigurator.dialog.GeraeteDialog;
+import com.example.beratungskonfigurator.dialog.LichteinstellungenDialog;
 import com.example.beratungskonfigurator.dialog.RaumauswahlDialog;
 import com.example.beratungskonfigurator.dialog.SzenarioDialog;
 import com.example.beratungskonfigurator.server.ServerInterface;
@@ -48,6 +50,7 @@ public class KonfigurationActivity extends Fragment {
 	private JSONArray szKonf;
 	private ListView konfigurationList;
 	private ListView einstellungenList;
+	private TextView titelEinstellungen;
 
 	private static final String ANWENDUNGSFALL_TAB = "Anwendungsfall";
 
@@ -62,6 +65,8 @@ public class KonfigurationActivity extends Fragment {
 
 		final View konfigurationView = (View) inflater.inflate(R.layout.tab_konfiguration_layout, container, false);
 		final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+		
+		titelEinstellungen = (TextView) konfigurationView.findViewById(R.id.titelEinstellungen);
 
 		// ----------------------------------------------------------------------------------//
 		// gibSelectedSzenario
@@ -82,9 +87,10 @@ public class KonfigurationActivity extends Fragment {
 
 					la = result.getJSONArray("data");
 					szIdArray = result.getJSONArray("szenarioId");
+					
+					titelEinstellungen.setText(la.getString(0));
 
 					Log.i("szIdArray", szIdArray.toString());
-
 					Log.i("szIdArray", "Array is NULL: " + szIdArray.isNull(0));
 
 					if (!szIdArray.isNull(0)) {
@@ -108,6 +114,12 @@ public class KonfigurationActivity extends Fragment {
 						konfigurationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 							public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 								
+								try {
+									titelEinstellungen.setText(la.getString(position));
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								gibSzenarioEinstellungen(position, konfigurationView);
 
 							}
@@ -181,15 +193,28 @@ public class KonfigurationActivity extends Fragment {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 							String selListItem = einstellungenList.getItemAtPosition(position).toString();
 							Log.i("in onClick", "Selected Item Name: "+ selListItem + " Position: " + position);
+							
 							if(selListItem.contains("Raumauswahl")){
-								RaumauswahlDialog customDialog = new RaumauswahlDialog(getActivity(), kundeId);
+								RaumauswahlDialog customDialog = new RaumauswahlDialog(getActivity(), kundeId, szenarioId);
 								customDialog.setTitle("Raumauswahl");
 								customDialog.show();
+								
 							}else if(selListItem.contains("Geräteauswahl")){
-								GeraeteDialog customDialog = new GeraeteDialog(getActivity(), kundeId);
+								GeraeteDialog customDialog = new GeraeteDialog(getActivity(), kundeId, szenarioId);
 								customDialog.setTitle("Geräteauswahl");
 								customDialog.show();
+								
+							}else if(selListItem.contains("Lichteinstellungen")){
+								LichteinstellungenDialog customDialog = new LichteinstellungenDialog(getActivity(), kundeId, szenarioId);
+								customDialog.setTitle("Lichteinstellungen");
+								customDialog.show();
+								
+							}else if(selListItem.contains("Dienstleister")){
+								DienstleisterDialog customDialog = new DienstleisterDialog(getActivity(), kundeId, szenarioId);
+								customDialog.setTitle("Dienstleister");
+								customDialog.show();
 							}
+							
 
 						}
 					});

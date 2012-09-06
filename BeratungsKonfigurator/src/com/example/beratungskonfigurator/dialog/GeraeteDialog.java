@@ -66,6 +66,7 @@ public class GeraeteDialog extends Dialog {
 
 	ListViewButtonAdapter listAdapter;
 	private int mKundeId;
+	private int mSzenarioId;
 	private Context mContext;
 
 	EditText etNumber;
@@ -80,7 +81,7 @@ public class GeraeteDialog extends Dialog {
 	ArrayList<Integer> selSzenarioList = new ArrayList<Integer>();
 
 	// Constructor
-	public GeraeteDialog(final Context context, int kundeId) {
+	public GeraeteDialog(final Context context, int kundeId, int szenarioId) {
 		super(context);
 
 		mContext = context;
@@ -90,6 +91,7 @@ public class GeraeteDialog extends Dialog {
 		pDialog.setCancelable(false);
 
 		mKundeId = kundeId;
+		mSzenarioId = szenarioId;
 
 		// get this window's layout parameters so we can change the position
 		WindowManager.LayoutParams paramsLayout = getWindow().getAttributes();
@@ -226,6 +228,7 @@ public class GeraeteDialog extends Dialog {
 
 					JSONObject updateParams = new JSONObject();
 					updateParams.put("kundeId", mKundeId);
+					updateParams.put("szenarioId", mSzenarioId);
 					updateParams.put("wohnraeumeId", raumId);
 					updateParams.put("anzGeraete", selectedAnzahl);
 					updateParams.put("geraeteId", selectedGeraet);
@@ -263,6 +266,7 @@ public class GeraeteDialog extends Dialog {
 
 			JSONObject params = new JSONObject();
 			params.put("kundeId", mKundeId);
+			params.put("szenarioId", mSzenarioId);
 
 			ServerInterface si = new ServerInterface();
 			si.addListener(new ServerInterfaceListener() {
@@ -374,6 +378,7 @@ public class GeraeteDialog extends Dialog {
 
 					params.put("kundeId", mKundeId);
 					params.put("wohnraeumeId", raumId);
+					params.put("szenarioId", mSzenarioId);
 
 					si = new ServerInterface();
 					si.addListener(new ServerInterfaceListener() {
@@ -535,6 +540,7 @@ public class GeraeteDialog extends Dialog {
 
 								JSONObject updateParams = new JSONObject();
 								updateParams.put("kundeId", mKundeId);
+								updateParams.put("szenarioId", mSzenarioId);
 								updateParams.put("wohnraeumeId", raumId);
 								updateParams.put("anzGeraete", selectedAnzahl);
 								updateParams.put("geraeteId", selectedGeraet);
@@ -567,6 +573,7 @@ public class GeraeteDialog extends Dialog {
 								JSONObject params = new JSONObject();
 
 								params.put("kundeId", mKundeId);
+								params.put("szenarioId", mSzenarioId);
 								params.put("wohnraeumeId", raumId);
 
 								ServerInterface si = new ServerInterface();
@@ -711,6 +718,7 @@ public class GeraeteDialog extends Dialog {
 			JSONObject params = new JSONObject();
 			params.put("kundeId", mKundeId);
 			params.put("wohnraeumeId", raumId);
+			params.put("szenarioId", mSzenarioId);
 
 			pDialog.show();
 			ServerInterface si = new ServerInterface();
@@ -770,6 +778,7 @@ public class GeraeteDialog extends Dialog {
 			JSONObject params = new JSONObject();
 			params.put("kundeId", mKundeId);
 			params.put("wohnraeumeId", raumId);
+			params.put("szenarioId", mSzenarioId);
 
 			ServerInterface si = new ServerInterface();
 			si.addListener(new ServerInterfaceListener() {
@@ -810,6 +819,7 @@ public class GeraeteDialog extends Dialog {
 			JSONObject params = new JSONObject();
 			params.put("kundeId", mKundeId);
 			params.put("wohnraeumeId", raumId);
+			params.put("szenarioId", mSzenarioId);
 
 			pDialog.show();
 
@@ -870,6 +880,7 @@ public class GeraeteDialog extends Dialog {
 
 			params.put("kundeId", mKundeId);
 			params.put("wohnraeumeId", raumId);
+			params.put("szenarioId", mSzenarioId);
 
 			ServerInterface si = new ServerInterface();
 			si.addListener(new ServerInterfaceListener() {

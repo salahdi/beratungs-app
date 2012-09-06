@@ -20,7 +20,7 @@
 
         <ListView
             android:id="@+id/wohnungList"
-            android:layout_width="350dp"
+            android:layout_width="350dip"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dip"
             android:dividerHeight="2dip"
@@ -45,7 +45,7 @@
 
                 <TextView
                     android:id="@+id/titelWohnsituation"
-                    android:layout_width="300dip"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
                     android:paddingLeft="10dip"
@@ -55,7 +55,7 @@
 
             <ListView
                 android:id="@+id/wohnsituationList"
-                android:layout_width="350dp"
+                android:layout_width="500dip"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"
@@ -82,7 +82,7 @@
 
                 <TextView
                     android:id="@+id/titelWohnform"
-                    android:layout_width="300dip"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
                     android:paddingLeft="10dip"
@@ -92,7 +92,7 @@
 
             <ListView
                 android:id="@+id/wohnformList"
-                android:layout_width="350dp"
+                android:layout_width="500dip"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"
@@ -119,7 +119,7 @@
 
                 <TextView
                     android:id="@+id/titelWohninformation"
-                    android:layout_width="300dip"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
                     android:paddingLeft="10dip"
@@ -134,7 +134,7 @@
 
                 <TextView
                     android:id="@+id/wohninformationStockwerkeText"
-                    android:layout_width="300dip"
+                    android:layout_width="350dip"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
                     android:paddingLeft="10dip"
@@ -175,7 +175,7 @@
 
                 <TextView
                     android:id="@+id/wohninformationFlaecheText"
-                    android:layout_width="300dip"
+                    android:layout_width="350dip"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
                     android:paddingLeft="10dip"
@@ -218,7 +218,7 @@
 
                 <TextView
                     android:id="@+id/titelWohnumfeld"
-                    android:layout_width="300dip"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
                     android:paddingLeft="10dip"
@@ -228,7 +228,7 @@
 
             <ListView
                 android:id="@+id/wohnumfeldList"
-                android:layout_width="350dp"
+                android:layout_width="500dip"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"
@@ -255,7 +255,7 @@
 
                 <TextView
                     android:id="@+id/titelWohnraeume"
-                    android:layout_width="300dip"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
                     android:paddingLeft="10dip"
@@ -265,7 +265,7 @@
 
             <ListView
                 android:id="@+id/wohnraeumeList"
-                android:layout_width="350dp"
+                android:layout_width="500dip"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"
@@ -292,7 +292,7 @@
 
                 <TextView
                     android:id="@+id/titelWohnbarrieren"
-                    android:layout_width="300dip"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
                     android:paddingLeft="10dip"
@@ -302,7 +302,7 @@
 
             <ListView
                 android:id="@+id/wohnbarrierenList"
-                android:layout_width="350dp"
+                android:layout_width="500dip"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"

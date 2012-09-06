@@ -32,10 +32,10 @@ import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.server.ServerInterface;
 import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
-public class RaumauswahlDialog extends Dialog {
+public class DienstleisterDialog extends Dialog {
 
 	private ProgressDialog pDialog;
-	private ListView raumauswahlList;
+	private ListView dienstleisterList;
 
 	private int mKundeId;
 	private int mSzenarioId;
@@ -43,7 +43,7 @@ public class RaumauswahlDialog extends Dialog {
 	ArrayList<Integer> selSzenarioList = new ArrayList<Integer>();
 
 	// Constructor
-	public RaumauswahlDialog(final Context context, int kundeId, int szenarioId) {
+	public DienstleisterDialog(final Context context, int kundeId, int szenarioId) {
 		super(context);
 
 		pDialog = new ProgressDialog(context);
@@ -66,28 +66,25 @@ public class RaumauswahlDialog extends Dialog {
 
 		setCancelable(false);
 
-		// no title on this dialog
-		// requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-		setContentView(R.layout.raumauswahl_dialog_layout);
+		setContentView(R.layout.dienstleister_dialog_layout);
 
 		Button bClose = (Button) findViewById(R.id.closeButton);
 		bClose.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
 				// ----------------------------------------------------------------------------------//
-				// insertRaumauswahl
+				// insertDienstleister
 				// ----------------------------------------------------------------------------------//
 
 				try {
 					String selected = "";
 					int count = 0;
-					int cntChoice = raumauswahlList.getCount();
-					SparseBooleanArray sparseBooleanArray = raumauswahlList.getCheckedItemPositions();
+					int cntChoice = dienstleisterList.getCount();
+					SparseBooleanArray sparseBooleanArray = dienstleisterList.getCheckedItemPositions();
 
 					for (int i = 0; i < cntChoice; i++) {
 						if (sparseBooleanArray.get(i)) {
-							selected += (raumauswahlList.getItemIdAtPosition(i) + 1) + ".";
+							selected += (dienstleisterList.getItemIdAtPosition(i) + 1) + ".";
 							count++;
 						}
 					}
@@ -97,7 +94,7 @@ public class RaumauswahlDialog extends Dialog {
 					}
 
 					JSONObject updateParams = new JSONObject();
-					updateParams.put("raumauswahl", selected);
+					updateParams.put("dienstleister", selected);
 					updateParams.put("kundeId", mKundeId);
 					updateParams.put("countAnz", count);
 					updateParams.put("szenarioId", mSzenarioId);
@@ -105,7 +102,7 @@ public class RaumauswahlDialog extends Dialog {
 					ServerInterface si = new ServerInterface();
 					si.addListener(new ServerInterfaceListener() {
 						public void serverSuccessHandler(JSONObject result) throws JSONException {
-							Log.i("INSERT Raumauswahl: ", result.getString("msg"));
+							Log.i("INSERT Dienstleister: ", result.getString("msg"));
 						}
 
 						public void serverErrorHandler(Exception e) {
@@ -113,7 +110,7 @@ public class RaumauswahlDialog extends Dialog {
 							// stub
 						}
 					});
-					si.call("insertRaumauswahl", updateParams);
+					si.call("insertDienstleister", updateParams);
 				} catch (JSONException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -126,7 +123,7 @@ public class RaumauswahlDialog extends Dialog {
 		try {
 
 			// ----------------------------------------------------------------------------------//
-			// gibRaumauswahl
+			// gibDienstleister
 			// ----------------------------------------------------------------------------------//
 
 			pDialog.show();
@@ -157,9 +154,9 @@ public class RaumauswahlDialog extends Dialog {
 					int[] to = { R.id.txt };
 
 					SimpleAdapter dataAdapter = new SimpleAdapter(context, list, R.layout.listview_checkable, from, to);
-					raumauswahlList = (ListView) findViewById(R.id.raumauswahlList);
-					raumauswahlList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-					raumauswahlList.setAdapter(dataAdapter);
+					dienstleisterList = (ListView) findViewById(R.id.dienstleisterList);
+					dienstleisterList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+					dienstleisterList.setAdapter(dataAdapter);
 				}
 
 				public void serverErrorHandler(Exception e) {
@@ -167,10 +164,10 @@ public class RaumauswahlDialog extends Dialog {
 					Log.e("error", "called");
 				}
 			});
-			si.call("gibRaumauswahl", params);
+			si.call("gibDienstleister", params);
 
 			// ----------------------------------------------------------------------------------//
-			// gibKundeRaumauswahl
+			// gibKundeDienstleister
 			// ----------------------------------------------------------------------------------//
 
 			params = new JSONObject();
@@ -189,7 +186,7 @@ public class RaumauswahlDialog extends Dialog {
 					JSONArray wd = result.getJSONArray("data");
 
 					for (int i = 0; i < wd.length(); i++) {
-						raumauswahlList.setItemChecked((wd.getInt(i)) - 1, true);
+						dienstleisterList.setItemChecked((wd.getInt(i)) - 1, true);
 					}
 				}
 
@@ -198,7 +195,7 @@ public class RaumauswahlDialog extends Dialog {
 					Log.e("error", "called");
 				}
 			});
-			si.call("gibKundeRaumauswahl", params);
+			si.call("gibKundeDienstleister", params);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -15,17 +15,17 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:id="@+id/dialogTitelGeraete"
+                android:id="@+id/dialogTitelLichteinstellungen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="30dip"
                 android:paddingLeft="20dip"
                 android:paddingTop="30dip"
-                android:text="Geräteauswahl"
+                android:text="Lichteinstellungen"
                 android:textSize="40sp" />
 
             <Button
-                android:id="@+id/bCloseGeraete"
+                android:id="@+id/bCloseLichteinstellungen"
                 android:layout_width="60dip"
                 android:layout_height="60dip"
                 android:layout_alignParentRight="true"
@@ -47,7 +47,7 @@
             android:paddingLeft="20dip" />
 
         <LinearLayout
-            android:id="@+id/layGeraete"
+            android:id="@+id/layLichteinstellungen"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -77,22 +77,22 @@
                         android:layout_height="fill_parent" >
 
                         <LinearLayout
-                            android:id="@+id/layGeraete"
+                            android:id="@+id/layLichtstaerke"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical" >
 
                             <TextView
-                                android:id="@+id/titelGeraete"
+                                android:id="@+id/titelLichtstaerke"
                                 android:layout_width="300dip"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="20dip"
                                 android:paddingLeft="10dip"
-                                android:text="Geräte auswählen: "
+                                android:text="Lichtstärke auswählen: "
                                 android:textSize="20sp" />
 
                             <ListView
-                                android:id="@+id/geraeteList"
+                                android:id="@+id/lichtstaerkeList"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:choiceMode="multipleChoice"
@@ -106,22 +106,22 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/layAusloeser"
+                            android:id="@+id/layLichtfarbe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical" >
 
                             <TextView
-                                android:id="@+id/titelStartSzenario"
+                                android:id="@+id/titelLichtfarbe"
                                 android:layout_width="300dip"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="20dip"
                                 android:paddingLeft="10dip"
-                                android:text="Szenario starten durch folgende Geräte: "
+                                android:text="Lichtfarbe auswählen: "
                                 android:textSize="20sp" />
 
                             <ListView
-                                android:id="@+id/ausloeserList"
+                                android:id="@+id/lichtfarbeList"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:choiceMode="multipleChoice"
@@ -133,24 +133,24 @@
                                 android:scrollbarFadeDuration="0"
                                 android:scrollbarStyle="outsideInset" />
                         </LinearLayout>
-
+                        
                         <LinearLayout
-                            android:id="@+id/layBeender"
+                            android:id="@+id/layLichtart"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical" >
 
                             <TextView
-                                android:id="@+id/titelEndSzenario"
+                                android:id="@+id/titelLichtart"
                                 android:layout_width="300dip"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="20dip"
                                 android:paddingLeft="10dip"
-                                android:text="Szenario beenden durch folgende Geräte: "
+                                android:text="Lichtart auswählen: "
                                 android:textSize="20sp" />
 
                             <ListView
-                                android:id="@+id/beenderList"
+                                android:id="@+id/lichtartList"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:choiceMode="multipleChoice"
