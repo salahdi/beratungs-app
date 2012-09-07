@@ -52,7 +52,6 @@ public class ListViewButtonAdapter extends BaseAdapter {
 		final ViewHolder holder;
 		
 		if (convertView == null) {
-			Log.i("CONVERT View", "= 0");
 	        convertView = mInflater.inflate(R.layout.listview_anzahl_checkable, parent, false);
 
 	        holder = new ViewHolder();

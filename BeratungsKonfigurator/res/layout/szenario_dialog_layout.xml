@@ -75,31 +75,43 @@
                         android:id="@android:id/tabcontent"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent" >
-                        
+
                         <TextView
                             android:id="@+id/tBeschreibung"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:ems="10"
                             android:inputType="textMultiLine"
+                            android:lineSpacingExtra="5dip"
+                            android:padding="10dip"
                             android:scrollbarAlwaysDrawVerticalTrack="true"
                             android:scrollbarFadeDuration="0"
                             android:scrollbarStyle="outsideInset"
-                            android:textSize="18sp" 
-                            android:lineSpacingExtra="5dip"
-                            android:padding="10dip"
-                            android:scrollbars="vertical"/>
+                            android:scrollbars="vertical"
+                            android:textSize="18sp" />
 
-                        <Gallery
-                            android:id="@+id/gBilder"
+                        <LinearLayout
+                            android:id="@+id/gBilderGallery"
                             android:layout_width="fill_parent"
-                            android:layout_height="fill_parent" />
+                            android:layout_height="fill_parent"
+                            android:orientation="vertical" >
 
-                        <VideoView
+                            <Gallery
+                                android:id="@+id/gBilder"
+                                android:layout_width="match_parent"
+                                android:layout_height="150dip" />
+
+                            <ImageView
+                                android:id="@+id/gBilderImageView"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_horizontal" />
+                        </LinearLayout>
+
+                        <SurfaceView
                             android:id="@+id/vVideo"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent" />
-
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </FrameLayout>
                 </LinearLayout>
             </TabHost>

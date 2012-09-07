@@ -106,22 +106,51 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/layGeraetestandort"
+                            android:id="@+id/layAusloeser"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical" >
 
                             <TextView
-                                android:id="@+id/titelGeraetestandort"
+                                android:id="@+id/titelStartSzenario"
                                 android:layout_width="300dip"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="20dip"
                                 android:paddingLeft="10dip"
-                                android:text="Standort der ausgewählten Geräte: "
+                                android:text="Szenario starten durch folgende Geräte: "
                                 android:textSize="20sp" />
 
                             <ListView
-                                android:id="@+id/geraetestandortList"
+                                android:id="@+id/ausloeserList"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:choiceMode="multipleChoice"
+                                android:divider="@drawable/divider"
+                                android:dividerHeight="2dip"
+                                android:paddingLeft="5dip"
+                                android:paddingRight="5dip"
+                                android:scrollbarAlwaysDrawVerticalTrack="true"
+                                android:scrollbarFadeDuration="0"
+                                android:scrollbarStyle="outsideInset" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layBeender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/titelEndSzenario"
+                                android:layout_width="300dip"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="20dip"
+                                android:paddingLeft="10dip"
+                                android:text="Szenario beenden durch folgende Geräte: "
+                                android:textSize="20sp" />
+
+                            <ListView
+                                android:id="@+id/beenderList"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:choiceMode="multipleChoice"

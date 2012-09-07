@@ -39,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.beratungskonfigurator.ListViewButtonAdapter;
+import com.example.beratungskonfigurator.ListViewSpinnerAdapter;
 import com.example.beratungskonfigurator.NumberPic;
 import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.server.ServerInterface;
@@ -47,23 +48,25 @@ import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 public class GeraeteDialog extends Dialog {
 
 	private ProgressDialog pDialog;
-	private ListView raeumeList;
-	private ListView geraeteList;
-	private ListView ausloeserList;
-	private ListView beenderList;
+	private ListView raeumeListView;
+	private ListView geraeteListView;
+	private ListView geraetestandortListView;
 
 	private int raumId;
 
-	private JSONArray geraeteListe = new JSONArray();
-	private JSONArray geraeteIdListe = new JSONArray();
+	private JSONArray jsonGeraeteList = new JSONArray();
+	private JSONArray jsonGeraeteIdList = new JSONArray();
 
-	private JSONArray raumIdArray = new JSONArray();
-	private JSONArray anzGeraeteArray = new JSONArray();
-	private JSONArray geraeteId = new JSONArray();
-	
-	private JSONArray beenderGeraeteId = new JSONArray();
-	private JSONArray ausloeserGeraeteId = new JSONArray();
+	private JSONArray jsonRaumIdArray = new JSONArray();
+	private JSONArray jsonAnzGeraeteArray = new JSONArray();
+	private JSONArray jsonGeraeteId = new JSONArray();
+	private JSONArray jsonGeraeteKundeName = new JSONArray();
+	private JSONArray jsonKundeGeraetestandortId = new JSONArray();
+	private JSONArray jsonGeraetestandortList = new JSONArray();
+	private JSONArray jsonGeraetestandortGeraeteId = new JSONArray();
+	private JSONArray jsonGeraetestandortGeraeteName = new JSONArray();
 
+	ListViewSpinnerAdapter listAdapterSpinner;
 	ListViewButtonAdapter listAdapter;
 	private int mKundeId;
 	private int mSzenarioId;
@@ -72,11 +75,15 @@ public class GeraeteDialog extends Dialog {
 	EditText etNumber;
 	List<String> anzList = new ArrayList<String>();
 	List<String> gerList = new ArrayList<String>();
+	List<String> gerNameList = new ArrayList<String>();
+	List<Integer> gerIdList = new ArrayList<Integer>();
+	List<String> geraetestandortList = new ArrayList<String>();
+	List<Integer> geraetestandortListKundeId = new ArrayList<Integer>();
+	
 
 	SimpleAdapter dataAdapter;
 	SimpleAdapter dataAdapterRaeume;
-	SimpleAdapter dataAdapterAusloeser;
-	SimpleAdapter dataAdapterBeender;
+	SimpleAdapter dataAdapterGeraetestandort;
 
 	ArrayList<Integer> selSzenarioList = new ArrayList<Integer>();
 
@@ -110,147 +117,14 @@ public class GeraeteDialog extends Dialog {
 
 		setContentView(R.layout.geraete_dialog_layout);
 
-		TextView titelStartSzenario = (TextView) findViewById(R.id.titelStartSzenario);
-		titelStartSzenario.setText("Szenario starten");
-		TextView titelEndSzenario = (TextView) findViewById(R.id.titelEndSzenario);
-		titelEndSzenario.setText("Szenario beenden");
+		TextView titelGeraetestandort = (TextView) findViewById(R.id.titelGeraetestandort);
+		titelGeraetestandort.setText("Standort für das ausgewählte Gerät:");
 		Button bCloseGeraete = (Button) findViewById(R.id.bCloseGeraete);
 		bCloseGeraete.setBackgroundResource(R.drawable.button_close);
 		bCloseGeraete.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				
-				// ----------------------------------------------------------------------------------//
-				// BERECHNUNG insertKundeGeraete
-				// ----------------------------------------------------------------------------------//
 
-				List<String> mAnzList = new ArrayList<String>();
-				List<String> mSelectedAnzahl = new ArrayList<String>();
-				List<Integer> mGeraete = new ArrayList<Integer>();
-				List<Integer> mAusloeser = new ArrayList<Integer>();
-				List<Integer> mBeender = new ArrayList<Integer>();
-				
-				mSelectedAnzahl.clear();
-				mAnzList = listAdapter.getAnzGeraeteListeAll();
-				mSelectedAnzahl = listAdapter.getAnzGeraeteListeAll();
-
-				try {
-					String selectedGeraet = "";
-					String selectedAnzahl = "";
-					String selectedAusloeser = "";
-					String selectedBeender = "";
-
-					int count = 0;
-					int cntChoiceAusloeser = ausloeserList.getCount();
-					int cntChoiceBeender = beenderList.getCount();
-					SparseBooleanArray sparseBooleanArrayAusloeser = ausloeserList.getCheckedItemPositions();
-					SparseBooleanArray sparseBooleanArrayBeender = beenderList.getCheckedItemPositions();
-
-					if (isNullList(mSelectedAnzahl)) {
-						Log.i("List is EMPTY", "mSelectedAnzahl: " + mSelectedAnzahl);
-						selectedGeraet = "0";
-						selectedAnzahl = "0";
-					} else {
-						Log.i("List is NOT EMPTY", "mAnzList: " + mAnzList);
-						for (int i = 0; i < mAnzList.size(); i++) {
-							if (!mAnzList.get(i).equals("0")) {
-								mGeraete.add(geraeteIdListe.getInt(i));
-								selectedGeraet += (geraeteIdListe.getString(i)) + ".";
-							}
-						}
-						if (!selectedGeraet.equals("0")) {
-							selectedGeraet = selectedGeraet.substring(0, selectedGeraet.length() - 1);
-						}
-						boolean removeAllNull = mSelectedAnzahl.removeAll(Arrays.asList("0"));
-						selectedAnzahl = TextUtils.join(".", mSelectedAnzahl);
-					}
-					
-					for (int i = 0; i < cntChoiceAusloeser; i++) {
-						if (sparseBooleanArrayAusloeser.get(i)) {
-							mAusloeser.add(ausloeserGeraeteId.getInt(i));
-						}else if (!sparseBooleanArrayAusloeser.get(i)){
-							mAusloeser.add(0);
-						}
-					}
-					for (int i = 0; i < cntChoiceBeender; i++) {
-						if (sparseBooleanArrayBeender.get(i)) {
-							mBeender.add(beenderGeraeteId.getInt(i));
-						}else if (!sparseBooleanArrayBeender.get(i)){
-							mBeender.add(0);
-						}
-					}
-					
-					loop: for(int i = 0; i < mGeraete.size(); i++){
-						for(int g = 0; g < cntChoiceAusloeser; g++ ){
-							if(mGeraete.get(i).equals(mAusloeser.get(g))){
-								int bla = mAusloeser.get(g);
-								selectedAusloeser += bla + ".";
-								count++;
-								continue loop;
-							}							
-						}
-						selectedAusloeser += 0 + ".";
-					}
-					if (count != 0) {
-						selectedAusloeser = selectedAusloeser.substring(0, selectedAusloeser.length() - 1);
-					} else if(count == 0){
-						selectedAusloeser = "0";
-					}
-					
-					count=0;
-					
-					loop: for(int i = 0; i < mGeraete.size(); i++){
-						for(int g = 0; g < cntChoiceBeender; g++ ){
-							if(mGeraete.get(i).equals(mBeender.get(g))){
-								int bla = mBeender.get(g);
-								selectedBeender += bla + ".";
-								count++;
-								continue loop;
-							}							
-						}
-						selectedBeender += 0 + ".";
-					}
-					if (count != 0) {
-						selectedBeender = selectedBeender.substring(0, selectedBeender.length() - 1);
-					} else if(count == 0){
-						selectedBeender = "0";
-					}
-					
-
-					// ----------------------------------------------------------------------------------//
-					// insertKundeGeraete
-					// ----------------------------------------------------------------------------------//
-
-					Log.i("INSERT Close", "Ausloeser List: " + mAusloeser.toString());
-					Log.i("INSERT Close", "Beender List: " + mBeender.toString());
-					Log.i("INSERT Close", "ausloeser: " + selectedAusloeser);
-					Log.i("INSERT Close", "beender: " + selectedBeender);
-					Log.i("INSERT Close", "Geräte: " + mGeraete.toString());
-
-					JSONObject updateParams = new JSONObject();
-					updateParams.put("kundeId", mKundeId);
-					updateParams.put("szenarioId", mSzenarioId);
-					updateParams.put("wohnraeumeId", raumId);
-					updateParams.put("anzGeraete", selectedAnzahl);
-					updateParams.put("geraeteId", selectedGeraet);
-					updateParams.put("ausloeser", selectedAusloeser);
-					updateParams.put("beender", selectedBeender);
-
-					ServerInterface si = new ServerInterface();
-					si.addListener(new ServerInterfaceListener() {
-						public void serverSuccessHandler(JSONObject result) throws JSONException {
-							Log.i("INSERT KundeGeraete: ", result.getString("msg"));
-						}
-
-						public void serverErrorHandler(Exception e) {
-							// TODO Auto-generated method
-							// stub
-						}
-					});
-					si.call("insertKundeGeraete", updateParams);
-				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				insertKundeGeraete();
 
 				dismiss();
 			}
@@ -275,9 +149,9 @@ public class GeraeteDialog extends Dialog {
 
 					List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 					JSONArray la = result.getJSONArray("data");
-					raumIdArray = result.getJSONArray("raumId");
-					Log.i("raumId Array", "raumId Array: " + raumIdArray);
-					Log.i("raumId Array", "raumId Array an Pos 0: " + raumIdArray.getInt(0));
+					jsonRaumIdArray = result.getJSONArray("raumId");
+					Log.i("raumId Array", "raumId Array: " + jsonRaumIdArray);
+					Log.i("raumId Array", "raumId Array an Pos 0: " + jsonRaumIdArray.getInt(0));
 
 					for (int i = 0; i < la.length(); i++) {
 						HashMap<String, String> hm = new HashMap<String, String>();
@@ -290,10 +164,10 @@ public class GeraeteDialog extends Dialog {
 
 					dataAdapterRaeume = new SimpleAdapter(mContext, list, R.layout.listview_raeume_einstellungen, new String[] { "name", "icon" },
 							new int[] { R.id.name, R.id.icon });
-					raeumeList = (ListView) findViewById(R.id.raeumeList);
-					raeumeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-					raeumeList.setAdapter(dataAdapterRaeume);
-					raeumeList.setItemChecked(0, true);
+					raeumeListView = (ListView) findViewById(R.id.raeumeList);
+					raeumeListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+					raeumeListView.setAdapter(dataAdapterRaeume);
+					raeumeListView.setItemChecked(0, true);
 
 					// ----------------------------------------------------------------------------------//
 					// gibGeraete
@@ -304,54 +178,34 @@ public class GeraeteDialog extends Dialog {
 
 						public void serverSuccessHandler(JSONObject result) throws JSONException {
 
-							pDialog.dismiss();
-
-							geraeteListe = result.getJSONArray("data");
-							geraeteIdListe = result.getJSONArray("geraeteId");
+							jsonGeraeteList = result.getJSONArray("data");
+							jsonGeraeteIdList = result.getJSONArray("geraeteId");
 							anzList.clear();
 
-							for (int i = 0; i < geraeteListe.length(); i++) {
-								gerList.add(geraeteListe.getString(i));
+							for (int i = 0; i < jsonGeraeteList.length(); i++) {
+								gerList.add(jsonGeraeteList.getString(i));
 								anzList.add("0");
 							}
 
 							listAdapter = new ListViewButtonAdapter(mContext, gerList, anzList);
-							geraeteList = (ListView) findViewById(R.id.geraeteList);
-							geraeteList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-							geraeteList.setAdapter(listAdapter);
-							geraeteList.setOnFocusChangeListener(new OnFocusChangeListener() {
+							geraeteListView = (ListView) findViewById(R.id.geraeteList);
+							geraeteListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+							geraeteListView.setAdapter(listAdapter);
+							geraeteListView.setOnFocusChangeListener(new OnFocusChangeListener() {
 								public void onFocusChange(View v, boolean hasFocus) {
-
-									Log.i("FOCUS CHANGED", "alle anzListe: " + listAdapter.getAnzGeraeteListeAll().toString());
-									geraeteList.clearChoices();
+									geraeteListView.clearChoices();
 									for (int i = 0; i < listAdapter.getAnzGeraeteListeAll().size(); i++) {
 										if (!listAdapter.getAnzGeraeteListeAll().get(i).equals("0")) {
-											Log.i("FOCUS CHANGED", "i: " + i + " Anzahl: " + listAdapter.getAnzGeraeteListeAll().get(i));
-											geraeteList.setItemChecked(i, true);
+											geraeteListView.setItemChecked(i, true);
 										} else {
-											geraeteList.setItemChecked(i, false);
+											geraeteListView.setItemChecked(i, false);
 										}
 									}
 
 								}
 							});
-							geraeteList.setOnScrollListener(new OnScrollListener() {
+							geraeteListView.setOnScrollListener(new OnScrollListener() {
 								public void onScrollStateChanged(AbsListView view, int scrollState) {
-									/*
-									 * Log.i("SCROLL", "changed");
-									 * geraeteList.clearChoices(); for (int i =
-									 * 0; i <
-									 * listAdapter.getAnzGeraeteListeAll()
-									 * .size(); i++) { if
-									 * (!listAdapter.getAnzGeraeteListeAll
-									 * ().get(i).equals("0")) {
-									 * Log.i("FOCUS CHANGED", "i: " + i +
-									 * " Anzahl: " +
-									 * listAdapter.getAnzGeraeteListeAll
-									 * ().get(i)); geraeteList.setItemChecked(i,
-									 * true); } else {
-									 * geraeteList.setItemChecked(i, false); } }
-									 */
 								}
 
 								public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -360,7 +214,6 @@ public class GeraeteDialog extends Dialog {
 							});
 
 						}
-
 						public void serverErrorHandler(Exception e) {
 							// z.B. Fehler Dialog aufploppen lassen
 							Log.e("error", "called");
@@ -369,278 +222,23 @@ public class GeraeteDialog extends Dialog {
 					JSONObject params = new JSONObject();
 					si.call("gibGeraete", params);
 
-					// ----------------------------------------------------------------------------------//
-					// gibKundeGeraete
-					// ----------------------------------------------------------------------------------//
-
-					raumId = raumIdArray.getInt(0);
-					params = new JSONObject();
-
-					params.put("kundeId", mKundeId);
-					params.put("wohnraeumeId", raumId);
-					params.put("szenarioId", mSzenarioId);
-
-					si = new ServerInterface();
-					si.addListener(new ServerInterfaceListener() {
-
-						public void serverSuccessHandler(JSONObject result) throws JSONException {
-
-							geraeteId = result.getJSONArray("data");
-							anzGeraeteArray = result.getJSONArray("anzGeraete");
-
-							anzList.clear();
-							geraeteList.clearChoices();
-							Log.i("geräte ID", "Geräte ID: " + geraeteId);
-							Log.i("geräte ID", "Anzahl Geräte ID: " + anzGeraeteArray);
-
-							if (!geraeteId.isNull(0)) {
-								boolean treffer = false;
-								for (int i = 0; i < geraeteIdListe.length(); i++) {
-									for (int k = 0; k < geraeteId.length(); k++) {
-										if (geraeteIdListe.getString(i).equals(geraeteId.getString(k)) && anzGeraeteArray.getInt(k) > 0) {
-											anzList.add(anzGeraeteArray.getString(k));
-											geraeteList.setItemChecked((geraeteId.getInt(k)) - 1, true);
-											treffer = true;
-											break;
-										} else {
-											treffer = false;
-										}
-									}
-									if (!treffer) {
-										anzList.add("0");
-									}
-								}
-							} else {
-								Log.i("ELSE", "ELSE: " + geraeteId.isNull(0));
-								geraeteList.clearChoices();
-								for (int i = 0; i < geraeteIdListe.length(); i++) {
-									anzList.add("0");
-								}
-							}
-							Log.i("anzList", "anzList: " + anzList);
-							geraeteList.invalidateViews();
-						}
-
-						public void serverErrorHandler(Exception e) {
-							// z.B. Fehler Dialog aufploppen lassen
-							Log.e("error", "called");
-						}
-					});
-					si.call("gibKundeGeraete", params);
-
-					raeumeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					raeumeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 
-							// ----------------------------------------------------------------------------------//
-							// BERECHNUNG insertKundeGeraete
-							// ----------------------------------------------------------------------------------//
-
-							List<String> mAnzList = new ArrayList<String>();
-							List<String> mSelectedAnzahl = new ArrayList<String>();
-							List<Integer> mGeraete = new ArrayList<Integer>();
-							List<Integer> mAusloeser = new ArrayList<Integer>();
-							List<Integer> mBeender = new ArrayList<Integer>();
+							insertKundeGeraete();
 							
-							mSelectedAnzahl.clear();
-							mAnzList = listAdapter.getAnzGeraeteListeAll();
-							mSelectedAnzahl = listAdapter.getAnzGeraeteListeAll();
-
-							try {
-								String selectedGeraet = "";
-								String selectedAnzahl = "";
-								String selectedAusloeser = "";
-								String selectedBeender = "";
-
-								int count = 0;
-								int cntChoiceAusloeser = ausloeserList.getCount();
-								int cntChoiceBeender = beenderList.getCount();
-								SparseBooleanArray sparseBooleanArrayAusloeser = ausloeserList.getCheckedItemPositions();
-								SparseBooleanArray sparseBooleanArrayBeender = beenderList.getCheckedItemPositions();
-
-								if (isNullList(mSelectedAnzahl)) {
-									Log.i("List is EMPTY", "mSelectedAnzahl: " + mSelectedAnzahl);
-									selectedGeraet = "0";
-									selectedAnzahl = "0";
-								} else {
-									Log.i("List is NOT EMPTY", "mAnzList: " + mAnzList);
-									for (int i = 0; i < mAnzList.size(); i++) {
-										if (!mAnzList.get(i).equals("0")) {
-											mGeraete.add(geraeteIdListe.getInt(i));
-											selectedGeraet += (geraeteIdListe.getString(i)) + ".";
-										}
-									}
-									if (!selectedGeraet.equals("0")) {
-										selectedGeraet = selectedGeraet.substring(0, selectedGeraet.length() - 1);
-									}
-									boolean removeAllNull = mSelectedAnzahl.removeAll(Arrays.asList("0"));
-									selectedAnzahl = TextUtils.join(".", mSelectedAnzahl);
-								}
-								
-								for (int i = 0; i < cntChoiceAusloeser; i++) {
-									if (sparseBooleanArrayAusloeser.get(i)) {
-										mAusloeser.add(ausloeserGeraeteId.getInt(i));
-									}else if (!sparseBooleanArrayAusloeser.get(i)){
-										mAusloeser.add(0);
-									}
-								}
-								for (int i = 0; i < cntChoiceBeender; i++) {
-									if (sparseBooleanArrayBeender.get(i)) {
-										mBeender.add(beenderGeraeteId.getInt(i));
-									}else if (!sparseBooleanArrayBeender.get(i)){
-										mBeender.add(0);
-									}
-								}
-								
-								loop: for(int i = 0; i < mGeraete.size(); i++){
-									for(int g = 0; g < cntChoiceAusloeser; g++ ){
-										if(mGeraete.get(i).equals(mAusloeser.get(g))){
-											int bla = mAusloeser.get(g);
-											selectedAusloeser += bla + ".";
-											count++;
-											continue loop;
-										}							
-									}
-									selectedAusloeser += 0 + ".";
-								}
-								if (count != 0) {
-									selectedAusloeser = selectedAusloeser.substring(0, selectedAusloeser.length() - 1);
-								} else if(count == 0){
-									selectedAusloeser = "0";
-								}
-								
-								count=0;
-								
-								loop: for(int i = 0; i < mGeraete.size(); i++){
-									for(int g = 0; g < cntChoiceBeender; g++ ){
-										if(mGeraete.get(i).equals(mBeender.get(g))){
-											int bla = mBeender.get(g);
-											selectedBeender += bla + ".";
-											count++;
-											continue loop;
-										}							
-									}
-									selectedBeender += 0 + ".";
-								}
-								if (count != 0) {
-									selectedBeender = selectedBeender.substring(0, selectedBeender.length() - 1);
-								} else if(count == 0){
-									selectedBeender = "0";
-								}
-								
-
-								// ----------------------------------------------------------------------------------//
-								// insertKundeGeraete
-								// ----------------------------------------------------------------------------------//
-
-								Log.i("INSERT Close", "Ausloeser List: " + mAusloeser.toString());
-								Log.i("INSERT Close", "Beender List: " + mBeender.toString());
-								Log.i("INSERT Close", "ausloeser: " + selectedAusloeser);
-								Log.i("INSERT Close", "beender: " + selectedBeender);
-								Log.i("INSERT Close", "Geräte: " + mGeraete.toString());
-
-								JSONObject updateParams = new JSONObject();
-								updateParams.put("kundeId", mKundeId);
-								updateParams.put("szenarioId", mSzenarioId);
-								updateParams.put("wohnraeumeId", raumId);
-								updateParams.put("anzGeraete", selectedAnzahl);
-								updateParams.put("geraeteId", selectedGeraet);
-								updateParams.put("ausloeser", selectedAusloeser);
-								updateParams.put("beender", selectedBeender);
-								
-								ServerInterface si = new ServerInterface();
-								si.addListener(new ServerInterfaceListener() {
-									public void serverSuccessHandler(JSONObject result) throws JSONException {
-										Log.i("INSERT KundeGeraete: ", result.getString("msg"));
-									}
-
-									public void serverErrorHandler(Exception e) {
-										// TODO Auto-generated method
-										// stub
-									}
-								});
-								si.call("insertKundeGeraete", updateParams);
-							} catch (JSONException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-
-							// ----------------------------------------------------------------------------------//
-							// gibKundeGeraete
-							// ----------------------------------------------------------------------------------//
-
-							try {
-								raumId = raumIdArray.getInt(position);
-								JSONObject params = new JSONObject();
-
-								params.put("kundeId", mKundeId);
-								params.put("szenarioId", mSzenarioId);
-								params.put("wohnraeumeId", raumId);
-
-								ServerInterface si = new ServerInterface();
-								si.addListener(new ServerInterfaceListener() {
-
-									public void serverSuccessHandler(JSONObject result) throws JSONException {
-
-										geraeteId = result.getJSONArray("data");
-										anzGeraeteArray = result.getJSONArray("anzGeraete");
-
-										anzList.clear();
-										geraeteList.clearChoices();
-										Log.i("geräte ID", "Geräte ID: " + geraeteId);
-										Log.i("geräte ID", "Anzahl Geräte ID: " + anzGeraeteArray);
-
-										if (!geraeteId.isNull(0)) {
-											boolean treffer = false;
-											for (int i = 0; i < geraeteIdListe.length(); i++) {
-												for (int k = 0; k < geraeteId.length(); k++) {
-													if (geraeteIdListe.getString(i).equals(geraeteId.getString(k)) && anzGeraeteArray.getInt(k) > 0) {
-														anzList.add(anzGeraeteArray.getString(k));
-														geraeteList.setItemChecked((geraeteId.getInt(k)) - 1, true);
-														treffer = true;
-														break;
-													} else {
-														treffer = false;
-													}
-												}
-												if (!treffer) {
-													anzList.add("0");
-												}
-											}
-										} else {
-											Log.i("ELSE", "ELSE: " + geraeteId.isNull(0));
-											geraeteList.clearChoices();
-											for (int i = 0; i < geraeteIdListe.length(); i++) {
-												anzList.add("0");
-											}
-										}
-										Log.i("anzList", "anzList: " + anzList);
-										// geraeteList.deferNotifyDataSetChanged();
-										listAdapter.notifyDataSetChanged();
-									}
-
-									public void serverErrorHandler(Exception e) {
-										// z.B. Fehler Dialog aufploppen lassen
-										Log.e("error", "called");
-									}
-								});
-								si.call("gibKundeGeraete", params);
-
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							gibAusloeser(position);
-							gibKundeAusloeser(position);
-							gibBeender(position);
-							gibKundeBeender(position);
-
+							gibKundeGeraete(position);
+							gibKundeGeraetestandort(position);
+							gibGeraetestandortGeraete(position);
+							
 						}
 					});
+					
+					gibKundeGeraete(0);
+					gibGeraetestandort();
+					gibKundeGeraetestandort(0);
+					gibGeraetestandortGeraete(0);
 
-					gibAusloeser(0);
-					gibKundeAusloeser(0);
-					gibBeender(0);
-					gibKundeBeender(0);
 
 				}
 
@@ -667,28 +265,10 @@ public class GeraeteDialog extends Dialog {
 		tabs.addTab(tab1);
 
 		// create tab 2
-		TabHost.TabSpec tab2 = tabs.newTabSpec("Auslöser");
-		tab2.setContent(R.id.layAusloeser);
-		tab2.setIndicator("Auslöser");
+		TabHost.TabSpec tab2 = tabs.newTabSpec("Gerätestandort");
+		tab2.setContent(R.id.layGeraetestandort);
+		tab2.setIndicator("Gerätestandort");
 		tabs.addTab(tab2);
-
-		// create tab 3
-		TabHost.TabSpec tab3 = tabs.newTabSpec("Beender");
-		tab3.setContent(R.id.layBeender);
-		tab3.setIndicator("Beender");
-		tabs.addTab(tab3);
-
-		/*
-		 * tabs.setOnTabChangedListener(new OnTabChangeListener() {
-		 * 
-		 * @Override public void onTabChanged(String tabId) { int tabInt =
-		 * tabs.getCurrentTab(); switch (tabInt) { case 0:
-		 * 
-		 * break; case 1: gibAusloeser(0); gibKundeAusloeser(); break; case 2:
-		 * gibBeender(0); gibKundeBeender(); break; default: break; } }
-		 * 
-		 * });
-		 */
 
 	}
 
@@ -704,21 +284,24 @@ public class GeraeteDialog extends Dialog {
 		}
 		return true;
 	}
-
-	public void gibAusloeser(int position) {
+	
+	
+	public void gibGeraetestandortGeraete(int position) {
 
 		// ----------------------------------------------------------------------------------//
-		// gibAusloeser
+		// gibGeraetestandortGeraete
 		// ----------------------------------------------------------------------------------//
 
 		try {
-			raumId = raumIdArray.getInt(position);
-			Log.i("AUSLOESER", "Raum ID: " + raumId);
-			Log.i("AUSLOESER", "Kunde ID: " + mKundeId);
+			raumId = jsonRaumIdArray.getInt(position);
+
 			JSONObject params = new JSONObject();
 			params.put("kundeId", mKundeId);
 			params.put("wohnraeumeId", raumId);
 			params.put("szenarioId", mSzenarioId);
+			Log.i("Gerätestandort ADAPTER", "Kunde ID: " + mKundeId);
+			Log.i("Gerätestandort ADAPTER", "Raum ID: " + raumId);
+			Log.i("Gerätestandort ADAPTER", "Szenario ID: " + mSzenarioId);
 
 			pDialog.show();
 			ServerInterface si = new ServerInterface();
@@ -726,33 +309,27 @@ public class GeraeteDialog extends Dialog {
 
 				public void serverSuccessHandler(JSONObject result) throws JSONException {
 
-					List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-					JSONArray la = result.getJSONArray("data");
-					ausloeserGeraeteId = result.getJSONArray("geraeteId");
+					gerNameList.clear();
+					gerIdList.clear();
+					jsonGeraetestandortGeraeteName = result.getJSONArray("data");
+					jsonGeraetestandortGeraeteId = result.getJSONArray("geraeteId");
 
-					for (int i = 0; i < la.length(); i++) {
-						HashMap<String, String> hm = new HashMap<String, String>();
-						hm.put("txt", la.getString(i));
-						list.add(hm);
+					for (int i = 0; i < jsonGeraetestandortGeraeteName.length(); i++) {
+						gerNameList.add(jsonGeraetestandortGeraeteName.getString(i));
+						gerIdList.add(jsonGeraetestandortGeraeteId.getInt(i));
 					}
-					Log.i("data Ausloeser", la.toString());
-					Log.i("msg Ausloeser", result.getString("msg"));
+					Log.i("Gerätestandort ADAPTER", "GERAETE JSONARRAY: " + jsonGeraetestandortGeraeteName);
+					Log.i("Gerätestandort ADAPTER", "GERAETE Namensliste: " + gerNameList);
+					Log.i("Gerätestandort ADAPTER", "GERAETE ID: " + gerIdList);
+					Log.i("Gerätestandort ADAPTER", "GERAETE Standortliste: " + geraetestandortList);
+					Log.i("Gerätestandort ADAPTER", "GERAETE Standortliste Kunde: " + geraetestandortListKundeId);
 
-					String[] from = { "txt" };
-					int[] to = { R.id.txt };
-
-					dataAdapterAusloeser = new SimpleAdapter(mContext, list, R.layout.listview_checkable, from, to);
-					ausloeserList = (ListView) findViewById(R.id.ausloeserList);
-
-					ausloeserList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-					ausloeserList.setAdapter(dataAdapterAusloeser);
+					listAdapterSpinner = new ListViewSpinnerAdapter(mContext, gerNameList, gerIdList, geraetestandortList, geraetestandortListKundeId);
+					geraetestandortListView = (ListView) findViewById(R.id.geraetestandortList);
+					geraetestandortListView.setEnabled(false);
+					geraetestandortListView.setAdapter(listAdapterSpinner);
 
 					pDialog.dismiss();
-					ausloeserList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-
-						}
-					});
 				}
 
 				public void serverErrorHandler(Exception e) {
@@ -760,22 +337,57 @@ public class GeraeteDialog extends Dialog {
 					Log.e("error", "called");
 				}
 			});
-			si.call("gibAusloeser", params);
+			si.call("gibGeraetestandortGeraete", params);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void gibKundeAusloeser(int position) {
+	public void gibGeraetestandort() {
 
 		// ----------------------------------------------------------------------------------//
-		// gibKundeAusloeser
+		// gibGeraetestandort
+		// ----------------------------------------------------------------------------------//
+
+		pDialog.show();
+
+		ServerInterface si = new ServerInterface();
+		si.addListener(new ServerInterfaceListener() {
+
+			public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+				geraetestandortList = new ArrayList<String>();
+
+				jsonGeraetestandortList = result.getJSONArray("data");
+
+				for (int i = 0; i < jsonGeraetestandortList.length(); i++) {
+					geraetestandortList.add(jsonGeraetestandortList.getString(i));
+				}
+				Log.i("data Gerätestandort", jsonGeraetestandortList.toString());
+
+				pDialog.dismiss();
+			}
+
+			public void serverErrorHandler(Exception e) {
+				// z.B. Fehler Dialog aufploppen lassen
+				Log.e("error", "called");
+			}
+		});
+		JSONObject params = new JSONObject();
+		si.call("gibGeraetestandort", params);
+	}
+
+	public void gibKundeGeraete(int position) {
+
+		// ----------------------------------------------------------------------------------//
+		// gibKundeGeraete
 		// ----------------------------------------------------------------------------------//
 
 		try {
-			raumId = raumIdArray.getInt(position);
+			raumId = jsonRaumIdArray.getInt(position);
 			JSONObject params = new JSONObject();
+
 			params.put("kundeId", mKundeId);
 			params.put("wohnraeumeId", raumId);
 			params.put("szenarioId", mSzenarioId);
@@ -785,75 +397,44 @@ public class GeraeteDialog extends Dialog {
 
 				public void serverSuccessHandler(JSONObject result) throws JSONException {
 
-					JSONArray wd = result.getJSONArray("data");
-					Log.i("Gib Kunde Ausloeser", "Kunde Ausloeser: "+wd.toString());
-					for (int i = 0; i < wd.length(); i++) {
-						if (Integer.valueOf(wd.get(i).toString()) == ausloeserGeraeteId.getInt(i)) {
-							ausloeserList.setItemChecked(i, true);
+					jsonGeraeteKundeName = result.getJSONArray("geraeteKunde");
+					jsonGeraeteId = result.getJSONArray("data");
+					jsonAnzGeraeteArray = result.getJSONArray("anzGeraete");
+
+					anzList.clear();
+					geraeteListView.clearChoices();
+					Log.i("geräte ID", "Geräte ID: " + jsonGeraeteId);
+					Log.i("geräte ID", "Geräte Kunde NAME: " + jsonGeraeteKundeName);
+					Log.i("geräte ID", "Anzahl Geräte ID: " + jsonAnzGeraeteArray);
+
+					if (!jsonGeraeteId.isNull(0)) {
+						boolean treffer = false;
+						for (int i = 0; i < jsonGeraeteIdList.length(); i++) {
+							for (int k = 0; k < jsonGeraeteId.length(); k++) {
+								if (jsonGeraeteIdList.getString(i).equals(jsonGeraeteId.getString(k)) && jsonAnzGeraeteArray.getInt(k) > 0) {
+									anzList.add(jsonAnzGeraeteArray.getString(k));
+									geraeteListView.setItemChecked((jsonGeraeteId.getInt(k)) - 1, true);
+									treffer = true;
+									break;
+								} else {
+									treffer = false;
+								}
+							}
+							if (!treffer) {
+								anzList.add("0");
+							}
+						}
+					} else {
+						Log.i("ELSE", "ELSE: " + jsonGeraeteId.isNull(0));
+						geraeteListView.clearChoices();
+						for (int i = 0; i < jsonGeraeteIdList.length(); i++) {
+							anzList.add("0");
 						}
 					}
-				}
+					Log.i("anzList", "anzList: " + anzList);
+					geraeteListView.invalidateViews();
 
-				public void serverErrorHandler(Exception e) {
-					// z.B. Fehler Dialog aufploppen lassen
-					Log.e("error", "called");
-				}
-			});
-			si.call("gibKundeAusloeser", params);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void gibBeender(int position) {
-
-		// ----------------------------------------------------------------------------------//
-		// gibBeender
-		// ----------------------------------------------------------------------------------//
-
-		try {
-			raumId = raumIdArray.getInt(position);
-			Log.i("BEENDER", "Raum ID: " + raumId);
-			Log.i("BEENDER", "Kunde ID: " + mKundeId);
-			JSONObject params = new JSONObject();
-			params.put("kundeId", mKundeId);
-			params.put("wohnraeumeId", raumId);
-			params.put("szenarioId", mSzenarioId);
-
-			pDialog.show();
-
-			ServerInterface si = new ServerInterface();
-			si.addListener(new ServerInterfaceListener() {
-
-				public void serverSuccessHandler(JSONObject result) throws JSONException {
-
-					List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-					JSONArray la = result.getJSONArray("data");
-					beenderGeraeteId = result.getJSONArray("geraeteId");
-
-					for (int i = 0; i < la.length(); i++) {
-						HashMap<String, String> hm = new HashMap<String, String>();
-						hm.put("txt", la.getString(i));
-						list.add(hm);
-					}
-					Log.i("data Beender", la.toString());
-					Log.i("msg Beender", result.getString("msg"));
-
-					String[] from = { "txt" };
-					int[] to = { R.id.txt };
-
-					dataAdapterBeender = new SimpleAdapter(mContext, list, R.layout.listview_checkable, from, to);
-					beenderList = (ListView) findViewById(R.id.beenderList);
-
-					beenderList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-					beenderList.setAdapter(dataAdapterBeender);
 					pDialog.dismiss();
-					beenderList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-
-						}
-					});
 				}
 
 				public void serverErrorHandler(Exception e) {
@@ -861,21 +442,21 @@ public class GeraeteDialog extends Dialog {
 					Log.e("error", "called");
 				}
 			});
-			si.call("gibBeender", params);
+			si.call("gibKundeGeraete", params);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void gibKundeBeender(int position) {
+	public void gibKundeGeraetestandort(int position) {
 
 		// ----------------------------------------------------------------------------------//
-		// gibKundeBeender
+		// gibKundeGeraetestandort
 		// ----------------------------------------------------------------------------------//
 
 		try {
-			raumId = raumIdArray.getInt(position);
+			raumId = jsonRaumIdArray.getInt(position);
 			JSONObject params = new JSONObject();
 
 			params.put("kundeId", mKundeId);
@@ -887,12 +468,13 @@ public class GeraeteDialog extends Dialog {
 
 				public void serverSuccessHandler(JSONObject result) throws JSONException {
 
-					JSONArray wd = result.getJSONArray("data");
-					Log.i("Gib Kunde Beender", "Kunde Beender: "+wd.toString());
-					for (int i = 0; i < wd.length(); i++) {
-						if (Integer.valueOf(wd.get(i).toString()) == beenderGeraeteId.getInt(i)) {
-							beenderList.setItemChecked(i, true);
-						}
+					geraetestandortListKundeId.clear();
+					jsonKundeGeraetestandortId = result.getJSONArray("kundeGeraetestandortId");
+
+					Log.i("geräte ID", "Gerätestandort ID: " + jsonKundeGeraetestandortId);
+
+					for (int i = 0; i < jsonKundeGeraetestandortId.length(); i++) {
+						geraetestandortListKundeId.add(jsonKundeGeraetestandortId.getInt(i));
 					}
 				}
 
@@ -901,11 +483,169 @@ public class GeraeteDialog extends Dialog {
 					Log.e("error", "called");
 				}
 			});
-			si.call("gibKundeBeender", params);
-		} catch (Exception e) {
+			si.call("gibKundeGeraetestandort", params);
+		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
+	
+	public void insertKundeGeraete(){
+		
+		// ----------------------------------------------------------------------------------//
+		// BERECHNUNG insertKundeGeraete
+		// ----------------------------------------------------------------------------------//
+
+		List<String> mAnzList = new ArrayList<String>();
+		List<String> mSelectedAnzahl = new ArrayList<String>();
+		List<Integer> mGeraete = new ArrayList<Integer>();
+		List<Integer> mGeraetestandort = new ArrayList<Integer>();
+
+		mSelectedAnzahl.clear();
+		mAnzList = listAdapter.getAnzGeraeteListeAll();
+		mSelectedAnzahl = listAdapter.getAnzGeraeteListeAll();
+
+		try {
+			int count = 0;
+			String selectedGeraet = "";
+			String selectedAnzahl = "";
+			String selectedGeraetestandort = "";
+
+			if (isNullList(mSelectedAnzahl)) {
+				Log.i("List is EMPTY", "mSelectedAnzahl: " + mSelectedAnzahl);
+				selectedGeraet = "0";
+				selectedAnzahl = "0";
+			} else {
+				Log.i("List is NOT EMPTY", "mAnzList: " + mAnzList);
+				for (int i = 0; i < mAnzList.size(); i++) {
+					if (!mAnzList.get(i).equals("0")) {
+						mGeraete.add(jsonGeraeteIdList.getInt(i));
+						selectedGeraet += (jsonGeraeteIdList.getString(i)) + ".";
+					}
+				}
+				if (!selectedGeraet.equals("0")) {
+					selectedGeraet = selectedGeraet.substring(0, selectedGeraet.length() - 1);
+				}
+				boolean removeAllNull = mSelectedAnzahl.removeAll(Arrays.asList("0"));
+				selectedAnzahl = TextUtils.join(".", mSelectedAnzahl);
+			}
+			
+
+			/*for (int i = 0; i < jsonGeraetestandortGeraeteId.length(); i++) {
+				selectedGeraetestandort += (listAdapterSpinner.getSpinnerItemId()) + ".";
+				count++;
+			}
+			if (count != 0) {
+				selectedGeraetestandort = selectedGeraetestandort.substring(0, selectedGeraetestandort.length() - 1);
+			} else if(count == 0){
+				selectedGeraetestandort = "0";
+			}*/
+			
+			//selectedGeraetestandort = TextUtils.join(".", listAdapterSpinner.getSpinnerItemId());
+			//Log.i("INSERT GERÄTE", "selectedGeraetestandort: "+selectedGeraetestandort);
+			
+			/*for (int i = 0; i < listAdapterSpinner.getSpinnerItemId().size(); i++) {
+				mGeraetestandort.add(jsonGeraetestandortGeraeteId.getInt(i));
+			}*/
+			
+			loop: for(int i = 0; i < mGeraete.size(); i++){
+				for(int g = 0; g < listAdapterSpinner.getSpinnerItemId().size(); g++ ){
+					if(mGeraete.get(i).equals(listAdapterSpinner.getSpinnerGeraeteId().get(g))){
+						int bla = listAdapterSpinner.getSpinnerItemId().get(g);
+						selectedGeraetestandort += bla + ".";
+						count++;
+						continue loop;
+					}							
+				}
+				selectedGeraetestandort += 0 + ".";
+			}
+			if (count != 0) {
+				selectedGeraetestandort = selectedGeraetestandort.substring(0, selectedGeraetestandort.length() - 1);
+			} else if(count == 0){
+				selectedGeraetestandort = "0";
+			}
+
+			Log.i("INSERT GERÄTE", "selectedGeraetestandort: "+selectedGeraetestandort);
+			// ----------------------------------------------------------------------------------//
+			// insertKundeGeraete
+			// ----------------------------------------------------------------------------------//
+
+			JSONObject updateParams = new JSONObject();
+			updateParams.put("kundeId", mKundeId);
+			updateParams.put("szenarioId", mSzenarioId);
+			updateParams.put("wohnraeumeId", raumId);
+			updateParams.put("anzGeraete", selectedAnzahl);
+			updateParams.put("geraeteId", selectedGeraet);
+			updateParams.put("geraetestandortId", selectedGeraetestandort);
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+					Log.i("INSERT KundeGeraete: ", result.getString("msg"));
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method
+					// stub
+				}
+			});
+			si.call("insertKundeGeraete", updateParams);
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+	}
+
+	/*public void insertKundeGeraetestandort() {
+
+		// ----------------------------------------------------------------------------------//
+		// BERECHNUNG insertKundeGeraetestandort
+		// ----------------------------------------------------------------------------------//
+
+		int count = 0;
+		String selectedGeraetestandort = "";
+		for (int i = 0; i < jsonGeraetestandortGeraeteId.length(); i++) {
+			selectedGeraetestandort += (listAdapterSpinner.getSpinnerItemId()) + ".";
+			count++;
+		}
+		if (count != 0) {
+			selectedGeraetestandort = selectedGeraetestandort.substring(0, selectedGeraetestandort.length() - 1);
+		} else if(count == 0){
+			selectedGeraetestandort = "0";
+		}
+		
+		Log.i("INSERT STANDORT", "getSpinnerItem ID: " + listAdapterSpinner.getSpinnerItemId());
+		Log.i("INSERT STANDORT", "getSpinnerItem TEXT: " + listAdapterSpinner.getSpinnerItemText());
+		Log.i("INSERT STANDORT", "selectedGeraetestandort: " + selectedGeraetestandort);
+
+		try {
+			// ----------------------------------------------------------------------------------//
+			// insertKundeGeraetestandort
+			// ----------------------------------------------------------------------------------//
+
+			JSONObject updateParams = new JSONObject();
+			updateParams.put("kundeId", mKundeId);
+			updateParams.put("szenarioId", mSzenarioId);
+			updateParams.put("wohnraeumeId", raumId);
+			updateParams.put("geraetestandortId", selectedGeraetestandort);
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+					Log.i("INSERT KundeGeraetestandort: ", result.getString("msg"));
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method
+					// stub
+				}
+			});
+			si.call("insertKundeGeraetestandort", updateParams);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}*/
+
 }

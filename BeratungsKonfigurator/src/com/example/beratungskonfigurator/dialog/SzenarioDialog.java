@@ -1,5 +1,6 @@
 package com.example.beratungskonfigurator.dialog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,25 +13,45 @@ import org.json.JSONObject;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnBufferingUpdateListener;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.media.MediaPlayer.OnVideoSizeChangedListener;
+import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Gallery;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.MediaController;
+import android.widget.MediaController.MediaPlayerControl;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.server.ServerInterface;
 import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
-public class SzenarioDialog extends Dialog {
+public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener, OnCompletionListener, OnPreparedListener, OnVideoSizeChangedListener, SurfaceHolder.Callback{
 
 	private ProgressDialog pDialog;
 	private ListView szenarioList;
@@ -44,12 +65,34 @@ public class SzenarioDialog extends Dialog {
 	private TextView dialogTitel;
 	private JSONArray szId = new JSONArray();
 	private JSONArray la = new JSONArray();
+	private ImageView imageView;
+
+	private static final String TAG = "MediaPlayerDemo";
+    private int mVideoWidth;
+    private int mVideoHeight;
+    private MediaPlayer mMediaPlayer;
+    private SurfaceView mPreview;
+    private SurfaceHolder holder;
+    private String path;
+    private Bundle extras;
+    private static final String MEDIA = "media";
+    private static final int LOCAL_AUDIO = 1;
+    private static final int STREAM_AUDIO = 2;
+    private static final int RESOURCES_AUDIO = 3;
+    private static final int LOCAL_VIDEO = 4;
+    private static final int STREAM_VIDEO = 5;
+    private boolean mIsVideoSizeKnown = false;
+    private boolean mIsVideoReadyToBePlayed = false;
+
+	private int[] myImageIds = { R.drawable.antartica1, R.drawable.antartica2, R.drawable.antartica3, R.drawable.antartica4 };
 
 	ArrayList<Integer> selSzenarioList = new ArrayList<Integer>();
 
 	// Constructor
 	public SzenarioDialog(final Context context, int anwendungsfallId, int kundeId, String anwendungsfallName) {
 		super(context);
+		
+		path = "rtsp://v8.cache8.c.youtube.com/CjYLENy73wIaLQlGb-3VVCUgNRMYDSANFEIJbXYtZ29vZ2xlSARSBXdhdGNoYKX6kvOXi_-kUAw=/0/0/0/video.3gp";
 
 		pDialog = new ProgressDialog(context);
 		pDialog.setMessage("Lade Daten!");
@@ -86,6 +129,9 @@ public class SzenarioDialog extends Dialog {
 		bClose.setBackgroundResource(R.drawable.button_close);
 		bClose.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				
+				releaseMediaPlayer();
+		        doCleanUp();
 
 				// ----------------------------------------------------------------------------------//
 				// insertSzenario
@@ -212,6 +258,7 @@ public class SzenarioDialog extends Dialog {
 									public void serverSuccessHandler(JSONObject result) throws JSONException {
 
 										tBeschreibung.setText(result.getJSONObject("data").getString("beschreibung"));
+
 									}
 
 									public void serverErrorHandler(Exception e) {
@@ -354,7 +401,7 @@ public class SzenarioDialog extends Dialog {
 
 		// create tab 2
 		TabHost.TabSpec tab2 = tabs.newTabSpec("Bilder");
-		tab2.setContent(R.id.gBilder);
+		tab2.setContent(R.id.gBilderGallery);
 		tab2.setIndicator("Bilder");
 		tabs.addTab(tab2);
 
@@ -364,8 +411,163 @@ public class SzenarioDialog extends Dialog {
 		tab3.setIndicator("Video");
 		tabs.addTab(tab3);
 
+		Gallery ga = (Gallery) findViewById(R.id.gBilder);
+		ga.setAdapter(new ImageAdapter(context));
+
+		imageView = (ImageView) findViewById(R.id.gBilderImageView);
+
+		ga.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView parent, View v, int position, long id) {
+				imageView.setImageResource(myImageIds[position]);
+
+			}
+
+		});
+
+		mPreview = (SurfaceView) findViewById(R.id.vVideo);
+		holder = mPreview.getHolder();
+		holder.addCallback(this);
+		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
 	}
 
 	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+	public class ImageAdapter extends BaseAdapter {
+
+		private static final int ITEM_WIDTH = 150;
+		private static final int ITEM_HEIGHT = 120;
+
+		private Context myContext;
+		private int itemBackground;
+
+		/** Simple Constructor saving the 'parent' context. */
+		public ImageAdapter(Context c) {
+			this.myContext = c;
+			TypedArray a = myContext.obtainStyledAttributes(R.styleable.Gallery1);
+			itemBackground = a.getResourceId(R.styleable.Gallery1_android_galleryItemBackground, 0);
+			a.recycle();
+		}
+
+		// inherited abstract methods - must be implemented
+		// Returns count of images, and individual IDs
+		public int getCount() {
+			return myImageIds.length;
+		}
+
+		public Object getItem(int position) {
+			return position;
+		}
+
+		public long getItemId(int position) {
+			return position;
+		}
+
+		// Returns a new ImageView to be displayed,
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			// Get a View to display image data
+			ImageView iv = new ImageView(this.myContext);
+			iv.setImageResource(myImageIds[position]);
+
+			// Image should be scaled somehow
+			iv.setScaleType(ImageView.ScaleType.FIT_XY);
+
+			// Set the Width & Height of the individual images
+			iv.setLayoutParams(new Gallery.LayoutParams(ITEM_WIDTH, ITEM_HEIGHT));
+			iv.setBackgroundResource(itemBackground);
+
+			return iv;
+		}
+	}
+	
+	private void playVideo(Integer Media) {
+        doCleanUp();
+        try {
+            // Create a new media player and set the listeners
+            mMediaPlayer = new MediaPlayer();
+            mMediaPlayer.setDataSource(path);
+            mMediaPlayer.setDisplay(holder);
+            mMediaPlayer.prepare();
+            mMediaPlayer.setOnBufferingUpdateListener(this);
+            mMediaPlayer.setOnCompletionListener(this);
+            mMediaPlayer.setOnPreparedListener(this);
+            mMediaPlayer.setOnVideoSizeChangedListener(this);
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+
+        } catch (Exception e) {
+            Log.e(TAG, "error: " + e.getMessage(), e);
+        }
+    }
+
+    public void onBufferingUpdate(MediaPlayer arg0, int percent) {
+        Log.d(TAG, "onBufferingUpdate percent:" + percent);
+
+    }
+
+    public void onCompletion(MediaPlayer arg0) {
+        Log.d(TAG, "onCompletion called");
+    }
+
+    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+        Log.v(TAG, "onVideoSizeChanged called");
+        if (width == 0 || height == 0) {
+            Log.e(TAG, "invalid video width(" + width + ") or height(" + height + ")");
+            return;
+        }
+        mIsVideoSizeKnown = true;
+        mVideoWidth = width;
+        mVideoHeight = height;
+        if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
+            startVideoPlayback();
+        }
+    }
+
+    public void onPrepared(MediaPlayer mediaplayer) {
+        Log.d(TAG, "onPrepared called");
+        mIsVideoReadyToBePlayed = true;
+        if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
+            startVideoPlayback();
+        }
+    }
+
+    public void surfaceChanged(SurfaceHolder surfaceholder, int i, int j, int k) {
+        Log.d(TAG, "surfaceChanged called");
+
+    }
+
+    public void surfaceDestroyed(SurfaceHolder surfaceholder) {
+        Log.d(TAG, "surfaceDestroyed called");
+    }
+
+
+    public void surfaceCreated(SurfaceHolder holder) {
+        Log.d(TAG, "surfaceCreated called");
+        playVideo(Integer.valueOf(MEDIA));
+
+
+    }
+
+    private void releaseMediaPlayer() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+    }
+
+    private void doCleanUp() {
+        mVideoWidth = 0;
+        mVideoHeight = 0;
+        mIsVideoReadyToBePlayed = false;
+        mIsVideoSizeKnown = false;
+    }
+
+    private void startVideoPlayback() {
+        Log.v(TAG, "startVideoPlayback");
+        holder.setFixedSize(mVideoWidth, mVideoHeight);
+        mMediaPlayer.start();
+    }
 
 }

@@ -3,12 +3,17 @@ package com.example.beratungskonfigurator;
 import java.util.HashMap;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TabWidget;
+import android.widget.TextView;
 
 import com.example.beratungskonfigurator.tabs.AnwendungsfallActivity;
 import com.example.beratungskonfigurator.tabs.ExportActivity;
@@ -29,14 +34,14 @@ public class TabActivity extends FragmentActivity {
     TabManager mTabManager;
     static int kundeId;
     
-    private static final String KUNDE_TAB = "Kunde";
-	private static final String WOHNUNG_TAB = "Wohnung";
-	private static final String GESUNDHEIT_TAB = "Gesundheit";
+    private static final String KUNDE_TAB = "Kundendaten";
+	private static final String WOHNUNG_TAB = "Wohnungsdaten";
+	private static final String GESUNDHEIT_TAB = "gesundheitliche Problemstellung";
 	//private static final String PROBLEM_TAB = "Problemstellung";
 	private static final String ANWENDUNGSFALL_TAB = "Anwendungsfall";
 	private static final String KONFIGURATION_TAB = "persönliche Konfiguration";
-	private static final String UEBERSICHT_TAB = "Übersicht";
-	private static final String HERSTELLER_TAB = "Herstellersuche";
+	//private static final String UEBERSICHT_TAB = "Übersicht";
+	//private static final String HERSTELLER_TAB = "Herstellersuche";
 	private static final String EXPORT_TAB = "Export";
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,22 +55,31 @@ public class TabActivity extends FragmentActivity {
 
         mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent);
         
-        mTabManager.addTab(mTabHost.newTabSpec(KUNDE_TAB).setIndicator(KUNDE_TAB),KundeActivity.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec(KUNDE_TAB).setIndicator(KUNDE_TAB, getResources().getDrawable(R.drawable.tab_icon)),KundeActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(WOHNUNG_TAB).setIndicator(WOHNUNG_TAB),WohnungActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(GESUNDHEIT_TAB).setIndicator(GESUNDHEIT_TAB),GesundheitActivity.class, null);
         //mTabManager.addTab(mTabHost.newTabSpec(PROBLEM_TAB).setIndicator(PROBLEM_TAB),ProblemActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(ANWENDUNGSFALL_TAB).setIndicator(ANWENDUNGSFALL_TAB),AnwendungsfallActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(KONFIGURATION_TAB).setIndicator(KONFIGURATION_TAB),KonfigurationActivity.class, null);
-        mTabManager.addTab(mTabHost.newTabSpec(UEBERSICHT_TAB).setIndicator(UEBERSICHT_TAB),UebersichtActivity.class, null);
-        mTabManager.addTab(mTabHost.newTabSpec(HERSTELLER_TAB).setIndicator(HERSTELLER_TAB),HerstellerActivity.class, null);
+        //mTabManager.addTab(mTabHost.newTabSpec(UEBERSICHT_TAB).setIndicator(UEBERSICHT_TAB),UebersichtActivity.class, null);
+        //mTabManager.addTab(mTabHost.newTabSpec(HERSTELLER_TAB).setIndicator(HERSTELLER_TAB),HerstellerActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(EXPORT_TAB).setIndicator(EXPORT_TAB),ExportActivity.class, null);
+        
+        
 
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
+        
+        TabWidget tw = mTabHost.getTabWidget();
+
+        for (int i = 0; i < tw.getChildCount(); i++) {
+        	View v = tw.getChildAt(i);
+        	v.setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator)); 
+        }
     }
 
-
+    
 	protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("tab", mTabHost.getCurrentTabTag());
