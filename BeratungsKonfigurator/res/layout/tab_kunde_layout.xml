@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@drawable/background_01" >
+    android:background="@drawable/background_01"
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/tabTitel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="60dip"
         android:paddingLeft="20dip"
         android:paddingTop="20dip"
-        android:paddingBottom="60dip"
-        android:text="Kundendaten"
-        android:textSize="40sp" 
-        android:textColor="@android:color/white"/>
+        android:text="Kundendaten eingeben"
+        android:textColor="@color/cDarkGray"
+        android:textSize="40sp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -44,78 +44,134 @@
 
                 <TextView
                     android:id="@+id/titelAdresse"
-                    android:layout_width="300dip"
+                    android:layout_width="350dip"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
-                    android:paddingLeft="10dip"
                     android:text="Adresse"
                     android:textSize="30sp" />
 
                 <ToggleButton
                     android:id="@+id/toggleEditAdresse"
+                    android:layout_width="60dip"
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="40dip"
+                    android:textOff=""
+                    android:textOn="" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dip"
-                    android:textOff="Edit"
-                    android:textOn="Save" />
-            </LinearLayout>
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Name: "
+                    android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/kName"
-                android:layout_width="300dip"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Name"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName" />
+                <EditText
+                    android:id="@+id/kName"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName" />
+            </RelativeLayout>
 
-            <EditText
-                android:id="@+id/kVorname"
-                android:layout_width="300dip"
+            <RelativeLayout
+                android:layout_width="450dip"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Vorname"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName" />
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textVorname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Vorname: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/kVorname"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Vorname"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
-                <EditText
-                    android:id="@+id/kStrasse"
-                    android:layout_width="300dip"
+                <RelativeLayout
+                    android:layout_width="450dip"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="Straße"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPersonName" />
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal" >
 
-                <EditText
-                    android:id="@+id/kHausnummer"
-                    android:layout_width="100dip"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="Nr."
-                    android:imeOptions="actionNext"
-                    android:inputType="textPersonName" />
+                    <TextView
+                        android:id="@+id/textStrasse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingRight="10dip"
+                        android:text="Straße/Nr.: "
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/kStrasse"
+                        android:layout_width="250dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="100dip"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Straße"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName" />
+
+                    <EditText
+                        android:id="@+id/kHausnummer"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Nr."
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName" />
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -123,31 +179,52 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" >
 
-                <EditText
-                    android:id="@+id/kPLZ"
-                    android:layout_width="100dip"
+                <RelativeLayout
+                    android:layout_width="450dip"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="PLZ"
-                    android:imeOptions="actionNext"
-                    android:inputType="textPostalAddress" />
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal" >
 
-                <EditText
-                    android:id="@+id/kOrt"
-                    android:layout_width="300dip"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:cursorVisible="false"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:hint="Ort"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPersonName" />
+                    <TextView
+                        android:id="@+id/textPLZ"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:paddingRight="10dip"
+                        android:text="PLZ/Ort: "
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/kPLZ"
+                        android:layout_width="100dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="250dip"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="PLZ"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPostalAddress" />
+
+                    <EditText
+                        android:id="@+id/kOrt"
+                        android:layout_width="250dip"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:ems="10"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Ort"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPersonName" />
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
 
@@ -166,74 +243,144 @@
 
                 <TextView
                     android:id="@+id/titelKontakt"
-                    android:layout_width="300dip"
+                    android:layout_width="350dip"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
-                    android:paddingLeft="10dip"
                     android:text="Kontakt"
                     android:textSize="30sp" />
 
                 <ToggleButton
                     android:id="@+id/toggleEditKontakt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dip"
-                    android:text="Edit"
-                    android:textOff="Edit"
-                    android:textOn="Save" />
+                    android:layout_width="60dip"
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="40dip"
+                    android:textOff=""
+                    android:textOn="" />
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/kTelefon"
-                android:layout_width="400dip"
+            <RelativeLayout
+                android:layout_width="450dip"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Telefon"
-                android:imeOptions="actionNext"
-                android:inputType="phone" />
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
 
-            <EditText
-                android:id="@+id/kMobil"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Mobil"
-                android:imeOptions="actionNext"
-                android:inputType="phone" />
+                <TextView
+                    android:id="@+id/textTelefon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Telefon: "
+                    android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/kFax"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Fax"
-                android:imeOptions="actionNext"
-                android:inputType="phone" />
+                <EditText
+                    android:id="@+id/kTelefon"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Telefon"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone" />
+            </RelativeLayout>
 
-            <EditText
-                android:id="@+id/kMail"
-                android:layout_width="400dip"
+            <RelativeLayout
+                android:layout_width="450dip"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="E-Mail"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress" />
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textMobil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Mobil: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/kMobil"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Mobil"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textFax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Fax: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/kFax"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Fax"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="E-Mail: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/kMail"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="E-Mail"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress" />
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -251,49 +398,120 @@
 
                 <TextView
                     android:id="@+id/titelInformation"
-                    android:layout_width="300dip"
+                    android:layout_width="350dip"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
-                    android:paddingLeft="10dip"
                     android:text="Adresse"
                     android:textSize="30sp" />
 
                 <ToggleButton
                     android:id="@+id/toggleEditInformation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dip"
-                    android:textOff="Edit"
-                    android:textOn="Save" />
+                    android:layout_width="60dip"
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="40dip"
+                    android:textOff=""
+                    android:textOn="" />
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/kGeburtsdatum"
-                android:layout_width="400dip"
+            <RelativeLayout
+                android:layout_width="450dip"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Geburtsdatum"
-                android:imeOptions="actionDone"
-                android:inputType="date" />
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
 
-            <Spinner
-                android:id="@+id/kFamilienstand"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/textGeburtsdatum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Geburtsdatum: "
+                    android:textSize="18sp" />
 
-            <Spinner
-                android:id="@+id/kKonfession"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/kGeburtsdatum"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Geburtsdatum"
+                    android:imeOptions="actionDone"
+                    android:inputType="date" />
+            </RelativeLayout>
 
-            <Spinner
-                android:id="@+id/kPflegestufe"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textFamilienstand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Familienstand: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/kFamilienstand"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textKonfession"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Konfession: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/kKonfession"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textPflegestufe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Pflegestufe: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/kPflegestufe"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -311,41 +529,135 @@
 
                 <TextView
                     android:id="@+id/titelVersorgung"
-                    android:layout_width="300dip"
+                    android:layout_width="350dip"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
-                    android:paddingLeft="10dip"
                     android:text="Versorgung"
                     android:textSize="30sp" />
 
                 <ToggleButton
                     android:id="@+id/toggleEditVersorgung"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dip"
-                    android:textOff="Edit"
-                    android:textOn="Save" />
+                    android:layout_width="60dip"
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="40dip"
+                    android:textOff=""
+                    android:textOn="" />
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/kKostentraeger"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
 
-            <Spinner
-                android:id="@+id/kVersicherungsart"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/textKostentraeger"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Kostenträger: "
+                    android:textSize="18sp" />
 
-            <Spinner
-                android:id="@+id/kKrankenkasse"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content" />
+                <Spinner
+                    android:id="@+id/kKostentraeger"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
 
-            <Spinner
-                android:id="@+id/kLeistungsart"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textVersicherungsart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Versicherungsart: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/kVersicherungsart"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textKrankenkasse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Krankenkasse: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/kKrankenkasse"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textLeistungsart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Leistungsart: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/kLeistungsart"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textVermoegen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Vermögen: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/kVermoegen"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -362,62 +674,128 @@
 
                 <TextView
                     android:id="@+id/titelAngehoeriger"
-                    android:layout_width="300dip"
+                    android:layout_width="350dip"
                     android:layout_height="wrap_content"
                     android:paddingBottom="40dip"
-                    android:paddingLeft="10dip"
                     android:text="Angehöriger"
                     android:textSize="30sp" />
 
                 <ToggleButton
                     android:id="@+id/toggleEditAngehoeriger"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="32dip"
-                    android:textOff="Edit"
-                    android:textOn="Save" />
+                    android:layout_width="60dip"
+                    android:layout_height="60dip"
+                    android:layout_marginLeft="40dip"
+                    android:textOff=""
+                    android:textOn="" />
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/aArt"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/aName"
-                android:layout_width="300dip"
+            <RelativeLayout
+                android:layout_width="450dip"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Name"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/aVorname"
-                android:layout_width="300dip"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Vorname"
-                android:imeOptions="actionNext"
-                android:inputType="textPersonName" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textaArt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Art: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/aArt"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textaName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Name: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/aName"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Name"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textaVorname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Vorname: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/aVorname"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Vorname"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textaStrasse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Straße/Nr.: "
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/aStrasse"
-                    android:layout_width="300dip"
+                    android:layout_width="250dip"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="100dip"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:ems="10"
@@ -431,6 +809,8 @@
                     android:id="@+id/aHausnummer"
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:ems="10"
@@ -439,17 +819,30 @@
                     android:hint="Nr."
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="450dip"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textaPlz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="PLZ/Ort: "
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/aPLZ"
                     android:layout_width="100dip"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="250dip"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:ems="10"
@@ -461,8 +854,10 @@
 
                 <EditText
                     android:id="@+id/aOrt"
-                    android:layout_width="300dip"
+                    android:layout_width="250dip"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:ems="10"
@@ -471,59 +866,131 @@
                     android:hint="Ort"
                     android:imeOptions="actionNext"
                     android:inputType="textPersonName" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <EditText
-                android:id="@+id/aTelefon"
-                android:layout_width="400dip"
+            <RelativeLayout
+                android:layout_width="450dip"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Telefon"
-                android:imeOptions="actionNext"
-                android:inputType="phone" />
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
 
-            <EditText
-                android:id="@+id/aMobil"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Mobil"
-                android:imeOptions="actionNext"
-                android:inputType="phone" />
+                <TextView
+                    android:id="@+id/textaTelefon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Telefon: "
+                    android:textSize="18sp" />
 
-            <EditText
-                android:id="@+id/aFax"
-                android:layout_width="400dip"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Fax"
-                android:imeOptions="actionNext"
-                android:inputType="phone" />
+                <EditText
+                    android:id="@+id/aTelefon"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Telefon"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone" />
+            </RelativeLayout>
 
-            <EditText
-                android:id="@+id/aMail"
-                android:layout_width="400dip"
+            <RelativeLayout
+                android:layout_width="450dip"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:ems="10"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="E-Mail"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress" />
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textaMobil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Mobil: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/aMobil"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Mobil"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textaFax"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Fax: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/aFax"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Fax"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="450dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textaMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="E-Mail: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/aMail"
+                    android:layout_width="350dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="E-Mail"
+                    android:imeOptions="actionDone"
+                    android:inputType="textEmailAddress" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

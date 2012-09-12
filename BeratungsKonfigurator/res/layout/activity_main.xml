@@ -1,33 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/background_start"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/txt_nberatung"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Neue Beratung" />
+        android:layout_gravity="center"
+        android:orientation="vertical" 
+        android:paddingTop="240dip">
 
-    <Button
-        android:id="@+id/btn_nberatung"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onButtonClick"
-        android:text="Neue Beratung" />
+        <Button
+            android:id="@+id/btn_nberatung"
+            android:layout_width="700px"
+            android:layout_height="102px"
+            android:layout_gravity="center"
+            android:layout_marginBottom="50dip"
+            android:background="@drawable/button_neue"
+            android:onClick="onButtonClick"
+            android:padding="50dip" />
 
-    <TextView
-        android:id="@+id/txt_fberatung"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Folgeberatung" />
-
-    <Button
-        android:id="@+id/btn_fberatung"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onButtonClick"
-        android:text="Folgeberatung" />
+        <Button
+            android:id="@+id/btn_fberatung"
+            android:layout_width="700px"
+            android:layout_height="102px"
+            android:layout_gravity="center"
+            android:background="@drawable/button_folge"
+            android:onClick="onButtonClick"
+            android:padding="50dip" />
+    </LinearLayout>
 
 </LinearLayout>

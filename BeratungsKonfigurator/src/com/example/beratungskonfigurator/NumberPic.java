@@ -3,7 +3,7 @@ package com.example.beratungskonfigurator;
 public class NumberPic {
 	
 	private final int MINIMUM = 0;
-	private final int MAXIMUM = 10;
+	private final int MAXIMUM = 50;
 
 	
 	public int increment(int value){

@@ -10,9 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
@@ -129,42 +131,60 @@ public class LichteinstellungenDialog extends Dialog {
 					JSONArray la = result.getJSONArray("data");
 					raumIdArray = result.getJSONArray("raumId");
 
-					for (int i = 0; i < la.length(); i++) {
-						HashMap<String, String> hm = new HashMap<String, String>();
-						hm.put("name", la.getString(i));
-						hm.put("icon", String.valueOf(R.drawable.listitem_refresh));
-						list.add(hm);
-					}
-					Log.i("data", la.toString());
-					Log.i("msg", result.getString("msg"));
+					if (la.isNull(0)) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+						builder.setTitle("Kein Räume ausgewählt!");
+						builder.setIcon(R.drawable.icon_kategorie1);
+						builder.setMessage(
+								"Sie haben noch keine Räume für Ihre persönliche Lichteinstellungen ausgewählt! Wählen Sie zuerst unter der Rubrik Raumauswahl Ihre Räume für dieses Szenario aus!")
+								.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+									}
+								});
+						AlertDialog alert = builder.create();
+						alert.show();
+						pDialog.dismiss();
+						dismiss();
+					} else {
 
-					dataAdapterRaeume = new SimpleAdapter(mContext, list, R.layout.listview_raeume_einstellungen, new String[] { "name", "icon" },
-							new int[] { R.id.name, R.id.icon });
-					raeumeList = (ListView) findViewById(R.id.raeumeList);
-					raeumeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-					raeumeList.setAdapter(dataAdapterRaeume);
-					raeumeList.setItemChecked(0, true);
-
-					gibLichtart();
-					gibLichtfarbe();
-					gibLichtstaerke();
-					gibKundeLichtart(0);
-					gibKundeLichtfarbe(0);
-					gibKundeLichtstaerke(0);
-
-					raeumeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-							insertLichtart();
-							insertLichtfarbe();
-							insertLichtstaerke();
-							gibLichtart();
-							gibLichtfarbe();
-							gibLichtstaerke();
-							gibKundeLichtart(position);
-							gibKundeLichtfarbe(position);
-							gibKundeLichtstaerke(position);
+						for (int i = 0; i < la.length(); i++) {
+							HashMap<String, String> hm = new HashMap<String, String>();
+							hm.put("name", la.getString(i));
+							hm.put("icon", String.valueOf(R.drawable.listitem_refresh));
+							list.add(hm);
 						}
-					});
+						Log.i("data", la.toString());
+						Log.i("msg", result.getString("msg"));
+
+						dataAdapterRaeume = new SimpleAdapter(mContext, list, R.layout.listview_raeume_einstellungen,
+								new String[] { "name", "icon" }, new int[] { R.id.name, R.id.icon });
+						raeumeList = (ListView) findViewById(R.id.raeumeList);
+						raeumeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+						raeumeList.setAdapter(dataAdapterRaeume);
+						raeumeList.setItemChecked(0, true);
+						pDialog.dismiss();
+
+						gibLichtart();
+						gibLichtfarbe();
+						gibLichtstaerke();
+						gibKundeLichtart(0);
+						gibKundeLichtfarbe(0);
+						gibKundeLichtstaerke(0);
+
+						raeumeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+							public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+								insertLichtart();
+								insertLichtfarbe();
+								insertLichtstaerke();
+								gibLichtart();
+								gibLichtfarbe();
+								gibLichtstaerke();
+								gibKundeLichtart(position);
+								gibKundeLichtfarbe(position);
+								gibKundeLichtstaerke(position);
+							}
+						});
+					}
 
 				}
 

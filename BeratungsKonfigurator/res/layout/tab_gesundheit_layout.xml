@@ -2,16 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/background_01"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/tabTitel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="30dip"
+        android:paddingBottom="60dip"
         android:paddingLeft="20dip"
-        android:paddingTop="30dip"
+        android:paddingTop="20dip"
         android:text="gesundheitliche Problemstellung"
+        android:textColor="@color/cDarkGray"
         android:textSize="40sp" />
 
     <LinearLayout

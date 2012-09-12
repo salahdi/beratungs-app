@@ -2,16 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/background_01"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/tabTitel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="30dip"
+        android:paddingBottom="60dip"
         android:paddingLeft="20dip"
-        android:paddingTop="30dip"
-        android:text="Anwendungsfall"
+        android:paddingTop="20dip"
+        android:text="Anwendungsfall auswählen"
+        android:textColor="@color/cDarkGray"
         android:textSize="40sp" />
 
     <LinearLayout
@@ -22,10 +24,10 @@
             android:id="@+id/kategorieList"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="50dip"
             android:choiceMode="multipleChoice"
             android:divider="@drawable/divider"
             android:dividerHeight="2dip"
-            android:layout_marginBottom="50dip"
             android:paddingLeft="20dip"
             android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbarFadeDuration="0"
@@ -58,10 +60,10 @@
                 android:id="@+id/anwendungsfallList"
                 android:layout_width="600dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="50dip"
                 android:choiceMode="multipleChoice"
                 android:divider="@drawable/divider"
                 android:dividerHeight="2dip"
-                android:layout_marginBottom="50dip"
                 android:paddingLeft="5dip"
                 android:paddingRight="10dip"
                 android:scrollbarAlwaysDrawVerticalTrack="true"

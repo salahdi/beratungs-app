@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="cCyan">#33b6ea</color>
-    <color name="cGray">#AAAAAA</color>
-    <color name="cRed">#FF0000</color>
-    <color name="cGreen">#00FF00</color>
-    <color name="cLightGray">#AAAAAA</color>
+    <color name="cCyan">#33B5E5</color>
+    <color name="cDarkCyan">#0099CC</color>
+    <color name="cGray">#C6C6C6</color>
+    <color name="cDarkGray">#3E3E3E</color>
 
 </resources>

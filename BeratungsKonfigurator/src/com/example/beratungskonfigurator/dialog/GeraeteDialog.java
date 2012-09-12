@@ -10,9 +10,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
@@ -79,7 +81,6 @@ public class GeraeteDialog extends Dialog {
 	List<Integer> gerIdList = new ArrayList<Integer>();
 	List<String> geraetestandortList = new ArrayList<String>();
 	List<Integer> geraetestandortListKundeId = new ArrayList<Integer>();
-	
 
 	SimpleAdapter dataAdapter;
 	SimpleAdapter dataAdapterRaeume;
@@ -125,7 +126,6 @@ public class GeraeteDialog extends Dialog {
 			public void onClick(View v) {
 
 				insertKundeGeraete();
-
 				dismiss();
 			}
 		});
@@ -150,95 +150,111 @@ public class GeraeteDialog extends Dialog {
 					List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 					JSONArray la = result.getJSONArray("data");
 					jsonRaumIdArray = result.getJSONArray("raumId");
-					Log.i("raumId Array", "raumId Array: " + jsonRaumIdArray);
-					Log.i("raumId Array", "raumId Array an Pos 0: " + jsonRaumIdArray.getInt(0));
 
-					for (int i = 0; i < la.length(); i++) {
-						HashMap<String, String> hm = new HashMap<String, String>();
-						hm.put("name", la.getString(i));
-						hm.put("icon", String.valueOf(R.drawable.listitem_refresh));
-						list.add(hm);
-					}
-					Log.i("data", la.toString());
-					Log.i("msg", result.getString("msg"));
+					if (la.isNull(0)) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+						builder.setTitle("Kein Räume ausgewählt!");
+						builder.setIcon(R.drawable.icon_kategorie1);
+						builder.setMessage(
+								"Sie haben noch keine Räume für Ihre persönliche Geräteeinstellungen ausgewählt! Wählen Sie zuerst unter dem Rubrik Raumauswahl Ihre Räume für dieses Szenario aus!")
+								.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int id) {
+									}
+								});
+						AlertDialog alert = builder.create();
+						alert.show();
+						pDialog.dismiss();
+						dismiss();
+					} else {
 
-					dataAdapterRaeume = new SimpleAdapter(mContext, list, R.layout.listview_raeume_einstellungen, new String[] { "name", "icon" },
-							new int[] { R.id.name, R.id.icon });
-					raeumeListView = (ListView) findViewById(R.id.raeumeList);
-					raeumeListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-					raeumeListView.setAdapter(dataAdapterRaeume);
-					raeumeListView.setItemChecked(0, true);
+						for (int i = 0; i < la.length(); i++) {
+							HashMap<String, String> hm = new HashMap<String, String>();
+							hm.put("name", la.getString(i));
+							hm.put("icon", String.valueOf(R.drawable.listitem_refresh));
+							list.add(hm);
+						}
+						Log.i("data", la.toString());
+						Log.i("msg", result.getString("msg"));
 
-					// ----------------------------------------------------------------------------------//
-					// gibGeraete
-					// ----------------------------------------------------------------------------------//
+						dataAdapterRaeume = new SimpleAdapter(mContext, list, R.layout.listview_raeume_einstellungen,
+								new String[] { "name", "icon" }, new int[] { R.id.name, R.id.icon });
+						raeumeListView = (ListView) findViewById(R.id.raeumeList);
+						raeumeListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+						raeumeListView.setAdapter(dataAdapterRaeume);
+						raeumeListView.setItemChecked(0, true);
 
-					ServerInterface si = new ServerInterface();
-					si.addListener(new ServerInterfaceListener() {
+						// ----------------------------------------------------------------------------------//
+						// gibGeraete
+						// ----------------------------------------------------------------------------------//
 
-						public void serverSuccessHandler(JSONObject result) throws JSONException {
+						ServerInterface si = new ServerInterface();
+						si.addListener(new ServerInterfaceListener() {
 
-							jsonGeraeteList = result.getJSONArray("data");
-							jsonGeraeteIdList = result.getJSONArray("geraeteId");
-							anzList.clear();
+							public void serverSuccessHandler(JSONObject result) throws JSONException {
 
-							for (int i = 0; i < jsonGeraeteList.length(); i++) {
-								gerList.add(jsonGeraeteList.getString(i));
-								anzList.add("0");
-							}
+								jsonGeraeteList = result.getJSONArray("data");
+								jsonGeraeteIdList = result.getJSONArray("geraeteId");
+								anzList.clear();
 
-							listAdapter = new ListViewButtonAdapter(mContext, gerList, anzList);
-							geraeteListView = (ListView) findViewById(R.id.geraeteList);
-							geraeteListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-							geraeteListView.setAdapter(listAdapter);
-							geraeteListView.setOnFocusChangeListener(new OnFocusChangeListener() {
-								public void onFocusChange(View v, boolean hasFocus) {
-									geraeteListView.clearChoices();
-									for (int i = 0; i < listAdapter.getAnzGeraeteListeAll().size(); i++) {
-										if (!listAdapter.getAnzGeraeteListeAll().get(i).equals("0")) {
-											geraeteListView.setItemChecked(i, true);
-										} else {
-											geraeteListView.setItemChecked(i, false);
+								for (int i = 0; i < jsonGeraeteList.length(); i++) {
+									gerList.add(jsonGeraeteList.getString(i));
+									anzList.add("0");
+								}
+
+								listAdapter = new ListViewButtonAdapter(mContext, gerList, anzList);
+								geraeteListView = (ListView) findViewById(R.id.geraeteList);
+								geraeteListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+								geraeteListView.setAdapter(listAdapter);
+								geraeteListView.setOnFocusChangeListener(new OnFocusChangeListener() {
+									public void onFocusChange(View v, boolean hasFocus) {
+										geraeteListView.clearChoices();
+										for (int i = 0; i < listAdapter.getAnzGeraeteListeAll().size(); i++) {
+											if (!listAdapter.getAnzGeraeteListeAll().get(i).equals("0")) {
+												geraeteListView.setItemChecked(i, true);
+											} else {
+												geraeteListView.setItemChecked(i, false);
+											}
 										}
+
+									}
+								});
+								geraeteListView.setOnScrollListener(new OnScrollListener() {
+									public void onScrollStateChanged(AbsListView view, int scrollState) {
 									}
 
-								}
-							});
-							geraeteListView.setOnScrollListener(new OnScrollListener() {
-								public void onScrollStateChanged(AbsListView view, int scrollState) {
-								}
+									public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+										// TODO Auto-generated method stub
+									}
+								});
 
-								public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-									// TODO Auto-generated method stub
-								}
-							});
+							}
 
-						}
-						public void serverErrorHandler(Exception e) {
-							// z.B. Fehler Dialog aufploppen lassen
-							Log.e("error", "called");
-						}
-					});
-					JSONObject params = new JSONObject();
-					si.call("gibGeraete", params);
+							public void serverErrorHandler(Exception e) {
+								// z.B. Fehler Dialog aufploppen lassen
+								Log.e("error", "called");
+							}
+						});
+						JSONObject params = new JSONObject();
+						si.call("gibGeraete", params);
 
-					raeumeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+						raeumeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+							public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 
-							insertKundeGeraete();
-							
-							gibKundeGeraete(position);
-							gibKundeGeraetestandort(position);
-							gibGeraetestandortGeraete(position);
-							
-						}
-					});
-					
-					gibKundeGeraete(0);
-					gibGeraetestandort();
-					gibKundeGeraetestandort(0);
-					gibGeraetestandortGeraete(0);
+								insertKundeGeraete();
 
+								gibKundeGeraete(position);
+								gibKundeGeraetestandort(position);
+								gibGeraetestandortGeraete(position);
+
+							}
+						});
+
+						gibKundeGeraete(0);
+						gibGeraetestandort();
+						gibKundeGeraetestandort(0);
+						gibGeraetestandortGeraete(0);
+						pDialog.dismiss();
+					}
 
 				}
 
@@ -284,8 +300,7 @@ public class GeraeteDialog extends Dialog {
 		}
 		return true;
 	}
-	
-	
+
 	public void gibGeraetestandortGeraete(int position) {
 
 		// ----------------------------------------------------------------------------------//
@@ -387,6 +402,7 @@ public class GeraeteDialog extends Dialog {
 		try {
 			raumId = jsonRaumIdArray.getInt(position);
 			JSONObject params = new JSONObject();
+			pDialog.show();
 
 			params.put("kundeId", mKundeId);
 			params.put("wohnraeumeId", raumId);
@@ -458,6 +474,7 @@ public class GeraeteDialog extends Dialog {
 		try {
 			raumId = jsonRaumIdArray.getInt(position);
 			JSONObject params = new JSONObject();
+			pDialog.show();
 
 			params.put("kundeId", mKundeId);
 			params.put("wohnraeumeId", raumId);
@@ -476,6 +493,7 @@ public class GeraeteDialog extends Dialog {
 					for (int i = 0; i < jsonKundeGeraetestandortId.length(); i++) {
 						geraetestandortListKundeId.add(jsonKundeGeraetestandortId.getInt(i));
 					}
+					pDialog.dismiss();
 				}
 
 				public void serverErrorHandler(Exception e) {
@@ -489,9 +507,9 @@ public class GeraeteDialog extends Dialog {
 			e.printStackTrace();
 		}
 	}
-	
-	public void insertKundeGeraete(){
-		
+
+	public void insertKundeGeraete() {
+
 		// ----------------------------------------------------------------------------------//
 		// BERECHNUNG insertKundeGeraete
 		// ----------------------------------------------------------------------------------//
@@ -529,43 +547,46 @@ public class GeraeteDialog extends Dialog {
 				boolean removeAllNull = mSelectedAnzahl.removeAll(Arrays.asList("0"));
 				selectedAnzahl = TextUtils.join(".", mSelectedAnzahl);
 			}
-			
 
-			/*for (int i = 0; i < jsonGeraetestandortGeraeteId.length(); i++) {
-				selectedGeraetestandort += (listAdapterSpinner.getSpinnerItemId()) + ".";
-				count++;
-			}
-			if (count != 0) {
-				selectedGeraetestandort = selectedGeraetestandort.substring(0, selectedGeraetestandort.length() - 1);
-			} else if(count == 0){
-				selectedGeraetestandort = "0";
-			}*/
-			
-			//selectedGeraetestandort = TextUtils.join(".", listAdapterSpinner.getSpinnerItemId());
-			//Log.i("INSERT GERÄTE", "selectedGeraetestandort: "+selectedGeraetestandort);
-			
-			/*for (int i = 0; i < listAdapterSpinner.getSpinnerItemId().size(); i++) {
-				mGeraetestandort.add(jsonGeraetestandortGeraeteId.getInt(i));
-			}*/
-			
-			loop: for(int i = 0; i < mGeraete.size(); i++){
-				for(int g = 0; g < listAdapterSpinner.getSpinnerItemId().size(); g++ ){
-					if(mGeraete.get(i).equals(listAdapterSpinner.getSpinnerGeraeteId().get(g))){
+			/*
+			 * for (int i = 0; i < jsonGeraetestandortGeraeteId.length(); i++) {
+			 * selectedGeraetestandort +=
+			 * (listAdapterSpinner.getSpinnerItemId()) + "."; count++; } if
+			 * (count != 0) { selectedGeraetestandort =
+			 * selectedGeraetestandort.substring(0,
+			 * selectedGeraetestandort.length() - 1); } else if(count == 0){
+			 * selectedGeraetestandort = "0"; }
+			 */
+
+			// selectedGeraetestandort = TextUtils.join(".",
+			// listAdapterSpinner.getSpinnerItemId());
+			// Log.i("INSERT GERÄTE",
+			// "selectedGeraetestandort: "+selectedGeraetestandort);
+
+			/*
+			 * for (int i = 0; i < listAdapterSpinner.getSpinnerItemId().size();
+			 * i++) {
+			 * mGeraetestandort.add(jsonGeraetestandortGeraeteId.getInt(i)); }
+			 */
+
+			loop: for (int i = 0; i < mGeraete.size(); i++) {
+				for (int g = 0; g < listAdapterSpinner.getSpinnerItemId().size(); g++) {
+					if (mGeraete.get(i).equals(listAdapterSpinner.getSpinnerGeraeteId().get(g))) {
 						int bla = listAdapterSpinner.getSpinnerItemId().get(g);
 						selectedGeraetestandort += bla + ".";
 						count++;
 						continue loop;
-					}							
+					}
 				}
 				selectedGeraetestandort += 0 + ".";
 			}
 			if (count != 0) {
 				selectedGeraetestandort = selectedGeraetestandort.substring(0, selectedGeraetestandort.length() - 1);
-			} else if(count == 0){
+			} else if (count == 0) {
 				selectedGeraetestandort = "0";
 			}
 
-			Log.i("INSERT GERÄTE", "selectedGeraetestandort: "+selectedGeraetestandort);
+			Log.i("INSERT GERÄTE", "selectedGeraetestandort: " + selectedGeraetestandort);
 			// ----------------------------------------------------------------------------------//
 			// insertKundeGeraete
 			// ----------------------------------------------------------------------------------//
@@ -594,58 +615,51 @@ public class GeraeteDialog extends Dialog {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 	}
 
-	/*public void insertKundeGeraetestandort() {
-
-		// ----------------------------------------------------------------------------------//
-		// BERECHNUNG insertKundeGeraetestandort
-		// ----------------------------------------------------------------------------------//
-
-		int count = 0;
-		String selectedGeraetestandort = "";
-		for (int i = 0; i < jsonGeraetestandortGeraeteId.length(); i++) {
-			selectedGeraetestandort += (listAdapterSpinner.getSpinnerItemId()) + ".";
-			count++;
-		}
-		if (count != 0) {
-			selectedGeraetestandort = selectedGeraetestandort.substring(0, selectedGeraetestandort.length() - 1);
-		} else if(count == 0){
-			selectedGeraetestandort = "0";
-		}
-		
-		Log.i("INSERT STANDORT", "getSpinnerItem ID: " + listAdapterSpinner.getSpinnerItemId());
-		Log.i("INSERT STANDORT", "getSpinnerItem TEXT: " + listAdapterSpinner.getSpinnerItemText());
-		Log.i("INSERT STANDORT", "selectedGeraetestandort: " + selectedGeraetestandort);
-
-		try {
-			// ----------------------------------------------------------------------------------//
-			// insertKundeGeraetestandort
-			// ----------------------------------------------------------------------------------//
-
-			JSONObject updateParams = new JSONObject();
-			updateParams.put("kundeId", mKundeId);
-			updateParams.put("szenarioId", mSzenarioId);
-			updateParams.put("wohnraeumeId", raumId);
-			updateParams.put("geraetestandortId", selectedGeraetestandort);
-
-			ServerInterface si = new ServerInterface();
-			si.addListener(new ServerInterfaceListener() {
-				public void serverSuccessHandler(JSONObject result) throws JSONException {
-					Log.i("INSERT KundeGeraetestandort: ", result.getString("msg"));
-				}
-
-				public void serverErrorHandler(Exception e) {
-					// TODO Auto-generated method
-					// stub
-				}
-			});
-			si.call("insertKundeGeraetestandort", updateParams);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}*/
+	/*
+	 * public void insertKundeGeraetestandort() {
+	 * 
+	 * //
+	 * ------------------------------------------------------------------------
+	 * ----------// // BERECHNUNG insertKundeGeraetestandort //
+	 * ------------------
+	 * ----------------------------------------------------------------//
+	 * 
+	 * int count = 0; String selectedGeraetestandort = ""; for (int i = 0; i <
+	 * jsonGeraetestandortGeraeteId.length(); i++) { selectedGeraetestandort +=
+	 * (listAdapterSpinner.getSpinnerItemId()) + "."; count++; } if (count != 0)
+	 * { selectedGeraetestandort = selectedGeraetestandort.substring(0,
+	 * selectedGeraetestandort.length() - 1); } else if(count == 0){
+	 * selectedGeraetestandort = "0"; }
+	 * 
+	 * Log.i("INSERT STANDORT", "getSpinnerItem ID: " +
+	 * listAdapterSpinner.getSpinnerItemId()); Log.i("INSERT STANDORT",
+	 * "getSpinnerItem TEXT: " + listAdapterSpinner.getSpinnerItemText());
+	 * Log.i("INSERT STANDORT", "selectedGeraetestandort: " +
+	 * selectedGeraetestandort);
+	 * 
+	 * try { //
+	 * ------------------------------------------------------------------
+	 * ----------------// // insertKundeGeraetestandort //
+	 * ----------------------
+	 * ------------------------------------------------------------//
+	 * 
+	 * JSONObject updateParams = new JSONObject(); updateParams.put("kundeId",
+	 * mKundeId); updateParams.put("szenarioId", mSzenarioId);
+	 * updateParams.put("wohnraeumeId", raumId);
+	 * updateParams.put("geraetestandortId", selectedGeraetestandort);
+	 * 
+	 * ServerInterface si = new ServerInterface(); si.addListener(new
+	 * ServerInterfaceListener() { public void serverSuccessHandler(JSONObject
+	 * result) throws JSONException { Log.i("INSERT KundeGeraetestandort: ",
+	 * result.getString("msg")); }
+	 * 
+	 * public void serverErrorHandler(Exception e) { // TODO Auto-generated
+	 * method // stub } }); si.call("insertKundeGeraetestandort", updateParams);
+	 * } catch (JSONException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); } }
+	 */
 
 }

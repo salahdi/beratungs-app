@@ -84,7 +84,7 @@
 
                             <TextView
                                 android:id="@+id/titelGeraete"
-                                android:layout_width="300dip"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="20dip"
                                 android:paddingLeft="10dip"
@@ -113,7 +113,7 @@
 
                             <TextView
                                 android:id="@+id/titelGeraetestandort"
-                                android:layout_width="300dip"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:paddingBottom="20dip"
                                 android:paddingLeft="10dip"
@@ -129,6 +129,7 @@
                                 android:dividerHeight="2dip"
                                 android:paddingLeft="5dip"
                                 android:paddingRight="5dip"
+                                android:layout_gravity="center_vertical"
                                 android:scrollbarAlwaysDrawVerticalTrack="true"
                                 android:scrollbarFadeDuration="0"
                                 android:scrollbarStyle="outsideInset" />

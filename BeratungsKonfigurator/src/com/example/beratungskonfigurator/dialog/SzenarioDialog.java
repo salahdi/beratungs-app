@@ -13,21 +13,29 @@ import org.json.JSONObject;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.TypedArray;
+import android.database.Cursor;
+import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.MediaPlayer.OnVideoSizeChangedListener;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -36,22 +44,27 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import android.widget.VideoView;
 
 import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.server.ServerInterface;
 import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
-public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener, OnCompletionListener, OnPreparedListener, OnVideoSizeChangedListener, SurfaceHolder.Callback{
+public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, OnPreparedListener, OnCompletionListener, OnBufferingUpdateListener,
+		OnClickListener, OnSeekCompleteListener, OnVideoSizeChangedListener {
 
 	private ProgressDialog pDialog;
 	private ListView szenarioList;
@@ -66,33 +79,30 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 	private JSONArray szId = new JSONArray();
 	private JSONArray la = new JSONArray();
 	private ImageView imageView;
-
-	private static final String TAG = "MediaPlayerDemo";
-    private int mVideoWidth;
-    private int mVideoHeight;
-    private MediaPlayer mMediaPlayer;
-    private SurfaceView mPreview;
-    private SurfaceHolder holder;
-    private String path;
-    private Bundle extras;
-    private static final String MEDIA = "media";
-    private static final int LOCAL_AUDIO = 1;
-    private static final int STREAM_AUDIO = 2;
-    private static final int RESOURCES_AUDIO = 3;
-    private static final int LOCAL_VIDEO = 4;
-    private static final int STREAM_VIDEO = 5;
-    private boolean mIsVideoSizeKnown = false;
-    private boolean mIsVideoReadyToBePlayed = false;
-
-	private int[] myImageIds = { R.drawable.antartica1, R.drawable.antartica2, R.drawable.antartica3, R.drawable.antartica4 };
-
 	ArrayList<Integer> selSzenarioList = new ArrayList<Integer>();
+
+	// Video
+	static Uri targetUri = null;
+	MediaPlayer mediaPlayer;
+	SurfaceView surfaceView;
+	SurfaceHolder surfaceHolder;
+	boolean pausing = false;
+	static TextView mediaUri;
+	ToggleButton toggleVideo;
+	Button stopVideo;
+	final Uri mediaSrc = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+	LinearLayout layVideo;
+	String videoPath;
+	int mpCount = 0;
+
+	// Image Gallery
+	private int[] myImageIds = { R.drawable.antartica1, R.drawable.antartica2, R.drawable.antartica3, R.drawable.antartica4 };
 
 	// Constructor
 	public SzenarioDialog(final Context context, int anwendungsfallId, int kundeId, String anwendungsfallName) {
 		super(context);
-		
-		path = "rtsp://v8.cache8.c.youtube.com/CjYLENy73wIaLQlGb-3VVCUgNRMYDSANFEIJbXYtZ29vZ2xlSARSBXdhdGNoYKX6kvOXi_-kUAw=/0/0/0/video.3gp";
+
+		videoPath = "";
 
 		pDialog = new ProgressDialog(context);
 		pDialog.setMessage("Lade Daten!");
@@ -129,9 +139,12 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 		bClose.setBackgroundResource(R.drawable.button_close);
 		bClose.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				
-				releaseMediaPlayer();
-		        doCleanUp();
+
+				if(!videoPath.equals("")){
+					mediaPlayer.release();
+					mediaPlayer = null;
+				}
+
 
 				// ----------------------------------------------------------------------------------//
 				// insertSzenario
@@ -187,8 +200,6 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 
 				public void serverSuccessHandler(JSONObject result) throws JSONException {
 
-					pDialog.dismiss();
-
 					List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
 					la = result.getJSONArray("data");
@@ -225,6 +236,25 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 						public void serverSuccessHandler(JSONObject result) throws JSONException {
 
 							tBeschreibung.setText(result.getJSONObject("data").getString("beschreibung"));
+							videoPath = result.getJSONObject("data").getString("video").toString();
+							Log.i("VIDEO PATH", "PATH videoPath: " + videoPath);
+
+							if (videoPath.equals("")) {
+								surfaceView.setVisibility(View.GONE);
+								toggleVideo.setVisibility(View.GONE);
+								stopVideo.setVisibility(View.GONE);
+								mediaUri.setText("Kein Video vorhanden!");
+
+							} else {
+								setMediaPlayer();
+								surfaceView.setVisibility(View.VISIBLE);
+								toggleVideo.setVisibility(View.VISIBLE);
+								stopVideo.setVisibility(View.VISIBLE);
+								Uri playableUri = Uri.parse(videoPath);
+								SzenarioDialog.setTargetUri(playableUri);
+							}
+
+							pDialog.dismiss();
 						}
 
 						public void serverErrorHandler(Exception e) {
@@ -236,6 +266,13 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 
 					szenarioList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+
+							mpCount = 0;
+							mediaPlayer.release();
+							videoPath = "";
+							mediaUri.setText("");
+							toggleVideo.setChecked(false);
+
 							try {
 								aktuelleListPosition = position;
 								szenarioId = szId.getInt(position);
@@ -258,7 +295,23 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 									public void serverSuccessHandler(JSONObject result) throws JSONException {
 
 										tBeschreibung.setText(result.getJSONObject("data").getString("beschreibung"));
+										videoPath = result.getJSONObject("data").getString("video").toString();
+										Log.i("VIDEO PATH", "PATH videoPath: " + videoPath);
 
+										if (videoPath.equals("")) {
+											surfaceView.setVisibility(View.GONE);
+											toggleVideo.setVisibility(View.GONE);
+											stopVideo.setVisibility(View.GONE);
+											mediaUri.setText("Kein Video vorhanden!");
+
+										} else {
+											setMediaPlayer();
+											surfaceView.setVisibility(View.VISIBLE);
+											toggleVideo.setVisibility(View.VISIBLE);
+											stopVideo.setVisibility(View.VISIBLE);
+											Uri playableUri = Uri.parse(videoPath);
+											SzenarioDialog.setTargetUri(playableUri);
+										}
 									}
 
 									public void serverErrorHandler(Exception e) {
@@ -406,10 +459,23 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 		tabs.addTab(tab2);
 
 		// create tab 2
-		TabHost.TabSpec tab3 = tabs.newTabSpec("Video");
+		final TabHost.TabSpec tab3 = tabs.newTabSpec("Video");
 		tab3.setContent(R.id.vVideo);
 		tab3.setIndicator("Video");
 		tabs.addTab(tab3);
+
+		tabs.setOnTabChangedListener(new OnTabChangeListener() {
+			public void onTabChanged(String tabId) {
+				// TODO Auto-generated method stub
+				Log.i("Tab Changed", "TabID: " + tabId);
+				Log.i("Tab Changed", "Tab3: " + tab3);
+				if (mpCount == 1) {
+					mediaPlayer.pause();
+					toggleVideo.setChecked(false);
+				}
+			}
+
+		});
 
 		Gallery ga = (Gallery) findViewById(R.id.gBilder);
 		ga.setAdapter(new ImageAdapter(context));
@@ -425,14 +491,71 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 
 		});
 
-		mPreview = (SurfaceView) findViewById(R.id.vVideo);
-		holder = mPreview.getHolder();
-		holder.addCallback(this);
-		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
 	}
 
 	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+
+	@Override
+	public void surfaceChanged(SurfaceHolder arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void surfaceCreated(SurfaceHolder arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void surfaceDestroyed(SurfaceHolder arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSeekComplete(MediaPlayer mp) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onBufferingUpdate(MediaPlayer mp, int percent) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public static void setTargetUri(Uri u) {
+		targetUri = u;
+		mediaUri.setText(u.toString());
+		Log.i("setTargetURI", "IN method: " + targetUri);
+	}
+
+	@Override
+	public void onPrepared(MediaPlayer mp) {
+		// TODO Auto-generated method stub
+		pDialog.dismiss();
+		surfaceView.setBackgroundColor((android.R.color.transparent));
+		mediaPlayer.start();
+	}
 
 	public class ImageAdapter extends BaseAdapter {
 
@@ -481,93 +604,77 @@ public class SzenarioDialog extends Dialog implements OnBufferingUpdateListener,
 			return iv;
 		}
 	}
-	
-	private void playVideo(Integer Media) {
-        doCleanUp();
-        try {
-            // Create a new media player and set the listeners
-            mMediaPlayer = new MediaPlayer();
-            mMediaPlayer.setDataSource(path);
-            mMediaPlayer.setDisplay(holder);
-            mMediaPlayer.prepare();
-            mMediaPlayer.setOnBufferingUpdateListener(this);
-            mMediaPlayer.setOnCompletionListener(this);
-            mMediaPlayer.setOnPreparedListener(this);
-            mMediaPlayer.setOnVideoSizeChangedListener(this);
-            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
+	public void setMediaPlayer() {
 
-        } catch (Exception e) {
-            Log.e(TAG, "error: " + e.getMessage(), e);
-        }
-    }
+		// View view = inflater.inflate(R.layout.szenario_dialog_layout,
+		// container, false);
+		layVideo = (LinearLayout) findViewById(R.id.vVideo);
+		mediaUri = (TextView) findViewById(R.id.mediauri);
+		toggleVideo = (ToggleButton) findViewById(R.id.togglevideoplayer);
+		stopVideo = (Button) findViewById(R.id.stopvideoplayer);
+		surfaceView = (SurfaceView) findViewById(R.id.surfaceview);
 
-    public void onBufferingUpdate(MediaPlayer arg0, int percent) {
-        Log.d(TAG, "onBufferingUpdate percent:" + percent);
+		getWindow().setFormat(PixelFormat.UNKNOWN);
+		surfaceHolder = surfaceView.getHolder();
+		surfaceHolder.addCallback(this);
+		// surfaceHolder.setFixedSize(176, 144);
+		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
-    }
+		mediaPlayer = new MediaPlayer();
 
-    public void onCompletion(MediaPlayer arg0) {
-        Log.d(TAG, "onCompletion called");
-    }
+		mediaPlayer.setOnPreparedListener(this);
+		mediaPlayer.setOnCompletionListener(this);
+		mediaPlayer.setOnBufferingUpdateListener(this);
+		mediaPlayer.setOnSeekCompleteListener(this);
+		mediaPlayer.setScreenOnWhilePlaying(true);
+		mediaPlayer.setOnVideoSizeChangedListener(this);
 
-    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-        Log.v(TAG, "onVideoSizeChanged called");
-        if (width == 0 || height == 0) {
-            Log.e(TAG, "invalid video width(" + width + ") or height(" + height + ")");
-            return;
-        }
-        mIsVideoSizeKnown = true;
-        mVideoWidth = width;
-        mVideoHeight = height;
-        if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
-            startVideoPlayback();
-        }
-    }
+		toggleVideo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-    public void onPrepared(MediaPlayer mediaplayer) {
-        Log.d(TAG, "onPrepared called");
-        mIsVideoReadyToBePlayed = true;
-        if (mIsVideoReadyToBePlayed && mIsVideoSizeKnown) {
-            startVideoPlayback();
-        }
-    }
+				if (isChecked && mpCount == 0) {
+					Log.i("Toggle Beginn", "isChecked: " + isChecked + " mpCount: " + mpCount);
+					mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+					mediaPlayer.setDisplay(surfaceHolder);
+					mpCount = 1;
+					try {
+						mediaPlayer.setDataSource(getContext().getApplicationContext(), targetUri);
+						pDialog.show();
+						mediaPlayer.prepareAsync();
+					} catch (IllegalArgumentException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SecurityException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IllegalStateException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
-    public void surfaceChanged(SurfaceHolder surfaceholder, int i, int j, int k) {
-        Log.d(TAG, "surfaceChanged called");
+				} else if (!isChecked && mpCount == 1) {
+					Log.i("Toggle Pause", "isChecked: " + isChecked + " mpCount: " + mpCount);
+					mediaPlayer.pause();
+				} else if (isChecked && mpCount == 1) {
+					Log.i("Toggle Start", "isChecked: " + isChecked + " mpCount: " + mpCount);
+					mediaPlayer.start();
+				}
+			}
+		});
 
-    }
+		stopVideo.setOnClickListener(new Button.OnClickListener() {
 
-    public void surfaceDestroyed(SurfaceHolder surfaceholder) {
-        Log.d(TAG, "surfaceDestroyed called");
-    }
+			public void onClick(View v) {
+				mediaPlayer.stop();
+				toggleVideo.setChecked(false);
+				mpCount = 0;
+			}
+		});
 
-
-    public void surfaceCreated(SurfaceHolder holder) {
-        Log.d(TAG, "surfaceCreated called");
-        playVideo(Integer.valueOf(MEDIA));
-
-
-    }
-
-    private void releaseMediaPlayer() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer.release();
-            mMediaPlayer = null;
-        }
-    }
-
-    private void doCleanUp() {
-        mVideoWidth = 0;
-        mVideoHeight = 0;
-        mIsVideoReadyToBePlayed = false;
-        mIsVideoSizeKnown = false;
-    }
-
-    private void startVideoPlayback() {
-        Log.v(TAG, "startVideoPlayback");
-        holder.setFixedSize(mVideoWidth, mVideoHeight);
-        mMediaPlayer.start();
-    }
+	}
 
 }

@@ -33,6 +33,7 @@ public class TabActivity extends FragmentActivity {
     TabHost mTabHost;
     TabManager mTabManager;
     static int kundeId;
+    static int angehoerigerId;
     
     private static final String KUNDE_TAB = "Kundendaten";
 	private static final String WOHNUNG_TAB = "Wohnungsdaten";
@@ -48,6 +49,7 @@ public class TabActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         
         kundeId = getIntent().getExtras().getInt("kundeId");
+        angehoerigerId = getIntent().getExtras().getInt("angehoerigerId");
 
         setContentView(R.layout.tabs_layout);
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
@@ -55,15 +57,15 @@ public class TabActivity extends FragmentActivity {
 
         mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent);
         
-        mTabManager.addTab(mTabHost.newTabSpec(KUNDE_TAB).setIndicator(KUNDE_TAB, getResources().getDrawable(R.drawable.tab_icon)),KundeActivity.class, null);
-        mTabManager.addTab(mTabHost.newTabSpec(WOHNUNG_TAB).setIndicator(WOHNUNG_TAB),WohnungActivity.class, null);
-        mTabManager.addTab(mTabHost.newTabSpec(GESUNDHEIT_TAB).setIndicator(GESUNDHEIT_TAB),GesundheitActivity.class, null);
-        //mTabManager.addTab(mTabHost.newTabSpec(PROBLEM_TAB).setIndicator(PROBLEM_TAB),ProblemActivity.class, null);
-        mTabManager.addTab(mTabHost.newTabSpec(ANWENDUNGSFALL_TAB).setIndicator(ANWENDUNGSFALL_TAB),AnwendungsfallActivity.class, null);
-        mTabManager.addTab(mTabHost.newTabSpec(KONFIGURATION_TAB).setIndicator(KONFIGURATION_TAB),KonfigurationActivity.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec(KUNDE_TAB).setIndicator(""),KundeActivity.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec(WOHNUNG_TAB).setIndicator(""),WohnungActivity.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec(GESUNDHEIT_TAB).setIndicator(""),GesundheitActivity.class, null);
+        //mTabManager.addTab(mTabHost.newTabSpec(PROBLEM_TAB).setIndicator(PROBLEM_TAB, getResources().getDrawable(R.drawable.tab_icon)),ProblemActivity.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec(ANWENDUNGSFALL_TAB).setIndicator(""),AnwendungsfallActivity.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec(KONFIGURATION_TAB).setIndicator(""),KonfigurationActivity.class, null);
         //mTabManager.addTab(mTabHost.newTabSpec(UEBERSICHT_TAB).setIndicator(UEBERSICHT_TAB),UebersichtActivity.class, null);
         //mTabManager.addTab(mTabHost.newTabSpec(HERSTELLER_TAB).setIndicator(HERSTELLER_TAB),HerstellerActivity.class, null);
-        mTabManager.addTab(mTabHost.newTabSpec(EXPORT_TAB).setIndicator(EXPORT_TAB),ExportActivity.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec(EXPORT_TAB).setIndicator(""),ExportActivity.class, null);
         
         
 
@@ -73,10 +75,17 @@ public class TabActivity extends FragmentActivity {
         
         TabWidget tw = mTabHost.getTabWidget();
 
-        for (int i = 0; i < tw.getChildCount(); i++) {
+        tw.getChildAt(0).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_01)); 
+        tw.getChildAt(1).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_02)); 
+        tw.getChildAt(2).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_03)); 
+        tw.getChildAt(3).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_04)); 
+        tw.getChildAt(4).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_05)); 
+        tw.getChildAt(5).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_06)); 
+        
+        /*for (int i = 0; i < tw.getChildCount(); i++) {
         	View v = tw.getChildAt(i);
-        	v.setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator)); 
-        }
+        	v.setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_01)); 
+        }*/
     }
 
     
@@ -164,6 +173,7 @@ public class TabActivity extends FragmentActivity {
             Bundle args = new Bundle();
             //args.putString("message","JD Nachricht via Bundle");
             args.putInt("sendKundeId", kundeId);
+            args.putInt("sendAngehoerigerId", angehoerigerId);
 
 
             if (mLastTab != newTab) {

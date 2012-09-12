@@ -87,13 +87,12 @@ public class KonfigurationActivity extends Fragment {
 
 					la = result.getJSONArray("data");
 					szIdArray = result.getJSONArray("szenarioId");
-					
-					titelEinstellungen.setText(la.getString(0));
 
 					Log.i("szIdArray", szIdArray.toString());
-					Log.i("szIdArray", "Array is NULL: " + szIdArray.isNull(0));
 
 					if (!szIdArray.isNull(0)) {
+						
+						titelEinstellungen.setText(la.getString(0));
 
 						for (int i = 0; i < la.length(); i++) {
 							HashMap<String, String> hm = new HashMap<String, String>();
@@ -125,7 +124,8 @@ public class KonfigurationActivity extends Fragment {
 							}
 						});
 					} else {
-
+						pDialog.dismiss();
+						Log.i("szIdArray", "Array is NULL: " + szIdArray.isNull(0));
 						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 						builder.setTitle("Kein Szenario ausgewählt!");
 						builder.setIcon(R.drawable.icon_kategorie1);
@@ -179,12 +179,11 @@ public class KonfigurationActivity extends Fragment {
 					for (int i = 0; i < szKonf.length(); i++) {
 						HashMap<String, String> hm = new HashMap<String, String>();
 						hm.put("name", szKonf.getString(i));
-						hm.put("icon", String.valueOf(R.drawable.icon_kategorie1));
 						list.add(hm);
 					}
 					Log.i("data", szKonf.toString());
 					final SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_einstellungen, new String[] {
-							"name", "icon" }, new int[] { R.id.name, R.id.icon });
+							"name"}, new int[] { R.id.name});
 					einstellungenList = (ListView) konfigurationView.findViewById(R.id.einstellungenList);
 					einstellungenList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 					einstellungenList.setAdapter(adapterMainList);

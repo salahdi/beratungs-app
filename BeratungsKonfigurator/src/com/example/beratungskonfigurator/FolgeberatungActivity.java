@@ -84,7 +84,7 @@ public class FolgeberatungActivity extends ListActivity implements AdapterView.O
 					temp.put("adresse",
 							alleKunden.getString(i = i + 1) + " " + alleKunden.getString(i = i + 1) + "		" + alleKunden.getString(i = i + 1) + " "
 									+ alleKunden.getString(i = i + 1));
-					temp.put("datum", "Datum");
+					temp.put("datum", alleKunden.getString(i = i + 1));
 					temp.put("id", alleKunden.getString(i=i+1));
 					list.add(temp);
 					temp = new HashMap<String, String>();
@@ -103,13 +103,11 @@ public class FolgeberatungActivity extends ListActivity implements AdapterView.O
 						HashMap<String, String> selectedItem = list.get(position);
 						int getKundeId = Integer.parseInt(selectedItem.get("id"));
 						
-						// When clicked, show a toast with the TextView text
 						Toast.makeText(getApplicationContext(), "List Click! + ID: "+id+"	Position: "+position+"	Kunde ID: "+getKundeId, Toast.LENGTH_SHORT).show();
 						
 						Intent startBeratung = new Intent(FolgeberatungActivity.this, TabActivity.class);
 						startBeratung.putExtra("kundeId", getKundeId);
 						startActivity(startBeratung);
-						//startActivity(new Intent(FolgeberatungActivity.this, TabActivity.class));
 					}
 				});
 			}

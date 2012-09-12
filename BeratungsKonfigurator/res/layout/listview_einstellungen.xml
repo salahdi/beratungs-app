@@ -8,6 +8,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:orientation="horizontal" >
 
         <TextView
@@ -17,15 +18,6 @@
             android:padding="15dip"
             android:text="Name"
             android:textSize="20sp" />
-
-        <ImageView
-            android:id="@+id/icon"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="7dip"
-            android:src="@drawable/icon_kategorie1" />
     </RelativeLayout>
 
 </LinearLayout>

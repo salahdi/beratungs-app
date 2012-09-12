@@ -94,6 +94,8 @@ public class WohnungActivity extends Fragment {
 		etWohnflaeche = (EditText) wohnungView.findViewById(R.id.etWohnflaeche);
 		Button bPlus = (Button) wohnungView.findViewById(R.id.bPlus);
 		Button bMinus = (Button) wohnungView.findViewById(R.id.bMinus);
+		bPlus.setBackgroundResource(R.drawable.button_plus);
+		bMinus.setBackgroundResource(R.drawable.button_minus);
 		etNumber = (EditText) wohnungView.findViewById(R.id.etNumber);
 		etNumber.setText("0");
 		etNumber.setFocusable(false);

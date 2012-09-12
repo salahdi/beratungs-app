@@ -95,16 +95,16 @@ public class AnwendungsfallActivity extends Fragment {
 				temp.put("icon", String.valueOf(R.drawable.icon_kategorie3));
 				break;
 			case 3:
-				temp.put("icon", String.valueOf(R.drawable.icon_kategorie1));
+				temp.put("icon", String.valueOf(R.drawable.icon_kategorie4));
 				break;
 			case 4:
-				temp.put("icon", String.valueOf(R.drawable.icon_kategorie2));
+				temp.put("icon", String.valueOf(R.drawable.icon_kategorie5));
 				break;
 			case 5:
-				temp.put("icon", String.valueOf(R.drawable.icon_kategorie3));
+				temp.put("icon", String.valueOf(R.drawable.icon_kategorie6));
 				break;
 			case 6:
-				temp.put("icon", String.valueOf(R.drawable.icon_kategorie1));
+				temp.put("icon", String.valueOf(R.drawable.icon_kategorie7));
 				break;
 			}
 			list.add(temp);
@@ -174,38 +174,38 @@ public class AnwendungsfallActivity extends Fragment {
 								for (int i = 0; i < la.length(); i++) {
 									HashMap<String, String> temp = new HashMap<String, String>();
 									temp.put("name", la.getString(i));
-									temp.put("iKategorie1", String.valueOf(R.drawable.icon_kategorie3));
-									temp.put("iKategorie2", String.valueOf(R.drawable.icon_kategorie3));
-									temp.put("iKategorie3", String.valueOf(R.drawable.icon_kategorie3));
-									temp.put("iKategorie4", String.valueOf(R.drawable.icon_kategorie3));
-									temp.put("iKategorie5", String.valueOf(R.drawable.icon_kategorie3));
-									temp.put("iKategorie6", String.valueOf(R.drawable.icon_kategorie3));
-									temp.put("iKategorie7", String.valueOf(R.drawable.icon_kategorie3));
+									temp.put("iKategorie1", String.valueOf(R.drawable.icon_kategorie1_in));
+									temp.put("iKategorie2", String.valueOf(R.drawable.icon_kategorie2_in));
+									temp.put("iKategorie3", String.valueOf(R.drawable.icon_kategorie3_in));
+									temp.put("iKategorie4", String.valueOf(R.drawable.icon_kategorie4_in));
+									temp.put("iKategorie5", String.valueOf(R.drawable.icon_kategorie5_in));
+									temp.put("iKategorie6", String.valueOf(R.drawable.icon_kategorie6_in));
+									temp.put("iKategorie7", String.valueOf(R.drawable.icon_kategorie7_in));
 									
 									String[] strings = kategorien.getString(i).split("\\-");
 							        for(int k = 0; k < strings.length; k++){
 							            int iOut = Integer.valueOf(strings[k]);
 										switch (iOut) {
 										case 1:
-											temp.put("iKategorie1", String.valueOf(R.drawable.icon_kategorie2));
+											temp.put("iKategorie1", String.valueOf(R.drawable.icon_kategorie1));
 											break;
 										case 2:
 											temp.put("iKategorie2", String.valueOf(R.drawable.icon_kategorie2));
 											break;
 										case 3:
-											temp.put("iKategorie3", String.valueOf(R.drawable.icon_kategorie2));
+											temp.put("iKategorie3", String.valueOf(R.drawable.icon_kategorie3));
 											break;
 										case 4:
-											temp.put("iKategorie4", String.valueOf(R.drawable.icon_kategorie2));
+											temp.put("iKategorie4", String.valueOf(R.drawable.icon_kategorie4));
 											break;
 										case 5:
-											temp.put("iKategorie5", String.valueOf(R.drawable.icon_kategorie2));
+											temp.put("iKategorie5", String.valueOf(R.drawable.icon_kategorie5));
 											break;
 										case 6:
-											temp.put("iKategorie6", String.valueOf(R.drawable.icon_kategorie2));
+											temp.put("iKategorie6", String.valueOf(R.drawable.icon_kategorie6));
 											break;
 										case 7:
-											temp.put("iKategorie7", String.valueOf(R.drawable.icon_kategorie2));
+											temp.put("iKategorie7", String.valueOf(R.drawable.icon_kategorie7));
 											break;
 										}
 									}
