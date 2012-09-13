@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/background_01"
+    android:background="@drawable/background_plain"
     android:orientation="vertical" >
 
     <TextView
@@ -20,20 +20,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-        <ListView
-            android:id="@+id/exportList"
-            android:layout_width="350dip"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dip"
-            android:choiceMode="multipleChoice"
-            android:divider="@drawable/divider"
-            android:dividerHeight="2dip"
-            android:paddingLeft="20dip"
-            android:paddingRight="10dip"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarFadeDuration="0"
-            android:scrollbarStyle="outsideInset" />
-
         <LinearLayout
             android:id="@+id/layExport"
             android:layout_width="fill_parent"
@@ -41,11 +27,177 @@
             android:orientation="vertical"
             android:paddingLeft="80dip" >
 
-            <Button
-                android:id="@+id/createPdf"
+            <TextView
+                android:id="@+id/titelExport"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create PDF" />
+                android:paddingBottom="30dip"
+                android:text="PDF erzeugen"
+                android:textSize="30sp" />
+
+            <RelativeLayout
+                android:layout_width="600dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="15dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textPdf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="Daten für den Export auswählen: "
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/datenPdf"
+                    android:layout_width="160dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="Daten auswählen"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="600dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="15dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="PDF mit ausgewählten Daten erzeugen: "
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/createPdf"
+                    android:layout_width="160dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="PDF erzeugen"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="600dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="30dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="PDF öffnen: "
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/openPdf"
+                    android:layout_width="160dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="PDF öffnen"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/titelExport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="30dip"
+                android:text="PDF versenden"
+                android:textSize="30sp" />
+
+            <RelativeLayout
+                android:layout_width="600dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="15dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="E-Mail-Adresse: "
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/editMail"
+                    android:layout_width="400dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:ems="10"
+                    android:hint="E-Mail Adresse"
+                    android:imeOptions="actionGo"
+                    android:inputType="textEmailAddress" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="600dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="15dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textPdf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="PDF auswählen: "
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerPdf"
+                    android:layout_width="400dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="600dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="15dip"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textMail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingRight="10dip"
+                    android:text="E-Mail mit dem PDF versenden: "
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/sendPdf"
+                    android:layout_width="160dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="Send PDF"
+                    android:textSize="14sp" />
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 
