@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,7 +71,7 @@ public class ExportActivity extends Fragment {
 		datenPdf.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				ExportDatenDialog customDatenDialog = new ExportDatenDialog(getActivity());
+				ExportDatenDialog customDatenDialog = new ExportDatenDialog(getActivity(), kundeId);
 				customDatenDialog.setTitle("Daten auswählen");
 				customDatenDialog.show();
 			}

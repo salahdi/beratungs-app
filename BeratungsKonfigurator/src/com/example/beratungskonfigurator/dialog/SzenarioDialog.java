@@ -133,6 +133,12 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 		dialogTitel = (TextView) findViewById(R.id.dialogTitel);
 		dialogTitel.setText(mAnwendungsfallName);
 
+		imageView = (ImageView) findViewById(R.id.gBilderImageView);
+		layVideo = (LinearLayout) findViewById(R.id.vVideo);
+		mediaUri = (TextView) findViewById(R.id.mediauri);
+		toggleVideo = (ToggleButton) findViewById(R.id.togglevideoplayer);
+		stopVideo = (Button) findViewById(R.id.stopvideoplayer);
+		surfaceView = (SurfaceView) findViewById(R.id.surfaceview);
 		tBeschreibung = (TextView) findViewById(R.id.tBeschreibung);
 		tBeschreibung.setMovementMethod(new ScrollingMovementMethod());
 		Button bClose = (Button) findViewById(R.id.bClose);
@@ -140,11 +146,10 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 		bClose.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				if(!videoPath.equals("")){
+				if (!videoPath.equals("")) {
 					mediaPlayer.release();
 					mediaPlayer = null;
 				}
-
 
 				// ----------------------------------------------------------------------------------//
 				// insertSzenario
@@ -236,7 +241,7 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 						public void serverSuccessHandler(JSONObject result) throws JSONException {
 
 							tBeschreibung.setText(result.getJSONObject("data").getString("beschreibung"));
-							videoPath = result.getJSONObject("data").getString("video").toString();
+							videoPath = result.getJSONObject("data").getString("video");
 							Log.i("VIDEO PATH", "PATH videoPath: " + videoPath);
 
 							if (videoPath.equals("")) {
@@ -267,8 +272,11 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 					szenarioList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 
+							if (!videoPath.equals("")) {
+								mediaPlayer.release();
+								mediaPlayer = null;
+							}
 							mpCount = 0;
-							mediaPlayer.release();
 							videoPath = "";
 							mediaUri.setText("");
 							toggleVideo.setChecked(false);
@@ -295,7 +303,7 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 									public void serverSuccessHandler(JSONObject result) throws JSONException {
 
 										tBeschreibung.setText(result.getJSONObject("data").getString("beschreibung"));
-										videoPath = result.getJSONObject("data").getString("video").toString();
+										videoPath = result.getJSONObject("data").getString("video");
 										Log.i("VIDEO PATH", "PATH videoPath: " + videoPath);
 
 										if (videoPath.equals("")) {
@@ -331,12 +339,11 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 
 					szenarioList.setOnItemLongClickListener(new OnItemLongClickListener() {
 						public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-
 							try {
 								int szenarioIdLong = szId.getInt(pos);
 								Log.i("Szenario ID", "SZENARIO ID: " + szenarioIdLong);
 								if (selSzenarioList.contains(szenarioIdLong)) {
-
+									deleteSzenarienEinstellungen(szenarioIdLong);
 									for (Iterator<Integer> nameIter = selSzenarioList.iterator(); nameIter.hasNext();) {
 										Integer name = nameIter.next();
 										if (name == szenarioIdLong) {
@@ -344,6 +351,7 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 											Log.i("REMOVE", "name REMOVE: " + name);
 										}
 									}
+									
 								} else {
 									selSzenarioList.add(szenarioIdLong);
 								}
@@ -480,8 +488,6 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 		Gallery ga = (Gallery) findViewById(R.id.gBilder);
 		ga.setAdapter(new ImageAdapter(context));
 
-		imageView = (ImageView) findViewById(R.id.gBilderImageView);
-
 		ga.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView parent, View v, int position, long id) {
@@ -607,14 +613,6 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 
 	public void setMediaPlayer() {
 
-		// View view = inflater.inflate(R.layout.szenario_dialog_layout,
-		// container, false);
-		layVideo = (LinearLayout) findViewById(R.id.vVideo);
-		mediaUri = (TextView) findViewById(R.id.mediauri);
-		toggleVideo = (ToggleButton) findViewById(R.id.togglevideoplayer);
-		stopVideo = (Button) findViewById(R.id.stopvideoplayer);
-		surfaceView = (SurfaceView) findViewById(R.id.surfaceview);
-
 		getWindow().setFormat(PixelFormat.UNKNOWN);
 		surfaceHolder = surfaceView.getHolder();
 		surfaceHolder.addCallback(this);
@@ -674,6 +672,39 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 				mpCount = 0;
 			}
 		});
+
+	}
+
+	private void deleteSzenarienEinstellungen(int varSzenarioId) {
+
+		// ----------------------------------------------------------------------------------//
+		// deleteSzenarienEinstellungen
+		// ----------------------------------------------------------------------------------//
+
+		try {
+			JSONObject params = new JSONObject();
+
+			params.put("kundeId", mKundeId);
+			params.put("szenarioId", varSzenarioId);
+
+			ServerInterface si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					Log.i("DELETE Szenario Einstellungen: ", result.getString("msg"));
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// z.B. Fehler Dialog aufploppen lassen
+					Log.e("error", "called");
+				}
+			});
+			si.call("deleteSzenarienEinstellungen", params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 

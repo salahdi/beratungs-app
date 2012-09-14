@@ -40,6 +40,7 @@ public class RaumauswahlDialog extends Dialog {
 	private int mKundeId;
 	private int mSzenarioId;
 
+	List<Integer> wohnraeumeIdList = new ArrayList<Integer>();
 	ArrayList<Integer> selSzenarioList = new ArrayList<Integer>();
 
 	// Constructor
@@ -87,7 +88,7 @@ public class RaumauswahlDialog extends Dialog {
 
 					for (int i = 0; i < cntChoice; i++) {
 						if (sparseBooleanArray.get(i)) {
-							selected += (raumauswahlList.getItemIdAtPosition(i) + 1) + ".";
+							selected += (wohnraeumeIdList.get(i)) + ".";
 							count++;
 						}
 					}
@@ -144,11 +145,13 @@ public class RaumauswahlDialog extends Dialog {
 
 					List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 					JSONArray la = result.getJSONArray("data");
+					JSONArray laWohnraeumeId = result.getJSONArray("wohnraeumeId");
 
 					for (int i = 0; i < la.length(); i++) {
 						HashMap<String, String> hm = new HashMap<String, String>();
 						hm.put("txt", la.getString(i));
 						list.add(hm);
+						wohnraeumeIdList.add(laWohnraeumeId.getInt(i));
 					}
 					Log.i("data", la.toString());
 					Log.i("msg", result.getString("msg"));
@@ -185,11 +188,20 @@ public class RaumauswahlDialog extends Dialog {
 				public void serverSuccessHandler(JSONObject result) throws JSONException {
 
 					pDialog.dismiss();
-
+					
 					JSONArray wd = result.getJSONArray("data");
-
+					
+					Log.i("KUNDE RAUMAUSWAHL", "selected Räume: "+wd.toString());
+					Log.i("KUNDE RAUMAUSWAHL", "alle Räume: "+wohnraeumeIdList.toString());
+					
 					for (int i = 0; i < wd.length(); i++) {
-						raumauswahlList.setItemChecked((wd.getInt(i)) - 1, true);
+						for (int k = 0; k < wohnraeumeIdList.size(); k++) {
+							if(wd.get(i).toString().equals(wohnraeumeIdList.get(k).toString())){
+								Log.i("KUNDE RAUMAUSWAHL", "is TRUE: "+wd.get(i)+" equals "+wohnraeumeIdList.get(k)+" at Position k: "+k+" and Position i: "+i);
+								raumauswahlList.setItemChecked(k, true);
+								//continue loop;
+							}
+						}
 					}
 				}
 

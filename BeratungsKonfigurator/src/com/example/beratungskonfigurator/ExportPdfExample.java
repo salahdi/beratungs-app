@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 
 import com.example.beratungskonfigurator.dialog.RaumauswahlDialog;
 import com.example.beratungskonfigurator.server.ServerInterface;
@@ -56,16 +57,15 @@ public class ExportPdfExample {
 	static List<String> pflegeList = new ArrayList<String>();
 	static List<String> alltagskompetenzenList = new ArrayList<String>();
 	static List<String> beobachtungenList = new ArrayList<String>();
-	
+
 	static List<String> szenarienList = new ArrayList<String>();
 	static List<String> raeumeList = new ArrayList<String>();
-	static List<String> geraeteList = new ArrayList<String>();
-	static List<String> geraeteStandortList = new ArrayList<String>();
-	static List<String> lichteinstellungenList = new ArrayList<String>();
+	static List<String> geraeteeinstellungenList = new ArrayList<String>();
 	static List<String> lichtartList = new ArrayList<String>();
 	static List<String> lichtfarbeList = new ArrayList<String>();
 	static List<String> lichtstaerkeList = new ArrayList<String>();
 	static List<String> dienstleisterList = new ArrayList<String>();
+	static List<String> exportdatenList = new ArrayList<String>();
 
 	private static String file;
 	private static int count = 0;
@@ -77,7 +77,8 @@ public class ExportPdfExample {
 	private static Document document;
 
 	private static Font catFont = new Font(Font.HELVETICA, 18, Font.BOLD);
-	private static Font redFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.CYAN);
+	private static Font cyanFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.CYAN);
+	private static Font dGrayFont = new Font(Font.HELVETICA, 12, Font.BOLD, Color.DARK_GRAY);
 	private static Font subFont = new Font(Font.HELVETICA, 16, Font.BOLD);
 	private static Font smallBold = new Font(Font.HELVETICA, 12, Font.BOLD);
 
@@ -85,10 +86,32 @@ public class ExportPdfExample {
 
 		mKundeId = kundeId;
 		mAngehoerigerId = angehoerigerId;
+		
+		wohnsituationList.clear();
+		wohnformList.clear();
+		wohnumfeldList.clear();
+		wohnraeumeList.clear();
+		wohnbarrierenList.clear();
+
+		erkrankungenList.clear();
+		pflegeList.clear();
+		alltagskompetenzenList.clear();
+		beobachtungenList.clear();
+
+		szenarienList.clear();
+		raeumeList.clear();
+		geraeteeinstellungenList.clear();
+		lichtartList.clear();
+		lichtfarbeList.clear();
+		lichtstaerkeList.clear();
+		dienstleisterList.clear();
+		exportdatenList.clear();
+		
 		exportKundedaten();
 		exportWohnungsdaten();
 		exportGesundheitsdaten();
-
+		exportSzenariendaten();
+		exportExportdaten();
 	}
 
 	public static String getPdfPath() {
@@ -114,9 +137,19 @@ public class ExportPdfExample {
 			document.open();
 			addMetaData(document);
 			addTitlePage(document);
-			addKundendaten(document);
-			addWohnungsdaten(document);
-			addGesundheitsdaten(document);
+			Log.i("EXPORT DATEN LIST", "List: " + exportdatenList.toString());
+			Log.i("EXPORT DATEN LIST", "List an Pos 0: " + exportdatenList.get(0));
+			for (int i = 0; i < exportdatenList.size(); i++) {
+				if (exportdatenList.get(i).equals("0")) {
+					addKundendaten(document);
+				} else if (exportdatenList.get(i).equals("1")) {
+					addWohnungsdaten(document);
+				} else if (exportdatenList.get(i).equals("2")) {
+					addGesundheitsdaten(document);
+				} else if (exportdatenList.get(i).equals("3")) {
+					addSzenariendaten(document);
+				}
+			}
 		} catch (DocumentException de) {
 			System.err.println(de.getMessage());
 		} catch (IOException ioe) {
@@ -213,6 +246,7 @@ public class ExportPdfExample {
 		subCatPart1.add(new Paragraph("Vorname:" + "   " + vorname));
 		subCatPart1.add(new Paragraph("Straße/Nr.:" + "   " + strasse + " " + hausnummer));
 		subCatPart1.add(new Paragraph("PLZ/Ort:" + "   " + plz + " " + ort));
+		document.add(Chunk.NEWLINE);
 
 		Paragraph subPara2 = new Paragraph("Kontakt", subFont);
 		Section subCatPart2 = catPart1.addSection(subPara2);
@@ -220,6 +254,7 @@ public class ExportPdfExample {
 		subCatPart2.add(new Paragraph("Mobil:" + "   " + mobil));
 		subCatPart2.add(new Paragraph("Fax:" + "   " + fax));
 		subCatPart2.add(new Paragraph("E-Mail:" + "   " + email));
+		document.add(Chunk.NEWLINE);
 
 		Paragraph subPara3 = new Paragraph("Information", subFont);
 		Section subCatPart3 = catPart1.addSection(subPara3);
@@ -227,6 +262,7 @@ public class ExportPdfExample {
 		subCatPart3.add(new Paragraph("Familienstand:" + "   " + familienstand));
 		subCatPart3.add(new Paragraph("Konfession:" + "   " + konfession));
 		subCatPart3.add(new Paragraph("Pflegestufe:" + "   " + pflegestufe));
+		document.add(Chunk.NEWLINE);
 
 		Paragraph subPara4 = new Paragraph("Versorgung", subFont);
 		Section subCatPart4 = catPart1.addSection(subPara4);
@@ -235,6 +271,7 @@ public class ExportPdfExample {
 		subCatPart4.add(new Paragraph("Krankenkasse:" + "   " + krankenkasse));
 		subCatPart4.add(new Paragraph("Leistungsart:" + "   " + leistungsart));
 		subCatPart4.add(new Paragraph("Vermögen:" + "   " + vermoegen));
+		document.add(Chunk.NEWLINE);
 
 		Paragraph subPara5 = new Paragraph("Angehöriger", subFont);
 		Section subCatPart5 = catPart1.addSection(subPara5);
@@ -264,28 +301,28 @@ public class ExportPdfExample {
 		for (int i = 0; i < wohnsituationList.size(); i++) {
 			subCatPart1.add(new Paragraph(wohnsituationList.get(i).toString()));
 		}
-
+		document.add(Chunk.NEWLINE);
 		Paragraph subPara2 = new Paragraph("Wohnform", subFont);
 		Section subCatPart2 = catPart2.addSection(subPara2);
 
 		for (int i = 0; i < wohnformList.size(); i++) {
 			subCatPart2.add(new Paragraph(wohnformList.get(i).toString()));
 		}
-
+		document.add(Chunk.NEWLINE);
 		Paragraph subPara3 = new Paragraph("Wohnumfeld", subFont);
 		Section subCatPart3 = catPart2.addSection(subPara3);
 
 		for (int i = 0; i < wohnumfeldList.size(); i++) {
 			subCatPart3.add(new Paragraph(wohnumfeldList.get(i).toString()));
 		}
-
+		document.add(Chunk.NEWLINE);
 		Paragraph subPara4 = new Paragraph("Wohnräume", subFont);
 		Section subCatPart4 = catPart2.addSection(subPara4);
 
 		for (int i = 0; i < wohnraeumeList.size(); i++) {
 			subCatPart4.add(new Paragraph(wohnraeumeList.get(i).toString()));
 		}
-
+		document.add(Chunk.NEWLINE);
 		Paragraph subPara5 = new Paragraph("Wohnbarrieren", subFont);
 		Section subCatPart5 = catPart2.addSection(subPara5);
 
@@ -294,8 +331,8 @@ public class ExportPdfExample {
 		}
 		Paragraph subPara6 = new Paragraph("Wohninformation", subFont);
 		Section subCatPart6 = catPart2.addSection(subPara6);
-		subCatPart6.add(new Paragraph("Anzahl der Stockwerke:"+"   "+stockwerke));
-		subCatPart6.add(new Paragraph("Wohnfläche in qm:"+"   "+wohnflaeche));
+		subCatPart6.add(new Paragraph("Anzahl der Stockwerke:" + "   " + stockwerke));
+		subCatPart6.add(new Paragraph("Wohnfläche in qm:" + "   " + wohnflaeche));
 
 		document.add(catPart2);
 
@@ -313,21 +350,21 @@ public class ExportPdfExample {
 		for (int i = 0; i < erkrankungenList.size(); i++) {
 			subCatPart1.add(new Paragraph(erkrankungenList.get(i).toString()));
 		}
-
+		document.add(Chunk.NEWLINE);
 		Paragraph subPara2 = new Paragraph("Pflege erfolgt durch", subFont);
 		Section subCatPart2 = catPart3.addSection(subPara2);
 
 		for (int i = 0; i < pflegeList.size(); i++) {
 			subCatPart2.add(new Paragraph(pflegeList.get(i).toString()));
 		}
-
+		document.add(Chunk.NEWLINE);
 		Paragraph subPara3 = new Paragraph("Alltagskompetenzen", subFont);
 		Section subCatPart3 = catPart3.addSection(subPara3);
 
 		for (int i = 0; i < alltagskompetenzenList.size(); i++) {
 			subCatPart3.add(new Paragraph(alltagskompetenzenList.get(i).toString()));
 		}
-
+		document.add(Chunk.NEWLINE);
 		Paragraph subPara4 = new Paragraph("Beobachtungen", subFont);
 		Section subCatPart4 = catPart3.addSection(subPara4);
 
@@ -337,24 +374,46 @@ public class ExportPdfExample {
 		document.add(catPart3);
 
 	}
-	
+
 	private static void addSzenariendaten(final Document document) throws DocumentException {
 
 		Anchor anchorSzenarien = new Anchor("eingerichtete Szenarien Einstellungen", catFont);
 		anchorSzenarien.setName("eingerichtete Szenarien Einstellungen");
-		Chapter catPart5 = new Chapter(new Paragraph(anchorSzenarien), 5);
+		Chapter catPart4 = new Chapter(new Paragraph(anchorSzenarien), 4);
 
-		Paragraph subPara1 = new Paragraph("Szenarien", subFont);
-		Section subCatPart1 = catPart5.addSection(subPara1);
-/*
-		for (int i = 0; i < szenarienList.size(); i++) {
-			catPart5.addSection(new Paragraph(szenarienList.get(i).toString(), subFont));
-			for (int k = 0; k < raeumeList.size(); k++) {
-				catPart5.add(new Paragraph(szenarienList.get(k).toString()));
-			}
-		}*/
-
-		document.add(catPart5);
+		Paragraph subPara1 = new Paragraph("Geräteeinstellungen", subFont);
+		Section subCatPart1 = catPart4.addSection(subPara1);
+		document.add(Chunk.NEWLINE);
+		for (int i = 0; i < geraeteeinstellungenList.size(); i++) {
+			subCatPart1.add(new Paragraph(geraeteeinstellungenList.get(i).toString() + ":", dGrayFont));
+			subCatPart1.add(new Paragraph(geraeteeinstellungenList.get(i = i + 1).toString() + ":   "
+					+ geraeteeinstellungenList.get(i = i + 1).toString() + "x  " + geraeteeinstellungenList.get(i = i + 1).toString() + "  "
+					+ geraeteeinstellungenList.get(i = i + 1).toString()));
+		}
+		document.add(Chunk.NEWLINE);
+		Paragraph subPara2 = new Paragraph("Lichteinstellungen", subFont);
+		Section subCatPart2 = catPart4.addSection(subPara2);
+		document.add(Chunk.NEWLINE);
+		subCatPart2.add(new Paragraph("Lichtart", dGrayFont));
+		for (int i = 0; i < lichtartList.size(); i++) {
+			subCatPart2.add(new Paragraph(lichtartList.get(i).toString()));
+		}
+		document.add(Chunk.NEWLINE);
+		subCatPart2.add(new Paragraph("Lichtfarbe", dGrayFont));
+		for (int i = 0; i < lichtfarbeList.size(); i++) {
+			subCatPart2.add(new Paragraph(lichtfarbeList.get(i).toString()));
+		}
+		document.add(Chunk.NEWLINE);
+		subCatPart2.add(new Paragraph("Lichtstärke", dGrayFont));
+		for (int i = 0; i < lichtstaerkeList.size(); i++) {
+			subCatPart2.add(new Paragraph(lichtstaerkeList.get(i).toString()));
+		}
+		document.add(Chunk.NEWLINE);
+		subCatPart2.add(new Paragraph("Dienstleister", dGrayFont));
+		for (int i = 0; i < dienstleisterList.size(); i++) {
+			subCatPart2.add(new Paragraph(dienstleisterList.get(i).toString()));
+		}
+		document.add(catPart4);
 
 	}
 
@@ -746,7 +805,6 @@ public class ExportPdfExample {
 					for (int i = 0; i < wd.length(); i++) {
 						beobachtungenList.add(wd.getString(i));
 					}
-					createDocument();
 				}
 
 				public void serverErrorHandler(Exception e) {
@@ -759,4 +817,210 @@ public class ExportPdfExample {
 			e.printStackTrace();
 		}
 	}
+
+	private static void exportSzenariendaten() {
+
+		// ----------------------------------------------------------------------------------//
+		// exportGeraeteeinstellungen
+		// ----------------------------------------------------------------------------------//
+		try {
+			JSONObject params = new JSONObject();
+			ServerInterface si;
+
+			params.put("kundeId", mKundeId);
+
+			si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					Log.i("Alle Geraete DATEN", result.toString());
+
+					JSONArray wd = result.getJSONArray("data");
+
+					for (int i = 0; i < wd.length(); i++) {
+						geraeteeinstellungenList.add(wd.getString(i));
+					}
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method stub
+				}
+			});
+			si.call("exportGeraeteeinstellungen", params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// ----------------------------------------------------------------------------------//
+		// exportLichtart
+		// ----------------------------------------------------------------------------------//
+		try {
+			JSONObject params = new JSONObject();
+			ServerInterface si;
+
+			params.put("kundeId", mKundeId);
+
+			si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					Log.i("Alle Lichtart DATEN", result.toString());
+
+					JSONArray wd = result.getJSONArray("data");
+
+					for (int i = 0; i < wd.length(); i++) {
+						lichtartList.add(wd.getString(i));
+					}
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method stub
+				}
+			});
+			si.call("exportLichtart", params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// ----------------------------------------------------------------------------------//
+		// exportLichtfarbe
+		// ----------------------------------------------------------------------------------//
+		try {
+			JSONObject params = new JSONObject();
+			ServerInterface si;
+
+			params.put("kundeId", mKundeId);
+
+			si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					Log.i("Alle Lichtfarbe DATEN", result.toString());
+
+					JSONArray wd = result.getJSONArray("data");
+
+					for (int i = 0; i < wd.length(); i++) {
+						lichtfarbeList.add(wd.getString(i));
+					}
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method stub
+				}
+			});
+			si.call("exportLichtfarbe", params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// ----------------------------------------------------------------------------------//
+		// exportLichtstaerke
+		// ----------------------------------------------------------------------------------//
+		try {
+			JSONObject params = new JSONObject();
+			ServerInterface si;
+
+			params.put("kundeId", mKundeId);
+
+			si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					Log.i("Alle Lichtstaerke DATEN", result.toString());
+
+					JSONArray wd = result.getJSONArray("data");
+
+					for (int i = 0; i < wd.length(); i++) {
+						lichtstaerkeList.add(wd.getString(i));
+					}
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method stub
+				}
+			});
+			si.call("exportLichtstaerke", params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// ----------------------------------------------------------------------------------//
+		// exportDienstleister
+		// ----------------------------------------------------------------------------------//
+		try {
+			JSONObject params = new JSONObject();
+			ServerInterface si;
+
+			params.put("kundeId", mKundeId);
+
+			si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					Log.i("Alle Dienstleister DATEN", result.toString());
+
+					JSONArray wd = result.getJSONArray("data");
+
+					for (int i = 0; i < wd.length(); i++) {
+						dienstleisterList.add(wd.getString(i));
+					}
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method stub
+				}
+			});
+			si.call("exportDienstleister", params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private static void exportExportdaten() {
+
+		// ----------------------------------------------------------------------------------//
+		// gibKundeExportdaten
+		// ----------------------------------------------------------------------------------//
+		try {
+			JSONObject params = new JSONObject();
+			ServerInterface si;
+
+			params.put("kundeId", mKundeId);
+
+			si = new ServerInterface();
+			si.addListener(new ServerInterfaceListener() {
+
+				public void serverSuccessHandler(JSONObject result) throws JSONException {
+
+					Log.i("Alle Export DATEN", result.toString());
+
+					JSONArray wd = result.getJSONArray("data");
+
+					for (int i = 0; i < wd.length(); i++) {
+						exportdatenList.add(wd.getString(i));
+					}
+					createDocument();
+				}
+
+				public void serverErrorHandler(Exception e) {
+					// TODO Auto-generated method stub
+				}
+			});
+			si.call("gibKundeExportdaten", params);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }
