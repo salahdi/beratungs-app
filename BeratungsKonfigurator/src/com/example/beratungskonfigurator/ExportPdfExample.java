@@ -2,40 +2,31 @@ package com.example.beratungskonfigurator;
 
 import harmony.java.awt.Color;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.Settings;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 
-import com.example.beratungskonfigurator.dialog.RaumauswahlDialog;
 import com.example.beratungskonfigurator.server.ServerInterface;
 import com.example.beratungskonfigurator.server.ServerInterfaceListener;
+import com.lowagie.text.Anchor;
+import com.lowagie.text.Chapter;
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Section;
 import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.*;
 
 public class ExportPdfExample {
 
@@ -72,7 +63,6 @@ public class ExportPdfExample {
 	private static int lastCount;
 
 	private static int mKundeId;
-	private static int mAngehoerigerId;
 
 	private static Document document;
 
@@ -82,10 +72,9 @@ public class ExportPdfExample {
 	private static Font subFont = new Font(Font.HELVETICA, 16, Font.BOLD);
 	private static Font smallBold = new Font(Font.HELVETICA, 12, Font.BOLD);
 
-	public static void main(String[] args, int kundeId, int angehoerigerId) {
+	public static void main(String[] args, int kundeId) {
 
 		mKundeId = kundeId;
-		mAngehoerigerId = angehoerigerId;
 		
 		wohnsituationList.clear();
 		wohnformList.clear();

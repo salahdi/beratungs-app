@@ -13,9 +13,7 @@ import org.json.JSONObject;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.TypedArray;
-import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -25,8 +23,6 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.MediaPlayer.OnVideoSizeChangedListener;
 import android.net.Uri;
-import android.opengl.Visibility;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
@@ -35,7 +31,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -49,15 +44,11 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.MediaController;
-import android.widget.MediaController.MediaPlayerControl;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
-import android.widget.VideoView;
 
 import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.server.ServerInterface;
@@ -351,7 +342,7 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 											Log.i("REMOVE", "name REMOVE: " + name);
 										}
 									}
-									
+
 								} else {
 									selSzenarioList.add(szenarioIdLong);
 								}

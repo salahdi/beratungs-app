@@ -3,32 +3,22 @@ package com.example.beratungskonfigurator;
 import java.util.HashMap;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
-import android.widget.TextView;
 
 import com.example.beratungskonfigurator.tabs.AnwendungsfallActivity;
 import com.example.beratungskonfigurator.tabs.ExportActivity;
 import com.example.beratungskonfigurator.tabs.GesundheitActivity;
-import com.example.beratungskonfigurator.tabs.HerstellerActivity;
 import com.example.beratungskonfigurator.tabs.KonfigurationActivity;
 import com.example.beratungskonfigurator.tabs.KundeActivity;
-import com.example.beratungskonfigurator.tabs.UebersichtActivity;
 import com.example.beratungskonfigurator.tabs.WohnungActivity;
 
-/**
- * This demonstrates how you can implement switching between the tabs of a
- * TabHost through fragments.  It uses a trick (see the code below) to allow
- * the tabs to switch between fragments instead of simple views.
- */
+
 public class TabActivity extends FragmentActivity {
     TabHost mTabHost;
     TabManager mTabManager;
@@ -38,11 +28,8 @@ public class TabActivity extends FragmentActivity {
     private static final String KUNDE_TAB = "Kundendaten";
 	private static final String WOHNUNG_TAB = "Wohnungsdaten";
 	private static final String GESUNDHEIT_TAB = "gesundheitliche Problemstellung";
-	//private static final String PROBLEM_TAB = "Problemstellung";
 	private static final String ANWENDUNGSFALL_TAB = "Anwendungsfall";
 	private static final String KONFIGURATION_TAB = "persönliche Konfiguration";
-	//private static final String UEBERSICHT_TAB = "Übersicht";
-	//private static final String HERSTELLER_TAB = "Herstellersuche";
 	private static final String EXPORT_TAB = "Export";
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +47,8 @@ public class TabActivity extends FragmentActivity {
         mTabManager.addTab(mTabHost.newTabSpec(KUNDE_TAB).setIndicator(""),KundeActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(WOHNUNG_TAB).setIndicator(""),WohnungActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(GESUNDHEIT_TAB).setIndicator(""),GesundheitActivity.class, null);
-        //mTabManager.addTab(mTabHost.newTabSpec(PROBLEM_TAB).setIndicator(PROBLEM_TAB, getResources().getDrawable(R.drawable.tab_icon)),ProblemActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(ANWENDUNGSFALL_TAB).setIndicator(""),AnwendungsfallActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(KONFIGURATION_TAB).setIndicator(""),KonfigurationActivity.class, null);
-        //mTabManager.addTab(mTabHost.newTabSpec(UEBERSICHT_TAB).setIndicator(UEBERSICHT_TAB),UebersichtActivity.class, null);
-        //mTabManager.addTab(mTabHost.newTabSpec(HERSTELLER_TAB).setIndicator(HERSTELLER_TAB),HerstellerActivity.class, null);
         mTabManager.addTab(mTabHost.newTabSpec(EXPORT_TAB).setIndicator(""),ExportActivity.class, null);
         
         
@@ -81,11 +65,6 @@ public class TabActivity extends FragmentActivity {
         tw.getChildAt(3).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_04)); 
         tw.getChildAt(4).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_05)); 
         tw.getChildAt(5).setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_06)); 
-        
-        /*for (int i = 0; i < tw.getChildCount(); i++) {
-        	View v = tw.getChildAt(i);
-        	v.setBackgroundDrawable(getResources().getDrawable(R.drawable.tab_indicator_01)); 
-        }*/
     }
 
     
@@ -171,7 +150,6 @@ public class TabActivity extends FragmentActivity {
         public void onTabChanged(String tabId) {
             TabInfo newTab = mTabs.get(tabId);
             Bundle args = new Bundle();
-            //args.putString("message","JD Nachricht via Bundle");
             args.putInt("sendKundeId", kundeId);
             args.putInt("sendAngehoerigerId", angehoerigerId);
 

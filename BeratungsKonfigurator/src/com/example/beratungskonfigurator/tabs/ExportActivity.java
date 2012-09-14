@@ -2,7 +2,6 @@ package com.example.beratungskonfigurator.tabs;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,27 +12,21 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 
 import com.example.beratungskonfigurator.ExportPdfExample;
-import com.example.beratungskonfigurator.MainActivity;
 import com.example.beratungskonfigurator.R;
-import com.example.beratungskonfigurator.dialog.PdfDialog;
 import com.example.beratungskonfigurator.dialog.ExportDatenDialog;
+import com.example.beratungskonfigurator.dialog.PdfDialog;
 
 public class ExportActivity extends Fragment {
 
@@ -44,7 +37,6 @@ public class ExportActivity extends Fragment {
 	Spinner selectPdf;
 	EditText emailAdress;
 	private int kundeId;
-	private int angehoerigerId;
 	
 	private List<String> fileListName = new ArrayList<String>();
 	private List<String> fileListPath = new ArrayList<String>();
@@ -54,7 +46,6 @@ public class ExportActivity extends Fragment {
 		final View exportView = (View) inflater.inflate(R.layout.tab_export_layout, container, false);
 		
 		kundeId = this.getArguments().getInt("sendKundeId");
-		angehoerigerId = this.getArguments().getInt("sendAngehoerigerId");
 		
 		datenPdf = (Button) exportView.findViewById(R.id.datenPdf);
 		createPdf = (Button) exportView.findViewById(R.id.createPdf);
@@ -81,7 +72,7 @@ public class ExportActivity extends Fragment {
 
 			public void onClick(View v) {
 				ExportPdfExample exportPDF = new ExportPdfExample();
-				exportPDF.main(null, kundeId, angehoerigerId);
+				exportPDF.main(null, kundeId);
 			}
 		});
 

@@ -24,7 +24,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import com.example.beratungskonfigurator.NumberPic;
 import com.example.beratungskonfigurator.R;
@@ -46,7 +45,6 @@ public class WohnungActivity extends Fragment {
 	private static final String WOHNRAEUME = "Wohnräume";
 	private static final String WOHNBARRIEREN = "Wohnbarrieren";
 
-	private String wohnsituationId = "";
 	EditText etNumber;
 	EditText etWohnflaeche;
 
@@ -330,9 +328,6 @@ public class WohnungActivity extends Fragment {
 
 					wohnsituationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-							Toast.makeText(getActivity(),
-									"Multiple List: " + wohnsituationList.getItemAtPosition(position).toString() + " Position: " + position,
-									Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -383,9 +378,6 @@ public class WohnungActivity extends Fragment {
 
 					wohnformList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-							Toast.makeText(getActivity(),
-									"Multiple List: " + wohnformList.getItemAtPosition(position).toString() + " Position: " + position,
-									Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -436,9 +428,6 @@ public class WohnungActivity extends Fragment {
 
 					wohnumfeldList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-							Toast.makeText(getActivity(),
-									"Multiple List: " + wohnumfeldList.getItemAtPosition(position).toString() + " Position: " + position,
-									Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -489,9 +478,6 @@ public class WohnungActivity extends Fragment {
 
 					wohnraeumeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-							Toast.makeText(getActivity(),
-									"Multiple List: " + wohnraeumeList.getItemAtPosition(position).toString() + " Position: " + position,
-									Toast.LENGTH_SHORT).show();
 						}
 					});
 				}
@@ -542,9 +528,6 @@ public class WohnungActivity extends Fragment {
 
 					wohnbarrierenList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-							Toast.makeText(getActivity(),
-									"Multiple List: " + wohnbarrierenList.getItemAtPosition(position).toString() + " Position: " + position,
-									Toast.LENGTH_SHORT).show();
 						}
 					});
 				}

@@ -1,9 +1,10 @@
 <resources>
 
-    <string name="app_name">BeratungsKonfigurator</string>
+    <string name="app_name">KONGA home</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_folgeberatung">Folgeberatung</string>
+    <string name="KONGA_home">KONGA home</string>
 
 </resources>

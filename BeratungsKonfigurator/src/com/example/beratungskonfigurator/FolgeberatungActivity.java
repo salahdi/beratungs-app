@@ -7,9 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.example.beratungskonfigurator.server.ServerInterface;
-import com.example.beratungskonfigurator.server.ServerInterfaceListener;
-
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -24,7 +21,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.beratungskonfigurator.server.ServerInterface;
+import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
 public class FolgeberatungActivity extends ListActivity implements AdapterView.OnItemSelectedListener {
 
@@ -102,8 +101,6 @@ public class FolgeberatungActivity extends ListActivity implements AdapterView.O
 						
 						HashMap<String, String> selectedItem = list.get(position);
 						int getKundeId = Integer.parseInt(selectedItem.get("id"));
-						
-						Toast.makeText(getApplicationContext(), "List Click! + ID: "+id+"	Position: "+position+"	Kunde ID: "+getKundeId, Toast.LENGTH_SHORT).show();
 						
 						Intent startBeratung = new Intent(FolgeberatungActivity.this, TabActivity.class);
 						startBeratung.putExtra("kundeId", getKundeId);

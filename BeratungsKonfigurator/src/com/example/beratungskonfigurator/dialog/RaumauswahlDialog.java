@@ -2,7 +2,6 @@ package com.example.beratungskonfigurator.dialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -12,21 +11,13 @@ import org.json.JSONObject;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TabHost;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.server.ServerInterface;
@@ -66,9 +57,6 @@ public class RaumauswahlDialog extends Dialog {
 		this.getWindow().setAttributes(paramsLayout);
 
 		setCancelable(false);
-
-		// no title on this dialog
-		// requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		setContentView(R.layout.raumauswahl_dialog_layout);
 
@@ -188,18 +176,15 @@ public class RaumauswahlDialog extends Dialog {
 				public void serverSuccessHandler(JSONObject result) throws JSONException {
 
 					pDialog.dismiss();
-					
+
 					JSONArray wd = result.getJSONArray("data");
-					
-					Log.i("KUNDE RAUMAUSWAHL", "selected Räume: "+wd.toString());
-					Log.i("KUNDE RAUMAUSWAHL", "alle Räume: "+wohnraeumeIdList.toString());
-					
+
 					for (int i = 0; i < wd.length(); i++) {
 						for (int k = 0; k < wohnraeumeIdList.size(); k++) {
-							if(wd.get(i).toString().equals(wohnraeumeIdList.get(k).toString())){
-								Log.i("KUNDE RAUMAUSWAHL", "is TRUE: "+wd.get(i)+" equals "+wohnraeumeIdList.get(k)+" at Position k: "+k+" and Position i: "+i);
+							if (wd.get(i).toString().equals(wohnraeumeIdList.get(k).toString())) {
+								Log.i("KUNDE RAUMAUSWAHL", "is TRUE: " + wd.get(i) + " equals " + wohnraeumeIdList.get(k) + " at Position k: " + k
+										+ " and Position i: " + i);
 								raumauswahlList.setItemChecked(k, true);
-								//continue loop;
 							}
 						}
 					}

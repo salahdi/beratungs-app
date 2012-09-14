@@ -3,7 +3,6 @@ package com.example.beratungskonfigurator.dialog;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -15,34 +14,24 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.TabHost;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Spinner;
-import android.widget.TabHost.OnTabChangeListener;
+import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.beratungskonfigurator.ListViewButtonAdapter;
 import com.example.beratungskonfigurator.ListViewSpinnerAdapter;
-import com.example.beratungskonfigurator.NumberPic;
 import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.server.ServerInterface;
 import com.example.beratungskonfigurator.server.ServerInterfaceListener;
@@ -547,28 +536,6 @@ public class GeraeteDialog extends Dialog {
 				boolean removeAllNull = mSelectedAnzahl.removeAll(Arrays.asList("0"));
 				selectedAnzahl = TextUtils.join(".", mSelectedAnzahl);
 			}
-
-			/*
-			 * for (int i = 0; i < jsonGeraetestandortGeraeteId.length(); i++) {
-			 * selectedGeraetestandort +=
-			 * (listAdapterSpinner.getSpinnerItemId()) + "."; count++; } if
-			 * (count != 0) { selectedGeraetestandort =
-			 * selectedGeraetestandort.substring(0,
-			 * selectedGeraetestandort.length() - 1); } else if(count == 0){
-			 * selectedGeraetestandort = "0"; }
-			 */
-
-			// selectedGeraetestandort = TextUtils.join(".",
-			// listAdapterSpinner.getSpinnerItemId());
-			// Log.i("INSERT GERÄTE",
-			// "selectedGeraetestandort: "+selectedGeraetestandort);
-
-			/*
-			 * for (int i = 0; i < listAdapterSpinner.getSpinnerItemId().size();
-			 * i++) {
-			 * mGeraetestandort.add(jsonGeraetestandortGeraeteId.getInt(i)); }
-			 */
-
 			loop: for (int i = 0; i < mGeraete.size(); i++) {
 				for (int g = 0; g < listAdapterSpinner.getSpinnerItemId().size(); g++) {
 					if (mGeraete.get(i).equals(listAdapterSpinner.getSpinnerGeraeteId().get(g))) {
@@ -587,6 +554,7 @@ public class GeraeteDialog extends Dialog {
 			}
 
 			Log.i("INSERT GERÄTE", "selectedGeraetestandort: " + selectedGeraetestandort);
+
 			// ----------------------------------------------------------------------------------//
 			// insertKundeGeraete
 			// ----------------------------------------------------------------------------------//
@@ -617,49 +585,5 @@ public class GeraeteDialog extends Dialog {
 		}
 
 	}
-
-	/*
-	 * public void insertKundeGeraetestandort() {
-	 * 
-	 * //
-	 * ------------------------------------------------------------------------
-	 * ----------// // BERECHNUNG insertKundeGeraetestandort //
-	 * ------------------
-	 * ----------------------------------------------------------------//
-	 * 
-	 * int count = 0; String selectedGeraetestandort = ""; for (int i = 0; i <
-	 * jsonGeraetestandortGeraeteId.length(); i++) { selectedGeraetestandort +=
-	 * (listAdapterSpinner.getSpinnerItemId()) + "."; count++; } if (count != 0)
-	 * { selectedGeraetestandort = selectedGeraetestandort.substring(0,
-	 * selectedGeraetestandort.length() - 1); } else if(count == 0){
-	 * selectedGeraetestandort = "0"; }
-	 * 
-	 * Log.i("INSERT STANDORT", "getSpinnerItem ID: " +
-	 * listAdapterSpinner.getSpinnerItemId()); Log.i("INSERT STANDORT",
-	 * "getSpinnerItem TEXT: " + listAdapterSpinner.getSpinnerItemText());
-	 * Log.i("INSERT STANDORT", "selectedGeraetestandort: " +
-	 * selectedGeraetestandort);
-	 * 
-	 * try { //
-	 * ------------------------------------------------------------------
-	 * ----------------// // insertKundeGeraetestandort //
-	 * ----------------------
-	 * ------------------------------------------------------------//
-	 * 
-	 * JSONObject updateParams = new JSONObject(); updateParams.put("kundeId",
-	 * mKundeId); updateParams.put("szenarioId", mSzenarioId);
-	 * updateParams.put("wohnraeumeId", raumId);
-	 * updateParams.put("geraetestandortId", selectedGeraetestandort);
-	 * 
-	 * ServerInterface si = new ServerInterface(); si.addListener(new
-	 * ServerInterfaceListener() { public void serverSuccessHandler(JSONObject
-	 * result) throws JSONException { Log.i("INSERT KundeGeraetestandort: ",
-	 * result.getString("msg")); }
-	 * 
-	 * public void serverErrorHandler(Exception e) { // TODO Auto-generated
-	 * method // stub } }); si.call("insertKundeGeraetestandort", updateParams);
-	 * } catch (JSONException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); } }
-	 */
 
 }

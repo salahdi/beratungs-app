@@ -2,7 +2,6 @@ package com.example.beratungskonfigurator.tabs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -13,30 +12,23 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 
-import com.example.beratungskonfigurator.MainActivity;
 import com.example.beratungskonfigurator.R;
 import com.example.beratungskonfigurator.dialog.DienstleisterDialog;
 import com.example.beratungskonfigurator.dialog.GeraeteDialog;
 import com.example.beratungskonfigurator.dialog.LichteinstellungenDialog;
 import com.example.beratungskonfigurator.dialog.RaumauswahlDialog;
-import com.example.beratungskonfigurator.dialog.SzenarioDialog;
 import com.example.beratungskonfigurator.server.ServerInterface;
 import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
@@ -65,7 +57,7 @@ public class KonfigurationActivity extends Fragment {
 
 		final View konfigurationView = (View) inflater.inflate(R.layout.tab_konfiguration_layout, container, false);
 		final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		
+
 		titelEinstellungen = (TextView) konfigurationView.findViewById(R.id.titelEinstellungen);
 
 		// ----------------------------------------------------------------------------------//
@@ -91,7 +83,7 @@ public class KonfigurationActivity extends Fragment {
 					Log.i("szIdArray", szIdArray.toString());
 
 					if (!szIdArray.isNull(0)) {
-						
+
 						titelEinstellungen.setText(la.getString(0));
 
 						for (int i = 0; i < la.length(); i++) {
@@ -112,7 +104,7 @@ public class KonfigurationActivity extends Fragment {
 						pDialog.dismiss();
 						konfigurationList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 							public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
-								
+
 								try {
 									titelEinstellungen.setText(la.getString(position));
 								} catch (JSONException e) {
@@ -139,6 +131,7 @@ public class KonfigurationActivity extends Fragment {
 						alert.show();
 					}
 				}
+
 				public void serverErrorHandler(Exception e) {
 					// z.B. Fehler Dialog aufploppen lassen
 					Log.e("error", "called");
@@ -154,8 +147,7 @@ public class KonfigurationActivity extends Fragment {
 
 	static final ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
-
-	private void gibSzenarioEinstellungen( int position, final View konfigurationView ) {
+	private void gibSzenarioEinstellungen(int position, final View konfigurationView) {
 
 		try {
 			// ----------------------------------------------------------------------------------//
@@ -182,8 +174,8 @@ public class KonfigurationActivity extends Fragment {
 						list.add(hm);
 					}
 					Log.i("data", szKonf.toString());
-					final SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_einstellungen, new String[] {
-							"name"}, new int[] { R.id.name});
+					final SimpleAdapter adapterMainList = new SimpleAdapter(getActivity(), list, R.layout.listview_einstellungen,
+							new String[] { "name" }, new int[] { R.id.name });
 					einstellungenList = (ListView) konfigurationView.findViewById(R.id.einstellungenList);
 					einstellungenList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 					einstellungenList.setAdapter(adapterMainList);
@@ -191,33 +183,33 @@ public class KonfigurationActivity extends Fragment {
 					einstellungenList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 						public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 							String selListItem = einstellungenList.getItemAtPosition(position).toString();
-							Log.i("in onClick", "Selected Item Name: "+ selListItem + " Position: " + position);
-							
-							if(selListItem.contains("Raumauswahl")){
+							Log.i("in onClick", "Selected Item Name: " + selListItem + " Position: " + position);
+
+							if (selListItem.contains("Raumauswahl")) {
 								RaumauswahlDialog customDialog = new RaumauswahlDialog(getActivity(), kundeId, szenarioId);
 								customDialog.setTitle("Raumauswahl");
 								customDialog.show();
-								
-							}else if(selListItem.contains("Geräteauswahl")){
+
+							} else if (selListItem.contains("Geräteauswahl")) {
 								GeraeteDialog customDialog = new GeraeteDialog(getActivity(), kundeId, szenarioId);
 								customDialog.setTitle("Geräteauswahl");
 								customDialog.show();
-								
-							}else if(selListItem.contains("Lichteinstellungen")){
+
+							} else if (selListItem.contains("Lichteinstellungen")) {
 								LichteinstellungenDialog customDialog = new LichteinstellungenDialog(getActivity(), kundeId, szenarioId);
 								customDialog.setTitle("Lichteinstellungen");
 								customDialog.show();
-								
-							}else if(selListItem.contains("Dienstleister")){
+
+							} else if (selListItem.contains("Dienstleister")) {
 								DienstleisterDialog customDialog = new DienstleisterDialog(getActivity(), kundeId, szenarioId);
 								customDialog.setTitle("Dienstleister");
 								customDialog.show();
 							}
-							
 
 						}
 					});
 				}
+
 				public void serverErrorHandler(Exception e) {
 					// z.B. Fehler Dialog aufploppen
 					// lassen

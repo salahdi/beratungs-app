@@ -70,9 +70,6 @@ public class AnwendungsfallActivity extends Fragment {
 
 		final View anwendungsfallView = (View) inflater.inflate(R.layout.tab_anwendungsfall_layout, container, false);
 		final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-		
-		//TextView titelAnwendungsfall = (TextView) anwendungsfallView.findViewById(R.id.titelAnwendungsfall);
-		//titelAnwendungsfall.setText("Anwendungsfall auswählen:");
 
 		String[] values = new String[] { KOMFORT, ENERGIE, MOBILITAET, GESUNDHEIT, HAUSHALT, SICHERHEIT, MEDIEN };
 

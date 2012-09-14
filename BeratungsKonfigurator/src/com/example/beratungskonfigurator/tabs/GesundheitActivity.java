@@ -202,12 +202,8 @@ public class GesundheitActivity extends Fragment {
 					String[] from = { "txt" };
 					int[] to = { R.id.txt };
 
-					// Instantiating an adapter to store each items
-					// R.layout.wohnung_listview defines the layout of each item
 					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					erkrankungenList = (ListView) gesundheitView.findViewById(R.id.erkrankungenList);
-
-					// wohnsituationList.setSelection(kLeistungsartId - 1);
 					erkrankungenList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 					erkrankungenList.setAdapter(dataAdapter);
 
@@ -251,13 +247,9 @@ public class GesundheitActivity extends Fragment {
 
 					String[] from = { "txt" };
 					int[] to = { R.id.txt };
-
-					// Instantiating an adapter to store each items
-					// R.layout.wohnung_listview defines the layout of each item
+					
 					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					pflegeList = (ListView) gesundheitView.findViewById(R.id.pflegeList);
-
-					// wohnsituationList.setSelection(kLeistungsartId - 1);
 					pflegeList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 					pflegeList.setAdapter(dataAdapter);
 
@@ -302,12 +294,8 @@ public class GesundheitActivity extends Fragment {
 					String[] from = { "txt" };
 					int[] to = { R.id.txt };
 
-					// Instantiating an adapter to store each items
-					// R.layout.wohnung_listview defines the layout of each item
 					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					alltagskompetenzenList = (ListView) gesundheitView.findViewById(R.id.alltagskompetenzenList);
-
-					// wohnsituationList.setSelection(kLeistungsartId - 1);
 					alltagskompetenzenList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 					alltagskompetenzenList.setAdapter(dataAdapter);
 
@@ -352,12 +340,8 @@ public class GesundheitActivity extends Fragment {
 					String[] from = { "txt" };
 					int[] to = { R.id.txt };
 
-					// Instantiating an adapter to store each items
-					// R.layout.wohnung_listview defines the layout of each item
 					SimpleAdapter dataAdapter = new SimpleAdapter(getActivity(), list, R.layout.listview_checkable, from, to);
 					beobachtungenList = (ListView) gesundheitView.findViewById(R.id.beobachtungenList);
-
-					// wohnsituationList.setSelection(kLeistungsartId - 1);
 					beobachtungenList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 					beobachtungenList.setAdapter(dataAdapter);
 

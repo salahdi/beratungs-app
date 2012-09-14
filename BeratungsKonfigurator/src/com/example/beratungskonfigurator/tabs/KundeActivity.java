@@ -14,7 +14,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -858,7 +857,7 @@ public class KundeActivity extends Fragment implements View.OnKeyListener {
 
 					Log.i("VOR DIALOG: ", "in SERVER SUCCESS HANDLER");
 					pDialog.dismiss();
-					
+
 					kName.setText(result.getJSONObject("data").getString("name"));
 					kVorname.setText(result.getJSONObject("data").getString("vorname"));
 					kStrasse.setText(result.getJSONObject("data").getString("strasse"));

@@ -1,11 +1,7 @@
 package com.example.beratungskonfigurator;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.example.beratungskonfigurator.server.ServerInterface;
-import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -17,9 +13,11 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.Toast;
+
+import com.example.beratungskonfigurator.server.ServerInterface;
+import com.example.beratungskonfigurator.server.ServerInterfaceListener;
 
 public class MainActivity extends Activity {
 
@@ -49,7 +47,6 @@ public class MainActivity extends Activity {
 						}
 					});
 			AlertDialog alert = builder.create();
-			// alert.setIcon(R.drawable.icon);
 			alert.show();
 		}
 	}
