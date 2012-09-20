@@ -62,6 +62,7 @@ public class FolgeberatungActivity extends ListActivity implements AdapterView.O
 				textSortList.setText("Kundenliste sortieren nach: ");
 
 				Spinner sortList = (Spinner) findViewById(R.id.sortList);
+				sortList.setEnabled(false);
 				sortList.setOnItemSelectedListener(FolgeberatungActivity.this);
 
 				ArrayAdapter<String> adapterSortList = new ArrayAdapter<String>(FolgeberatungActivity.this, android.R.layout.simple_spinner_item,
@@ -83,7 +84,7 @@ public class FolgeberatungActivity extends ListActivity implements AdapterView.O
 					temp.put("adresse",
 							alleKunden.getString(i = i + 1) + " " + alleKunden.getString(i = i + 1) + "		" + alleKunden.getString(i = i + 1) + " "
 									+ alleKunden.getString(i = i + 1));
-					temp.put("datum", alleKunden.getString(i = i + 1));
+					temp.put("datum", "Letzte Beratung: " + alleKunden.getString(i = i + 1));
 					temp.put("id", alleKunden.getString(i=i+1));
 					list.add(temp);
 					temp = new HashMap<String, String>();
