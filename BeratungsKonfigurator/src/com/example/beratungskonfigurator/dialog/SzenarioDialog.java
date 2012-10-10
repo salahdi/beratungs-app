@@ -87,7 +87,7 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 	int mpCount = 0;
 
 	// Image Gallery
-	private int[] myImageIds = { R.drawable.antartica1, R.drawable.antartica2, R.drawable.antartica3, R.drawable.antartica4 };
+	private int[] myImageIds = { R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4 , R.drawable.image5};
 
 	// Constructor
 	public SzenarioDialog(final Context context, int anwendungsfallId, int kundeId, String anwendungsfallName) {
@@ -112,7 +112,10 @@ public class SzenarioDialog extends Dialog implements SurfaceHolder.Callback, On
 		paramsLayout.y = 0;
 		paramsLayout.height = WindowManager.LayoutParams.FILL_PARENT;
 		paramsLayout.width = WindowManager.LayoutParams.FILL_PARENT;
+		this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+		this.getWindow().setDimAmount(0);
 		this.getWindow().setAttributes(paramsLayout);
+
 
 		setCancelable(false);
 
